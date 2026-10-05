@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Three.js 入門 ― ブラウザで3Dを動かそう</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <nav class="top"><a href="./">← 授業資料トップ</a></nav>
+  <h1>Three.js 入門 ― ブラウザで3Dを動かそう</h1>
+  <p class="date">2026-10-05</p>
+
+  <h2>Three.js とは</h2>
+  <p>Three.js は、ブラウザの中で3Dを動かすための JavaScript ライブラリです。HTML と CSS で「ページの見た目」を作れるようになったら、次は Three.js で「ページの中に立体の世界」を作れます。</p>
+  <ul>
+    <li><strong>何ができる？</strong> 回る立体、3Dキャラクター、宇宙や街並み、マウスに反応する背景など</li>
+    <li><strong>必要なもの</strong> ブラウザとテキストエディタだけ。インストールするソフトは不要</li>
+    <li><strong>料金</strong> 無料（MITライセンスのオープンソース）</li>
+    <li><strong>作者</strong> Ricardo Cabello（通称 mrdoob）。2010年に公開され、今も活発に更新中</li>
+  </ul>
+
+  <h3>HTML/CSS とのつながり</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>学んだこと</th><th>Three.js での使われ方</th></tr></thead>
+    <tbody>
+      <tr><td>HTML</td><td><code>&lt;canvas&gt;</code> や <code>&lt;script&gt;</code> を置く「土台」になる</td></tr>
+      <tr><td>CSS</td><td>3D画面を全画面にする、上に文字やボタンを重ねる</td></tr>
+      <tr><td>JavaScript</td><td>3Dの物体を作る・動かす（ここが新しく学ぶ部分）</td></tr>
+    </tbody>
+  </table></div>
+  <p>つまり、今まで学んだことはそのまま使えます。Three.js は「HTML の上に3Dの窓を開ける道具」と考えると分かりやすいです。</p>
+
+  <h3>なぜ自分で WebGL を書かないの？</h3>
+  <p>ブラウザで3Dを描く本来の仕組みは <strong>WebGL</strong>（最近は後継の <strong>WebGPU</strong>）です。ただし直接書くと、三角形1枚を出すだけで100行近いコードが必要です。Three.js はこれを包んでくれるので、<strong>数十行で回る立体が作れます</strong>。</p>
+
+  <h2>なぜ今流行っているのか</h2>
+  <p>Webサイトは「読むもの」から「体験するもの」へ変わっていて、その中心にいるのが Three.js です。ブラウザで3Dを扱うライブラリとしては世界で最も使われており、GitHub のスター数は10万を超えています。</p>
+  <h3>流行っている理由</h3>
+  <ol>
+    <li><strong>スマホでも動く</strong> ― 最近のスマホは3Dを軽く動かせるので、アプリを入れずに URL を開くだけで3D体験ができる</li>
+    <li><strong>ひと目で印象に残る</strong> ― 広告、新商品のページ、ポートフォリオで「他と違う」を出せる</li>
+    <li><strong>商品を回して見られる</strong> ― 靴・車・家具を 360度回したり色を変えたりできる（ECサイトで人気）</li>
+    <li><strong>ブラウザゲーム</strong> ― インストール不要の3Dゲームが増えている</li>
+    <li><strong>ツールが充実</strong> ― React で使える React Three Fiber、無料の3Dモデル作成ソフト Blender などと組み合わせやすい</li>
+    <li><strong>AIと相性がいい</strong> ― AIに「Three.js で回る地球を作って」と頼むと動くコードが出てくる。サンプルが多いのでAIも得意</li>
+  </ol>
+  <h3>どんなところで使われている？</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>分野</th><th>例</th></tr></thead>
+    <tbody>
+      <tr><td>企業・ブランドサイト</td><td>新商品の特設ページで商品が画面いっぱいに回る</td></tr>
+      <tr><td>ポートフォリオ</td><td>Webデザイナーが自分の部屋や3Dの世界を歩かせて自己紹介</td></tr>
+      <tr><td>ECサイト</td><td>靴や車の色を選んでその場で3Dで確認</td></tr>
+      <tr><td>ゲーム</td><td>ブラウザで遊べる3Dゲーム</td></tr>
+      <tr><td>データ表示</td><td>地球儀の上に世界中のデータを表示</td></tr>
+      <tr><td>教育・VR/AR</td><td>人体模型、天体の動き、VRゴーグル対応の体験</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">公式サイトの <a href="https://threejs.org/examples/">examples</a> を開いてみよう。「これがブラウザで動いてるの？」という作品がたくさんあります。</p>
+
+  <h2>3Dの基本：「映画の撮影」で考える</h2>
+  <p>Three.js のコードは、どれも「舞台を作る → 役者を置く → カメラで撮る」の順番で書きます。この5つの登場人物さえ覚えれば、どのサンプルも読めるようになります。</p>
+  <figure>
+    <svg viewBox="0 0 760 368" role="img" aria-label="シーンをカメラで撮り、レンダラーが canvas に描く" font-size="13">
+      <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="dg-head"/></marker></defs>
+      <text x="24" y="34" font-size="15" font-weight="600" class="dg-ink">シーンをカメラで撮り、レンダラーが canvas に描く</text>
+      <rect x="24" y="64" width="300" height="200" rx="8" class="dg-box"/>
+      <text x="40" y="88" font-weight="600" class="dg-ink">シーン（舞台）</text>
+      <rect x="40" y="104" width="268" height="72" rx="8" class="dg-box"/>
+      <text x="56" y="128" font-weight="600" class="dg-ink">メッシュ（役者）</text>
+      <text x="56" y="148" font-size="11.5" class="dg-quiet">ジオメトリ＝形（箱・球など）</text>
+      <text x="56" y="164" font-size="11.5" class="dg-quiet">マテリアル＝色・質感</text>
+      <rect x="40" y="192" width="268" height="56" rx="8" class="dg-box"/>
+      <text x="56" y="216" font-weight="600" class="dg-ink">ライト（照明）</text>
+      <text x="56" y="236" font-size="11.5" class="dg-quiet">光がないと真っ暗に見える</text>
+      <rect x="24" y="288" width="300" height="56" rx="8" class="dg-box"/>
+      <text x="40" y="312" font-weight="600" class="dg-ink">カメラ（視点）</text>
+      <text x="40" y="332" font-size="11.5" class="dg-quiet">どこから・どの角度で見るか</text>
+      <rect x="380" y="168" width="160" height="72" rx="8" class="dg-main"/>
+      <text x="460" y="192" text-anchor="middle" font-weight="600" class="dg-ink">レンダラー</text>
+      <text x="460" y="212" text-anchor="middle" font-size="11.5" class="dg-ink">シーンをカメラで</text>
+      <text x="460" y="228" text-anchor="middle" font-size="11.5" class="dg-ink">撮って絵にする係</text>
+      <rect x="576" y="168" width="160" height="72" rx="8" class="dg-box"/>
+      <text x="656" y="192" text-anchor="middle" font-weight="600" class="dg-ink">canvas 要素</text>
+      <text x="656" y="212" text-anchor="middle" font-size="11.5" class="dg-quiet">HTML のページ上に</text>
+      <text x="656" y="228" text-anchor="middle" font-size="11.5" class="dg-quiet">結果が映る</text>
+      <path d="M324 190H380" class="dg-line" marker-end="url(#arrow)"/>
+      <path d="M324 316H400V240" class="dg-line" marker-end="url(#arrow)"/>
+      <path d="M540 204H576" class="dg-line" marker-end="url(#arrow)"/>
+      <text x="352" y="180" text-anchor="middle" font-size="11.5" class="dg-quiet">何を</text>
+      <text x="408" y="284" font-size="11.5" class="dg-quiet">どこから</text>
+      <text x="476" y="284" font-size="11.5" class="dg-quiet">これを毎秒約60回くり返して動かす</text>
+    </svg>
+    <figcaption>Three.js の登場人物 · シーン・カメラ・レンダラー</figcaption>
+  </figure>
+  <div class="table-wrap"><table>
+    <thead><tr><th>用語</th><th>映画でいうと</th><th>コード例</th></tr></thead>
+    <tbody>
+      <tr><td>Scene（シーン）</td><td>舞台・セット</td><td><code>new THREE.Scene()</code></td></tr>
+      <tr><td>Mesh（メッシュ）</td><td>役者・小道具</td><td><code>new THREE.Mesh(形, 質感)</code></td></tr>
+      <tr><td>Light（ライト）</td><td>照明</td><td><code>new THREE.DirectionalLight()</code></td></tr>
+      <tr><td>Camera（カメラ）</td><td>撮影カメラ</td><td><code>new THREE.PerspectiveCamera()</code></td></tr>
+      <tr><td>Renderer（レンダラー）</td><td>カメラマン＋スクリーン</td><td><code>new THREE.WebGLRenderer()</code></td></tr>
+    </tbody>
+  </table></div>
+  <p>座標は <strong>x（左右）・y（上下）・z（手前と奥）</strong> の3つ。CSS の <code>top</code> / <code>left</code> に奥行き z が加わったもの、と考えると分かりやすいです。</p>
+
+  <h2>やってみよう：HTML 1枚で回る立方体</h2>
+  <p>下のコードを <code>index.html</code> として保存し、VS Code の拡張機能「Live Server」で開くと、青い立方体が回ります。インストールは不要で、Three.js はネット（CDN）から読み込みます。</p>
+  <p><a class="btn" href="demo/cube.html">完成形を見る ▶</a></p>
+  <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;はじめての Three.js&lt;/title&gt;
+  &lt;style&gt;
+    body { margin: 0; }          /* 余白を消して全画面に */
+    canvas { display: block; }
+  &lt;/style&gt;
+  &lt;!-- Three.js をどこから読むかを指定 --&gt;
+  &lt;script type="importmap"&gt;
+    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js" } }
+  &lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;script type="module"&gt;
+    import * as THREE from "three";
+
+    // ① 舞台
+    const scene = new THREE.Scene();
+
+    // ② カメラ（視野角75度・画面の縦横比・見える範囲）
+    const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 1000);
+    camera.position.z = 3;  // 少し手前に下がる
+
+    // ③ レンダラー（canvas を作って body に追加）
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(innerWidth, innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // ④ 役者：形（箱）＋質感（青）
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    const material = new THREE.MeshStandardMaterial({ color: 0x1d4ed8 });
+    const cube = new THREE.Mesh(geometry, material);
+    scene.add(cube);
+
+    // ⑤ 照明
+    const light = new THREE.DirectionalLight(0xffffff, 3);
+    light.position.set(2, 3, 4);
+    scene.add(light);
+
+    // ⑥ 毎フレーム少しずつ回して撮り直す
+    function animate() {
+      cube.rotation.x += 0.01;
+      cube.rotation.y += 0.01;
+      renderer.render(scene, camera);
+    }
+    renderer.setAnimationLoop(animate);
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+  <h3>コードの読み方</h3>
+  <ol>
+    <li><code>&lt;style&gt;</code> は普通の CSS。余白を消して canvas を画面いっぱいにしている</li>
+    <li><code>importmap</code> で「three と書いたらこの URL から読む」と決めている</li>
+    <li>①〜⑤は上の図の登場人物を、そのまま順番に作っているだけ</li>
+    <li>⑥ <code>setAnimationLoop</code> が毎秒約60回 <code>animate</code> を呼ぶ。少し回す → 撮る、のくり返しがアニメーションになる</li>
+  </ol>
+  <h3>つまずきやすい点</h3>
+  <ul>
+    <li><strong>ファイルをダブルクリックで開くと動かないことがある</strong> → Live Server などのローカルサーバーで開く</li>
+    <li><strong>真っ黒な画面</strong> → ライトを入れ忘れていないか、カメラが物体の中に埋まっていないか（<code>camera.position.z</code>）</li>
+    <li><strong>何も出ない</strong> → ブラウザで F12 を押して Console の赤いエラーを読む</li>
+  </ul>
+
+  <h2>演習課題</h2>
+  <p>易しい順に並んでいます。できたところまで、隣の人と見せ合おう。</p>
+  <ol>
+    <li><strong>色を変える</strong> ― <code>0x1d4ed8</code> を別の色に。CSS の <code>#1d4ed8</code> と同じ考え方</li>
+    <li><strong>形を変える</strong> ― <code>BoxGeometry</code> を <code>SphereGeometry(0.8, 32, 16)</code> や <code>TorusGeometry(0.6, 0.25, 16, 64)</code> に</li>
+    <li><strong>回転の速さ・向きを変える</strong> ― <code>0.01</code> を変える、片方の軸だけ回す</li>
+    <li><strong>背景色を付ける</strong> ― <code>scene.background = new THREE.Color(0xf0f4ff);</code></li>
+    <li><strong>立方体をもう1個置く</strong> ― <code>position.x</code> で左右に並べる</li>
+    <li><strong>上に文字を重ねる（CSS の復習）</strong> ― <code>&lt;h1&gt;</code> を <code>position: absolute</code> で canvas の上に置き、「3D背景のトップページ」に仕上げる</li>
+  </ol>
+  <h3>次のステップ</h3>
+  <ul>
+    <li><strong>マウスで回せるようにする</strong> ― <code>OrbitControls</code>（ドラッグで視点を回せる部品）</li>
+    <li><strong>3Dモデルを読み込む</strong> ― Blender や無料素材の <code>.glb</code> ファイルを <code>GLTFLoader</code> で表示</li>
+    <li><strong>画面サイズに合わせる</strong> ― <code>resize</code> イベントでカメラとレンダラーを更新（レスポンシブの3D版）</li>
+    <li>公式の入門ページ: <a href="https://threejs.org/manual/#en/creating-a-scene">Creating a scene</a>（英語。ブラウザの翻訳で読める）</li>
+  </ul>
+
+  <h2>参考</h2>
+  <ul>
+    <li><a href="https://threejs.org/">Three.js 公式サイト</a></li>
+    <li><a href="https://threejs.org/examples/">Three.js examples</a></li>
+    <li><a href="https://github.com/mrdoob/three.js">GitHub: mrdoob/three.js</a></li>
+  </ul>
+</main>
+</body>
+</html>

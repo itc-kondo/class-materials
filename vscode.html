@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VS Code 概要とインストール・セットアップ手順書</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <nav class="top"><a href="./">← 授業資料トップ</a></nav>
+  <h1>VS Code 概要とインストール・セットアップ手順書</h1>
+  <p class="date">2026-10-05</p>
+
+  <h2>VS Code とは</h2>
+  <p>Visual Studio Code（略称 VS Code）は、Microsoft が無料で配布しているコードエディタです。2015年に公開され、現在は世界で最も使われている開発用エディタです。</p>
+  <ul>
+    <li><strong>無料・オープンソース</strong>（本体は MIT ライセンス）。Mac / Windows / Linux で同じように使える</li>
+    <li><strong>マウスでもキーボードでも操作できる</strong> GUI アプリ。インストールしたその日から使える</li>
+    <li><strong>拡張機能</strong>で、言語対応・デバッグ・Git・AI補完などを後から足せる</li>
+    <li><strong>ターミナル内蔵</strong>。エディタを離れずにコマンドを実行できる</li>
+    <li><strong>リモート開発</strong>。SSH 先のサーバーや Docker コンテナの中のファイルを、手元と同じ感覚で編集できる</li>
+  </ul>
+  <p>「メモ帳より高機能で、統合開発環境（IDE）より軽い」という立ち位置です。</p>
+
+  <h2>Vim との違い</h2>
+  <p>いちばん大きい違いは、<strong>Vim は「モードを切り替えてキーボードだけで操る」、VS Code は「誰でもすぐ使えて、機能は拡張で足す」</strong> という設計の違いです。どちらが優れているというより得意な場面が違い、VS Code に Vim の操作方法を入れて両方をいいとこ取りする人も多いです。</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>比較項目</th><th>Vim</th><th>VS Code</th></tr></thead>
+    <tbody>
+      <tr><td>動く場所</td><td>ターミナルの中（CUI）</td><td>ウィンドウアプリ（GUI）</td></tr>
+      <tr><td>操作</td><td>ノーマル・挿入・ビジュアルなどモードを切り替える。マウスはほぼ使わない</td><td>普通のアプリと同じ。マウスとショートカットの両方</td></tr>
+      <tr><td>覚える量</td><td>多い（<code>:wq</code> で終了、<code>dd</code> で行削除など）</td><td>少ない。メニューから機能を探せる</td></tr>
+      <tr><td>起動の速さ・軽さ</td><td>非常に軽い。数MBのメモリで動く</td><td>重め（Electron 製で数百MB使うことも）</td></tr>
+      <tr><td>サーバーでの使用</td><td>ほぼ全ての Linux に最初から入っている（vi）</td><td>普通は入っていない。Remote-SSH で手元から接続する</td></tr>
+      <tr><td>コード補完・エラー表示</td><td>プラグインと設定で自分で組む</td><td>最初から入っている（拡張を入れるだけ）</td></tr>
+      <tr><td>拡張の追加</td><td>設定ファイル <code>.vimrc</code> やプラグインマネージャーで管理</td><td>画面から検索して「インストール」を押すだけ</td></tr>
+      <tr><td>デバッグ</td><td>別ツールを使うことが多い</td><td>ブレークポイントを置いて画面上で実行を止められる</td></tr>
+      <tr><td>Git</td><td>コマンドやプラグインで操作</td><td>差分表示・コミットが画面からできる</td></tr>
+      <tr><td>AI 支援</td><td>プラグインで対応</td><td>GitHub Copilot などが標準的に統合されている</td></tr>
+    </tbody>
+  </table></div>
+  <h3>使い分けの目安</h3>
+  <ul>
+    <li><strong>Vim が向く</strong> ― SSH で入ったサーバーで設定ファイルを少し直す、キーボードだけで高速に書きたい</li>
+    <li><strong>VS Code が向く</strong> ― プロジェクト全体を開いて開発する、初心者が学ぶ、デバッグや Git を画面で見たい</li>
+    <li><strong>Vim に慣れている人</strong> ― VS Code に拡張「Vim」を入れれば、いつもの <code>hjkl</code> や <code>dd</code> がそのまま使える（下のセットアップ参照）</li>
+  </ul>
+
+  <h2>インストール手順</h2>
+  <p>どのOSでも、公式サイト <a href="https://code.visualstudio.com/">code.visualstudio.com</a> から無料でダウンロードできます。所要時間は5〜10分です。</p>
+  <p class="note">似た名前の「Visual Studio」は別の重い開発ツールなので間違えないように。</p>
+
+  <h3>Mac</h3>
+  <ol>
+    <li>公式サイトで「Download for macOS」を押す（Apple シリコン / Intel 両対応の Universal 版でOK）</li>
+    <li>ダウンロードされた zip を開くと「Visual Studio Code.app」が出てくる</li>
+    <li>そのアプリを <strong>「アプリケーション」フォルダに移動</strong>する（ダウンロードフォルダのままだと自動更新が効かない）</li>
+    <li>ダブルクリックで起動。「インターネットからダウンロードされたアプリです」と出たら「開く」</li>
+  </ol>
+  <p>Homebrew を使っているなら、ターミナルで次の1行でも入ります。</p>
+  <pre><code>brew install --cask visual-studio-code</code></pre>
+
+  <h3>Windows</h3>
+  <ol>
+    <li>公式サイトで「Download for Windows」を押す（User Installer でOK。管理者権限が不要）</li>
+    <li>ダウンロードした <code>VSCodeUserSetup-xxx.exe</code> を実行</li>
+    <li>使用許諾契約に同意 → 次へ</li>
+    <li><strong>「追加タスクの選択」で次の2つにチェック</strong>（後から便利）
+      <ul>
+        <li>「Code で開く」アクションをエクスプローラーのファイル・ディレクトリのコンテキストメニューに追加する</li>
+        <li>PATH への追加（通常はオンになっている）</li>
+      </ul>
+    </li>
+    <li>「インストール」→「完了」で起動</li>
+  </ol>
+
+  <h3>Linux（Ubuntu / Debian）</h3>
+  <ol>
+    <li>公式サイトから <code>.deb</code> をダウンロード</li>
+    <li>ターミナルでインストール（Microsoft のリポジトリも自動で登録され、以降は <code>apt</code> で更新される）
+      <pre><code>sudo apt install ./code_*.deb</code></pre>
+    </li>
+    <li>アプリ一覧の「Visual Studio Code」か、ターミナルで <code>code</code> と打って起動</li>
+  </ol>
+  <p>他のディストリビューションは公式の <a href="https://code.visualstudio.com/docs/setup/linux">Linux 向け手順</a>（<code>.rpm</code> や Snap）を参照。</p>
+
+  <h2>初期セットアップ</h2>
+  <p>インストールしたら、上から順にやれば「日本語で、保存し忘れず、ターミナルから開ける」状態になります。</p>
+
+  <h3>1. 日本語化</h3>
+  <ol>
+    <li>左端のアイコン列から <strong>拡張機能</strong>（四角が4つのアイコン、<code>Cmd+Shift+X</code> / <code>Ctrl+Shift+X</code>）を開く</li>
+    <li><code>Japanese Language Pack</code> を検索し、Microsoft 製のものを「Install」</li>
+    <li>右下に出る「Change Language and Restart」を押すと、再起動後に日本語になる</li>
+  </ol>
+
+  <h3>2. 入れておくと便利な拡張機能</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>拡張機能</th><th>何ができるか</th><th>向いている人</th></tr></thead>
+    <tbody>
+      <tr><td>Japanese Language Pack</td><td>メニューを日本語にする</td><td>全員</td></tr>
+      <tr><td>Live Server</td><td>HTML を保存するとブラウザが自動で更新される</td><td>HTML/CSS を学ぶ人</td></tr>
+      <tr><td>Prettier</td><td>保存時にコードの整形（インデントなど）を自動で揃える</td><td>全員</td></tr>
+      <tr><td>Python</td><td>Python の補完・実行・デバッグ</td><td>Python を書く人</td></tr>
+      <tr><td>GitLens</td><td>「この行を誰がいつ変えたか」を表示</td><td>Git を使う人</td></tr>
+      <tr><td>Remote - SSH</td><td>サーバー上のファイルを手元と同じように編集</td><td>サーバーを触る人</td></tr>
+      <tr><td>Vim</td><td>Vim のキー操作（モード・<code>hjkl</code>・<code>:w</code>）を使えるようにする</td><td>Vim から移る人</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>3. おすすめの設定</h3>
+  <p>設定画面は <code>Cmd+,</code>（Windows/Linux は <code>Ctrl+,</code>）。上の検索欄に設定名を入れて変更します。</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>設定</th><th>おすすめ</th><th>理由</th></tr></thead>
+    <tbody>
+      <tr><td>Files: Auto Save</td><td><code>afterDelay</code></td><td>保存し忘れがなくなる</td></tr>
+      <tr><td>Editor: Format On Save</td><td>オン</td><td>保存のたびに Prettier で整形</td></tr>
+      <tr><td>Editor: Tab Size</td><td><code>2</code></td><td>HTML/CSS/JavaScript で一般的な幅</td></tr>
+      <tr><td>Editor: Word Wrap</td><td><code>on</code></td><td>長い行を画面内で折り返す</td></tr>
+      <tr><td>Editor: Render Whitespace</td><td><code>boundary</code></td><td>全角スペースなどの混入に気づける</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>4. ターミナルから <code>code</code> コマンドで開けるようにする</h3>
+  <p>Vim で <code>vim index.html</code> と打っていた感覚で、<code>code .</code>（今いるフォルダを開く）や <code>code index.html</code> が使えるようになります。</p>
+  <ul>
+    <li><strong>Mac</strong> ― <code>Cmd+Shift+P</code> でコマンドパレットを開き、<code>Shell Command: Install 'code' command in PATH</code> を実行</li>
+    <li><strong>Windows / Linux</strong> ― インストール時に自動で使えるようになる（使えない時はターミナルを開き直す）</li>
+  </ul>
+
+  <h3>5. Vim から移る人向け：Vim キーバインド</h3>
+  <ol>
+    <li>拡張機能で <code>Vim</code>（vscodevim）をインストール</li>
+    <li>これだけでノーマル/挿入/ビジュアルモード、<code>:w</code> <code>:q</code>、<code>dd</code> <code>yy</code> <code>p</code> などが使える</li>
+    <li><strong>Mac のみ</strong>：<code>j</code> を押しっぱなしにしても連続で動かない時は、ターミナルで次を実行して VS Code を再起動
+      <pre><code>defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false</code></pre>
+    </li>
+    <li><code>Ctrl+C</code> や <code>Ctrl+V</code> を VS Code 側（コピー・貼り付け）に残したい場合は、設定の <code>Vim: Handle Keys</code> で個別に切り替えられる</li>
+  </ol>
+
+  <h2>よく使うショートカット</h2>
+  <p>まずは「コマンドパレット」だけ覚えれば十分です。全機能を名前で検索して実行できるので、Vim の <code>:</code> コマンドの代わりになります。</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>操作</th><th>Mac</th><th>Windows / Linux</th></tr></thead>
+    <tbody>
+      <tr><td>コマンドパレット（何でも検索）</td><td><code>Cmd+Shift+P</code></td><td><code>Ctrl+Shift+P</code></td></tr>
+      <tr><td>ファイル名で開く</td><td><code>Cmd+P</code></td><td><code>Ctrl+P</code></td></tr>
+      <tr><td>保存</td><td><code>Cmd+S</code></td><td><code>Ctrl+S</code></td></tr>
+      <tr><td>ターミナルを開閉</td><td><code>Ctrl+@</code></td><td><code>Ctrl+@</code></td></tr>
+      <tr><td>ファイル内を検索 / 全ファイルを検索</td><td><code>Cmd+F</code> / <code>Cmd+Shift+F</code></td><td><code>Ctrl+F</code> / <code>Ctrl+Shift+F</code></td></tr>
+      <tr><td>行をコメントアウト</td><td><code>Cmd+/</code></td><td><code>Ctrl+/</code></td></tr>
+      <tr><td>行を上下に移動</td><td><code>Option+↑/↓</code></td><td><code>Alt+↑/↓</code></td></tr>
+      <tr><td>同じ単語を複数選択（一括編集）</td><td><code>Cmd+D</code></td><td><code>Ctrl+D</code></td></tr>
+      <tr><td>サイドバーの表示/非表示</td><td><code>Cmd+B</code></td><td><code>Ctrl+B</code></td></tr>
+    </tbody>
+  </table></div>
+  <p>※ ターミナルの <code>Ctrl+@</code> は日本語キーボードの場合。英語キーボードでは <code>Ctrl+`</code> です。</p>
+
+  <h2>よくあるトラブル</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>症状</th><th>対処</th></tr></thead>
+    <tbody>
+      <tr><td>ターミナルで <code>code</code> が「command not found」</td><td>Mac は「4. code コマンド」の手順を実行。Windows はターミナルを開き直す</td></tr>
+      <tr><td>日本語にならない</td><td>コマンドパレットで <code>Configure Display Language</code> → <code>ja</code> を選んで再起動</td></tr>
+      <tr><td>保存しても整形されない</td><td>コマンドパレットで <code>Format Document With...</code> → 既定のフォーマッターに Prettier を選ぶ</td></tr>
+      <tr><td>Mac で Vim の <code>hjkl</code> が押しっぱなしで動かない</td><td>「5. Vim キーバインド」の <code>defaults write</code> を実行して再起動</td></tr>
+      <tr><td>動作が重い</td><td>使っていない拡張機能を無効化。コマンドパレットの <code>Show Running Extensions</code> で重いものを特定できる</td></tr>
+      <tr><td>Mac で「開発元を検証できません」</td><td>アプリを右クリック →「開く」。公式サイトから入れたものかも確認</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>参考</h2>
+  <ul>
+    <li><a href="https://code.visualstudio.com/">VS Code 公式サイト</a></li>
+    <li><a href="https://code.visualstudio.com/docs/setup/setup-overview">公式ドキュメント：Setup</a></li>
+    <li><a href="https://code.visualstudio.com/docs/getstarted/keybindings">キーボードショートカット一覧</a></li>
+  </ul>
+</main>
+</body>
+</html>
