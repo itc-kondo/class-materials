@@ -49,6 +49,7 @@
 
   <h2>インストール手順</h2>
   <p>どのOSでも、公式サイト <a href="https://code.visualstudio.com/">code.visualstudio.com</a> から無料でダウンロードできます。所要時間は5〜10分です。</p>
+  <p class="note"><strong>この授業の皆さんは Ubuntu を使っているので、<code>.deb</code> をダウンロードしてください。</strong>手順は下の「<a href="#linux">Linux（Ubuntu / Debian）</a>」を見てください。</p>
   <p class="note">似た名前の「Visual Studio」は別の重い開発ツールなので間違えないように。</p>
 
   <h3>Mac</h3>
@@ -75,15 +76,30 @@
     <li>「インストール」→「完了」で起動</li>
   </ol>
 
-  <h3>Linux（Ubuntu / Debian）</h3>
+  <h3 id="linux">Linux（Ubuntu / Debian）← 授業ではこれ</h3>
+  <p class="note">皆さんは Ubuntu なので、<strong><code>.deb</code></strong> を選んでダウンロードしてください（<code>.rpm</code> ではありません）。</p>
   <ol>
-    <li>公式サイトから <code>.deb</code> をダウンロード</li>
-    <li>ターミナルでインストール（Microsoft のリポジトリも自動で登録され、以降は <code>apt</code> で更新される）
-      <pre><code>sudo apt install ./code_*.deb</code></pre>
+    <li>公式サイトのダウンロードページで、Linux の <strong><code>.deb</code>（Debian, Ubuntu）</strong>のボタンを押す</li>
+    <li>ターミナルを開き、ダウンロードフォルダに移動してインストール（Microsoft のリポジトリも自動で登録され、以降は <code>apt</code> で更新される）
+      <pre><code>cd ~/Downloads
+sudo apt install ./code_*.deb</code></pre>
+      ※ 日本語環境ではフォルダ名が <code>~/ダウンロード</code> の場合があります。パスワードを聞かれたら、ログイン時のパスワードを入力（画面には表示されません）。
     </li>
     <li>アプリ一覧の「Visual Studio Code」か、ターミナルで <code>code</code> と打って起動</li>
   </ol>
-  <p>他のディストリビューションは公式の <a href="https://code.visualstudio.com/docs/setup/linux">Linux 向け手順</a>（<code>.rpm</code> や Snap）を参照。</p>
+
+  <h3>補足：<code>.deb</code> と <code>.rpm</code> の違い</h3>
+  <p>どちらも Linux 用の「インストール用パッケージ」ですが、<strong>Linux の系統（ディストリビューション）ごとに形式が違います</strong>。自分の OS に合わない方を選ぶとインストールできません。</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th></th><th><code>.deb</code></th><th><code>.rpm</code></th></tr></thead>
+    <tbody>
+      <tr><td>対応する OS</td><td><strong>Ubuntu</strong>、Debian、Linux Mint など（Debian 系）</td><td>Fedora、Red Hat、CentOS、Rocky Linux など（Red Hat 系）</td></tr>
+      <tr><td>インストールするコマンド</td><td><code>apt</code>（<code>dpkg</code>）</td><td><code>dnf</code> / <code>yum</code>（<code>rpm</code>）</td></tr>
+      <tr><td>名前の由来</td><td>Debian の略</td><td>Red Hat Package Manager の略</td></tr>
+    </tbody>
+  </table></div>
+  <p>Windows の <code>.exe</code>、Mac の <code>.dmg</code> のように、Linux では系統によって <code>.deb</code> と <code>.rpm</code> を使い分ける、と覚えておけば十分です。自分の OS が分からない時は、ターミナルで <code>cat /etc/os-release</code> を実行すると表示されます。</p>
+  <p>その他の方法（Snap など）は公式の <a href="https://code.visualstudio.com/docs/setup/linux">Linux 向け手順</a>を参照。</p>
 
   <h2>初期セットアップ</h2>
   <p>インストールしたら、上から順にやれば「日本語で、保存し忘れず、ターミナルから開ける」状態になります。</p>
