@@ -158,6 +158,70 @@ sudo apt install ./code_*.deb</code></pre>
 
   <h2 id="git">Git / GitHub と接続して課題を上げる（03-18）</h2>
   <p>VS Code で作った課題を GitHub にアップロードし、GitHub Pages で公開するまでの手順です。例として、教科書の練習問題 <strong>03-18（お問い合わせフォーム）</strong>を上げます。</p>
+
+  <h3>まず全体像：自分のPCと GitHub の関係</h3>
+  <p>ファイルは <strong>自分のPCの中で2段階セーブ</strong>（<span class="chip">git add</span> → <span class="chip">git commit</span>）してから、<span class="chip">git push</span> で GitHub に送ります。ゲームにたとえると、PC の中のセーブが「本体セーブ」、GitHub が「クラウドセーブ」です。</p>
+  <figure>
+    <svg viewBox="0 0 760 350" role="img" aria-label="自分のPCで add と commit をしてから、push で GitHub に送る" font-size="13">
+      <defs><marker id="garrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="dg-head"/></marker></defs>
+      <text x="24" y="30" font-size="15" font-weight="600" class="dg-ink">自分のPCで add → commit してから、push で GitHub に送る</text>
+
+      <rect x="24" y="56" width="484" height="270" rx="12" class="dg-zone"/>
+      <text x="40" y="82" font-weight="600" class="dg-ink">自分のPC（ローカル）</text>
+      <rect x="580" y="56" width="156" height="270" rx="12" class="dg-zone"/>
+      <text x="596" y="82" font-weight="600" class="dg-ink">GitHub（ネット上）</text>
+
+      <rect x="40" y="150" width="140" height="88" rx="8" class="dg-box"/>
+      <text x="110" y="176" text-anchor="middle" font-weight="600" class="dg-ink">作業フォルダ</text>
+      <text x="110" y="198" text-anchor="middle" font-size="11.5" class="dg-quiet">ch03/ のファイル</text>
+      <text x="110" y="214" text-anchor="middle" font-size="11.5" class="dg-quiet">VS Code で編集する</text>
+
+      <rect x="196" y="150" width="140" height="88" rx="8" class="dg-box"/>
+      <text x="266" y="176" text-anchor="middle" font-weight="600" class="dg-ink">ステージ</text>
+      <text x="266" y="198" text-anchor="middle" font-size="11.5" class="dg-quiet">次にセーブする</text>
+      <text x="266" y="214" text-anchor="middle" font-size="11.5" class="dg-quiet">ものの置き場</text>
+
+      <rect x="352" y="150" width="140" height="88" rx="8" class="dg-box"/>
+      <text x="422" y="176" text-anchor="middle" font-weight="600" class="dg-ink">ローカルリポジトリ</text>
+      <text x="422" y="198" text-anchor="middle" font-size="11.5" class="dg-quiet">セーブ（コミット）の</text>
+      <text x="422" y="214" text-anchor="middle" font-size="11.5" class="dg-quiet">履歴が残る場所</text>
+
+      <rect x="596" y="150" width="124" height="88" rx="8" class="dg-main"/>
+      <text x="658" y="176" text-anchor="middle" font-weight="600" class="dg-ink">リモート</text>
+      <text x="658" y="198" text-anchor="middle" font-size="11.5" class="dg-ink">GitHub の ch03</text>
+      <text x="658" y="214" text-anchor="middle" font-size="11.5" class="dg-ink">呼び名は origin</text>
+
+      <rect x="596" y="262" width="124" height="52" rx="8" class="dg-box"/>
+      <text x="658" y="284" text-anchor="middle" font-weight="600" class="dg-ink">GitHub Pages</text>
+      <text x="658" y="302" text-anchor="middle" font-size="11.5" class="dg-quiet">公開サイト</text>
+
+      <path d="M110 150V124H266V150" class="dg-line" marker-end="url(#garrow)"/>
+      <path d="M266 150V124H422V150" class="dg-line" marker-end="url(#garrow)"/>
+      <path d="M492 186H596" class="dg-line" marker-end="url(#garrow)"/>
+      <path d="M596 222H530V290H110V238" class="dg-line" marker-end="url(#garrow)"/>
+      <path d="M658 238V262" class="dg-line" marker-end="url(#garrow)"/>
+
+      <rect x="150" y="113" width="76" height="22" rx="11" class="dg-chip"/>
+      <text x="188" y="128" text-anchor="middle" font-size="12" class="dg-chip-text">git add</text>
+      <rect x="298" y="113" width="92" height="22" rx="11" class="dg-chip"/>
+      <text x="344" y="128" text-anchor="middle" font-size="12" class="dg-chip-text">git commit</text>
+      <rect x="502" y="175" width="84" height="22" rx="11" class="dg-chip"/>
+      <text x="544" y="190" text-anchor="middle" font-size="12" class="dg-chip-text">git push</text>
+      <rect x="276" y="279" width="84" height="22" rx="11" class="dg-chip"/>
+      <text x="318" y="294" text-anchor="middle" font-size="12" class="dg-chip-text">git pull</text>
+      <text x="666" y="255" font-size="11.5" class="dg-quiet">自動</text>
+    </svg>
+    <figcaption>自分のPC と GitHub の関係（<code>git remote -v</code> で表示されるのが「リモート」の URL）</figcaption>
+  </figure>
+  <ul class="chips">
+    <li><span class="chip">git add</span>作業フォルダ → ステージへ（セーブ候補に入れる）</li>
+    <li><span class="chip">git commit</span>ステージ → ローカルリポジトリへ（PC の中にセーブ）</li>
+    <li><span class="chip">git push</span>PC → GitHub へ送る</li>
+    <li><span class="chip">git pull</span>GitHub → PC へ取り込む</li>
+    <li><span class="chip">git remote -v</span>送り先（リモート）の URL を確認</li>
+    <li><span class="chip">git status</span>今どこに何があるかを確認</li>
+  </ul>
+  <p>⚠ <strong>commit しただけでは GitHub には届きません</strong>（まだ自分のPCの中にあるだけ）。GitHub に反映させるには必ず <span class="chip">git push</span> まで実行します。push すると、GitHub Pages の公開サイトも数分で自動更新されます。</p>
   <p class="note">リポジトリは<strong>章ごとに1つ</strong>（<code>ch03</code>）、課題は<strong>フォルダで分ける</strong>（<code>03-18</code>、<code>03-19</code> …）、ブランチは <strong><code>main</code> だけ</strong>、というルールで進めます。<br>以下の <code>h-kondo</code> は例です。<strong>自分の GitHub ユーザー名</strong>に読み替えてください。</p>
 <pre><code>ch03/                 ← GitHub のリポジトリ1つぶん
 ├── index.html        ← 課題へのリンク集（トップページ）

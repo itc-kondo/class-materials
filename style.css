@@ -91,3 +91,22 @@ figcaption { color: var(--muted); font-size: 13px; text-align: center; margin-to
 .dg-head { fill: #9ca3af; }
 .dg-ink { fill: var(--text); }
 .dg-quiet { fill: var(--muted); }
+.dg-zone { fill: var(--accent-soft); fill-opacity: .45; stroke: var(--line); stroke-width: 1.25; }
+.dg-chip { fill: var(--bg); stroke: var(--accent); stroke-width: 1.5; }
+.dg-chip-text { fill: var(--accent); font-family: "SFMono-Regular", Menlo, Consolas, monospace; font-weight: 700; }
+
+/* コマンドのチップ */
+.chips { display: flex; flex-wrap: wrap; gap: 8px 10px; margin: 12px 0; padding: 0; list-style: none; }
+.chips li { margin: 0; display: inline-flex; align-items: center; gap: 6px; font-size: 14px; }
+.chip {
+  display: inline-block;
+  padding: 3px 12px;
+  border: 1.5px solid var(--accent);
+  border-radius: 999px;
+  color: var(--accent);
+  background: var(--bg);
+  font-family: "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
