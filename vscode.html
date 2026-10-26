@@ -22,6 +22,7 @@
     <li><strong>リモート開発</strong>。SSH 先のサーバーや Docker コンテナの中のファイルを、手元と同じ感覚で編集できる</li>
   </ul>
   <p>「メモ帳より高機能で、統合開発環境（IDE）より軽い」という立ち位置です。</p>
+  <p class="note">課題を GitHub に上げる手順は「<a href="#git">Git / GitHub と接続して課題を上げる（03-18）</a>」へ。</p>
 
   <h2>Vim との違い</h2>
   <p>いちばん大きい違いは、<strong>Vim は「モードを切り替えてキーボードだけで操る」、VS Code は「誰でもすぐ使えて、機能は拡張で足す」</strong> という設計の違いです。どちらが優れているというより得意な場面が違い、VS Code に Vim の操作方法を入れて両方をいいとこ取りする人も多いです。</p>
@@ -154,6 +155,236 @@ sudo apt install ./code_*.deb</code></pre>
     </li>
     <li><code>Ctrl+C</code> や <code>Ctrl+V</code> を VS Code 側（コピー・貼り付け）に残したい場合は、設定の <code>Vim: Handle Keys</code> で個別に切り替えられる</li>
   </ol>
+
+  <h2 id="git">Git / GitHub と接続して課題を上げる（03-18）</h2>
+  <p>VS Code で作った課題を GitHub にアップロードし、GitHub Pages で公開するまでの手順です。例として、教科書の練習問題 <strong>03-18（お問い合わせフォーム）</strong>を上げます。</p>
+  <p class="note">リポジトリは<strong>章ごとに1つ</strong>（<code>ch03</code>）、課題は<strong>フォルダで分ける</strong>（<code>03-18</code>、<code>03-19</code> …）、ブランチは <strong><code>main</code> だけ</strong>、というルールで進めます。<br>以下の <code>h-kondo</code> は例です。<strong>自分の GitHub ユーザー名</strong>に読み替えてください。</p>
+<pre><code>ch03/                 ← GitHub のリポジトリ1つぶん
+├── index.html        ← 課題へのリンク集（トップページ）
+└── 03-18/
+    ├── index.html
+    └── style.css</code></pre>
+
+  <h3>STEP 1. Git が入っているか確認する</h3>
+  <p>VS Code のターミナル（<code>Ctrl+@</code>）で実行します。</p>
+<pre><code>git --version</code></pre>
+  <p><code>git version 2.xx.x</code> と出ればOK。出なければインストールします。</p>
+<pre><code>sudo apt update
+sudo apt install -y git</code></pre>
+
+  <h3>STEP 2. 名前とメールアドレスを登録する（最初に1回だけ）</h3>
+  <p>コミット（セーブ）に「誰が変更したか」として記録されます。<strong>GitHub のユーザー名と、GitHub に登録したメールアドレス</strong>を使います。</p>
+<pre><code>git config --global user.name "h-kondo"
+git config --global user.email "GitHubに登録したメールアドレス"</code></pre>
+  <p>登録できたか確認します。</p>
+<pre><code>git config --global --list</code></pre>
+  <p>次のように出れば成功です（<code>q</code> で閉じる）。</p>
+<pre><code>user.name=h-kondo
+user.email=xxxxx@gmail.com</code></pre>
+  <ul>
+    <li><code>--global</code> を付けると、<strong>そのPCのすべてのリポジトリ</strong>に設定されます</li>
+    <li>⚠ <strong>学校の共有PC</strong>では、次の人のコミットに自分の名前が付いてしまうので <code>--global</code> を付けず、STEP 6 の <code>git init</code> の後に <code>ch03</code> フォルダの中で <code>git config user.name "h-kondo"</code> のように実行するのがおすすめです</li>
+    <li>メールアドレスを公開したくない人は、GitHub の <strong>Settings → Emails</strong> にある <code>数字+ユーザー名@users.noreply.github.com</code> を使えます</li>
+  </ul>
+  <div class="table-wrap"><table>
+    <thead><tr><th>よくある間違い</th><th>出るエラー</th><th>正しい書き方</th></tr></thead>
+    <tbody>
+      <tr><td>名前とメールを登録していない</td><td><code>Please tell me who you are</code> / <code>unable to auto-detect email address</code></td><td>上の2行を実行する</td></tr>
+      <tr><td><code>user.name</code> を書き忘れた<br><code>git config --global h-kondo</code></td><td><code>error: key does not contain a section: h-kondo</code></td><td><code>git config --global user.name "h-kondo"</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>STEP 3. GitHub と接続する（ログイン・最初に1回だけ）</h3>
+  <p>⚠ GitHub は<strong>パスワードでのアップロードを受け付けません</strong>。GitHub CLI（<code>gh</code>）でログインします。</p>
+<pre><code>sudo apt install -y gh
+gh auth login</code></pre>
+  <div class="table-wrap"><table>
+    <thead><tr><th>質問</th><th>選ぶもの</th></tr></thead>
+    <tbody>
+      <tr><td>Where do you use GitHub?</td><td><code>GitHub.com</code></td></tr>
+      <tr><td>What is your preferred protocol?</td><td><code>HTTPS</code></td></tr>
+      <tr><td>Authenticate Git with your GitHub credentials?</td><td><code>Yes</code></td></tr>
+      <tr><td>How would you like to authenticate?</td><td><code>Login with a web browser</code></td></tr>
+    </tbody>
+  </table></div>
+  <p>画面に出た <strong>8桁のコード</strong>をコピー → ブラウザで GitHub にログインしてコードを入力 → <strong>Authorize</strong>。</p>
+<pre><code>gh auth status</code></pre>
+  <p><code>Logged in to github.com account h-kondo</code> と出ればOK。</p>
+
+  <h3>STEP 4. ch03 フォルダを作って VS Code で開く</h3>
+<pre><code>mkdir -p ~/ch03/03-18   # ch03 と、その中の 03-18 をまとめて作る
+cd ~/ch03
+code .                  # ch03 フォルダを VS Code で開く</code></pre>
+  <p>⚠ VS Code では<strong>課題のフォルダ（03-18）ではなく、<code>ch03</code> フォルダを開く</strong>のがポイントです。Git はリポジトリ（<code>ch03</code>）単位で管理するためです。</p>
+
+  <h3>STEP 5. 03-18 の HTML と CSS を書く</h3>
+  <p>左のエクスプローラーで <code>03-18</code> フォルダを右クリック →「新しいファイル」で、<code>index.html</code> と <code>style.css</code> を作ります。⚠ ファイル名は<strong>すべて小文字</strong>（<code>Index.html</code> だと Pages で開けません）。</p>
+  <p><strong>03-18/index.html</strong></p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+    &lt;title&gt;お問い合わせ&lt;/title&gt;
+    &lt;link rel="stylesheet" href="style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;お問い合わせ&lt;/h1&gt;
+    &lt;p&gt;ご質問がありましたらお気軽にご連絡ください。&lt;/p&gt;
+    &lt;p&gt;お名前&lt;/p&gt;
+    &lt;input type="text" placeholder="例：大本真奈美"&gt;
+    &lt;p&gt;ご質問内容&lt;/p&gt;
+    &lt;select name="question"&gt;
+        &lt;option value="a"&gt;商品の質問&lt;/option&gt;
+        &lt;option value="b"&gt;お店について&lt;/option&gt;
+        &lt;option value="c"&gt;その他&lt;/option&gt;
+    &lt;/select&gt;
+    &lt;p&gt;ご意見・ご質問&lt;/p&gt;
+    &lt;textarea name="message"&gt;&lt;/textarea&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+  <p class="note">⚠ <code>&lt;link rel="stylesheet" href="style.css"&gt;</code> を <code>&lt;head&gt;</code> の中に入れないと、<strong>CSS を別ファイルに分けたときに反映されません</strong>。<code>href</code> の名前と CSS のファイル名（<code>style.css</code>）が1文字も違わないことも確認しましょう。</p>
+  <p><strong>03-18/style.css</strong></p>
+<pre><code>/* 入力フィールド共通の装飾 */
+input[type="text"],
+select,
+textarea {
+    width: 100%;             /* 横幅いっぱいに広げる */
+    padding: 12px;           /* 内側に余白を作ってクリックしやすく */
+    border: 1px solid #ccc;  /* 消えた枠線を復活させる */
+    border-radius: 6px;      /* 角を丸くして柔らかい印象に */
+    margin-bottom: 25px;     /* 次の項目との間に余白を作る */
+    font-size: 16px;         /* 入力する文字の大きさ */
+}
+
+/* テキストエリアの高さ指定 */
+textarea {
+    height: 150px;           /* 高さを固定して入力しやすくする */
+}</code></pre>
+  <p>書けたら <code>03-18/index.html</code> を右クリック →「Open with Live Server」でブラウザに表示して確認します。</p>
+
+  <h4>トップページ（リンク集）も作る</h4>
+  <p><code>ch03</code> の直下（<code>03-18</code> フォルダの外）に <code>index.html</code> を作ります。課題が増えたら <code>&lt;li&gt;</code> を1行ずつ足します。</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;ch03 課題一覧&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;ch03 課題一覧&lt;/h1&gt;
+    &lt;ul&gt;
+        &lt;li&gt;&lt;a href="03-18/"&gt;03-18 お問い合わせ&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+  <h3>STEP 6. GitHub に ch03 リポジトリを作る（ブラウザ）</h3>
+  <ol>
+    <li>GitHub 右上の <strong>＋</strong> → <strong>New repository</strong></li>
+    <li>Repository name：<strong><code>ch03</code></strong></li>
+    <li><strong>Public</strong> を選ぶ（無料で GitHub Pages を使うには Public が必要）</li>
+    <li>「Add a README file」には<strong>チェックを入れない</strong></li>
+    <li><strong>Create repository</strong></li>
+  </ol>
+
+  <h3>STEP 7. 初回のアップロード（1回だけ）</h3>
+  <p>VS Code のターミナルで、<code>ch03</code> フォルダにいることを確認してから実行します。</p>
+<pre><code>pwd                         # 最後が /ch03 になっていればOK
+
+git init                    # ch03 を Git で管理し始める
+git add .                   # 全ファイルをセーブ候補に入れる
+git commit -m "Complete 03-18"
+git branch -M main          # ブランチ名を main にする
+
+git remote add origin https://github.com/h-kondo/ch03.git   # 送り先の GitHub を登録
+git remote -v               # 送り先が正しいか確認する
+git push -u origin main     # GitHub に送る（-u は初回だけ）</code></pre>
+  <p><strong><code>git remote -v</code></strong> は「このフォルダの送り先（リモート）」を表示するコマンドです。次のように<strong>自分のユーザー名と ch03</strong> が出ていれば正しく登録できています。</p>
+<pre><code>origin  https://github.com/h-kondo/ch03.git (fetch)
+origin  https://github.com/h-kondo/ch03.git (push)</code></pre>
+  <div class="table-wrap"><table>
+    <thead><tr><th><code>git remote -v</code> の結果</th><th>どうするか</th></tr></thead>
+    <tbody>
+      <tr><td>何も出ない</td><td>まだ登録していない → <code>git remote add origin https://github.com/h-kondo/ch03.git</code></td></tr>
+      <tr><td>ユーザー名やリポジトリ名が間違っている</td><td>正しい URL に付け替える → <code>git remote set-url origin https://github.com/h-kondo/ch03.git</code></td></tr>
+      <tr><td><code>remote origin already exists</code> と言われた</td><td>もう登録済み。<code>git remote -v</code> で URL を確認し、違えば上の <code>set-url</code> で直す</td></tr>
+    </tbody>
+  </table></div>
+  <p>GitHub の <code>ch03</code> のページを再読み込みして、<code>03-18</code> フォルダが見えれば成功です。</p>
+
+  <h3>STEP 8. GitHub Pages で公開する（1回だけ・ブラウザ）</h3>
+  <ol>
+    <li>GitHub で <code>ch03</code> リポジトリを開く</li>
+    <li>上の <strong>Settings</strong> → 左メニューの <strong>Pages</strong></li>
+    <li>Source：<strong>Deploy from a branch</strong> ／ Branch：<strong>main</strong> ／ Folder：<strong>/(root)</strong> → <strong>Save</strong></li>
+    <li>1〜10分ほど待つ</li>
+  </ol>
+
+  <h3>STEP 9. URL を2つ提出する</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>提出するもの</th><th>URL</th><th>先生が見るもの</th></tr></thead>
+    <tbody>
+      <tr><td>GitHub URL</td><td><code>https://github.com/h-kondo/ch03/tree/main/03-18</code></td><td>HTML / CSS のコード</td></tr>
+      <tr><td>GitHub Pages URL</td><td><code>https://h-kondo.github.io/ch03/03-18/</code></td><td>完成した画面</td></tr>
+    </tbody>
+  </table></div>
+  <p>⚠ Pages の URL は<strong>最後の <code>/</code> まで</strong>付けて開きます。CSS が効いていなければ STEP 5 の <code>&lt;link&gt;</code> を確認しましょう。</p>
+
+  <h3>2回目以降（03-19 からは毎回これだけ）</h3>
+<pre><code>cd ~/ch03
+mkdir 03-19
+# 03-19 に index.html と style.css を作る
+# トップページの index.html に &lt;li&gt;&lt;a href="03-19/"&gt;03-19&lt;/a&gt;&lt;/li&gt; を1行足す
+
+git add .
+git commit -m "Complete 03-19"
+git push origin main</code></pre>
+  <p><strong>名前の登録・GitHub へのログイン・<code>git remote add</code>・Pages の設定はやり直さなくてOK</strong>。push すると数分で公開ページも更新されます。</p>
+
+  <h3>VS Code のボタンでやる場合</h3>
+  <p>左の <strong>ソース管理</strong> アイコン（枝分かれのマーク・<code>Ctrl+Shift+G</code>）からも同じことができます。</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>コマンド</th><th>VS Code での操作</th></tr></thead>
+    <tbody>
+      <tr><td><code>git status</code></td><td>変更したファイルが一覧で出る（クリックすると変更箇所が左右に並ぶ）</td></tr>
+      <tr><td><code>git add .</code></td><td>「変更」の横の <strong>＋</strong>（すべての変更をステージ）</td></tr>
+      <tr><td><code>git commit -m "…"</code></td><td>上の欄にメッセージを書いて <strong>✓ コミット</strong></td></tr>
+      <tr><td><code>git push</code></td><td><strong>変更の同期</strong>ボタン（または「…」→ プッシュ）</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>よく使う Git コマンド</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>コマンド</th><th>意味</th></tr></thead>
+    <tbody>
+      <tr><td><code>git status</code></td><td>今の状態を見る。<strong>迷ったらまずこれ</strong></td></tr>
+      <tr><td><code>git add .</code></td><td>変更したファイルを全部セーブ候補に入れる</td></tr>
+      <tr><td><code>git commit -m "メッセージ"</code></td><td>セーブする</td></tr>
+      <tr><td><code>git push origin main</code></td><td>GitHub に送る</td></tr>
+      <tr><td><code>git pull origin main</code></td><td>GitHub の最新を手元に取り込む</td></tr>
+      <tr><td><code>git log --oneline</code></td><td>セーブの履歴を見る（<code>q</code> で閉じる）</td></tr>
+      <tr><td><code>git remote -v</code></td><td>送り先の GitHub の URL を確認する</td></tr>
+      <tr><td><code>git config --global --list</code></td><td>登録した名前とメールを確認する</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>うまくいかない時</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>出てくる文</th><th>対処</th></tr></thead>
+    <tbody>
+      <tr><td><code>Please tell me who you are</code></td><td>STEP 2 の名前とメールの登録をする</td></tr>
+      <tr><td><code>key does not contain a section</code></td><td><code>git config</code> の後に <code>user.name</code> / <code>user.email</code> を書き忘れている</td></tr>
+      <tr><td><code>fatal: not a git repository</code></td><td><code>ch03</code> フォルダにいない → <code>cd ~/ch03</code></td></tr>
+      <tr><td><code>src refspec main does not match any</code></td><td>まだコミットしていない → <code>git add .</code> → <code>git commit -m "…"</code> の後に push</td></tr>
+      <tr><td><code>Authentication failed</code> / パスワードを聞かれる</td><td>GitHub にログインしていない → STEP 3 の <code>gh auth login</code></td></tr>
+      <tr><td><code>Repository not found</code></td><td>送り先の URL が違う、または GitHub にリポジトリを作っていない → <code>git remote -v</code> で確認（STEP 6・7）</td></tr>
+      <tr><td><code>rejected ... (fetch first)</code></td><td>GitHub 側で編集した → <code>git pull origin main</code> してからもう一度 push</td></tr>
+      <tr><td>Pages が 404</td><td>①Pages の設定が main / (root) か ②ファイル名が小文字の <code>index.html</code> か ③10分ほど待ったか</td></tr>
+      <tr><td>Pages で CSS が効かない</td><td><code>&lt;head&gt;</code> に <code>&lt;link rel="stylesheet" href="style.css"&gt;</code> があるか、ファイル名が一致しているか</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">学校の共有PCを使い終わったら、次の人があなたのアカウントでアップロードできないよう <code>gh auth logout</code> でログアウトしておきましょう。</p>
 
   <h2>よく使うショートカット</h2>
   <p>まずは「コマンドパレット」だけ覚えれば十分です。全機能を名前で検索して実行できるので、Vim の <code>:</code> コマンドの代わりになります。</p>
