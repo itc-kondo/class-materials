@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GMO 不正アクセス事件の技術解説</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <nav class="top"><a href="./">← 授業資料トップ</a></nav>
+  <h1>GMO「お名前.com デスクトップクラウド」不正アクセス事件 ― 技術的に何が起きたのか</h1>
+  <p class="date">2026-10-26 時点の公表内容と報道にもとづく（調査は継続中で、内容は今後変わる可能性があります）</p>
+
+  <p class="note">FX の自動売買用に貸し出されていた <strong>Windows のクラウドサーバー（VPS）26,739台</strong>に不正なプログラムが仕掛けられ、サーバー内に保存されていた<strong>証券・FX口座のIDとパスワードが盗まれて、実際に口座が不正操作された</strong>事件です。攻撃者は100万ドルの身代金を要求し、GMO は支払いを拒否しました。</p>
+
+  <h2>1. 対象サービス：デスクトップクラウドとは</h2>
+  <p>FX（外国為替証拠金取引）の<strong>自動売買ソフトを24時間動かし続けるための、Windows のクラウドPC</strong>です。自分のPCを一晩中つけっぱなしにしなくて済むので、個人投資家に使われていました。</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>項目</th><th>内容</th></tr></thead>
+    <tbody>
+      <tr><td>サービスの種類</td><td>VPS（Virtual Private Server＝1台の物理サーバーを分割して貸す仮想サーバー）</td></tr>
+      <tr><td>OS</td><td>Windows Server 2019</td></tr>
+      <tr><td>接続方法</td><td>リモートデスクトップ（手元のPCから画面ごと遠隔操作する）</td></tr>
+      <tr><td>主な用途</td><td>MT4 / MT5（FXの取引ソフト）と EA（自動売買プログラム）を24時間稼働</td></tr>
+      <tr><td>影響の可能性があるサーバー数</td><td><strong>26,739台</strong>（＝全プラン。人数ではなくサーバーの台数）</td></tr>
+    </tbody>
+  </table></div>
+  <p>⚠ 同じ時期に、GMO グループの別会社「GMOリサーチ&amp;AI」のアンケートサイトでも会員情報が最大約94万件流出した可能性が発表されています（10/6）。<strong>これは別の事件</strong>なので混同しないようにしましょう。</p>
+
+  <h2>2. 時系列</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>日付</th><th>出来事</th></tr></thead>
+    <tbody>
+      <tr><td>10/19</td><td>利用者からの問い合わせを受けて調査開始</td></tr>
+      <tr><td>10/20</td><td>一部のサーバーで<strong>第三者が設置した不正プログラム</strong>を確認。新規申し込みと管理画面を停止</td></tr>
+      <tr><td>10/21</td><td>4時から<strong>全プランのサーバーを順次停止</strong>。第1報「情報が閲覧された可能性。悪用は確認されていない」</td></tr>
+      <tr><td>10/22</td><td>第2報で「<strong>不正に利用された可能性</strong>」に表現を変更。取引口座の不正操作の報告があると公表。警察に相談</td></tr>
+      <tr><td>10/23</td><td>第3報。口座パスワードの変更と、ログイン中のセッションの切断を要請</td></tr>
+      <tr><td>10/24</td><td>第4報で<strong>情報の外部持ち出しを確認</strong>。システムにセキュリティ上の問題があったと認める。全契約者に見舞金5,000円、不正取引の実損を補償、身代金には応じないと発表。政府に「能動的サイバー防御」を要請</td></tr>
+      <tr><td>10/27 正午</td><td>攻撃者が示した身代金（100万ドル＝約1億5,600万円）の支払い期限（報道）</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>3. 攻撃の流れ</h2>
+  <p>公表されている事実をつなぐと、次のような流れになります。<strong>どうやって最初に入り込んだか（侵入経路）はまだ公表されていません。</strong></p>
+  <figure>
+    <svg viewBox="0 0 760 300" role="img" aria-label="サーバーに保存された口座のパスワードが盗まれ、別の場所から口座が操作された" font-size="13">
+      <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="dg-head"/></marker></defs>
+      <text x="24" y="30" font-size="15" font-weight="600" class="dg-ink">サーバーに保存された口座のパスワードが盗まれ、口座が操作された</text>
+      <rect x="24" y="60" width="160" height="88" rx="8" class="dg-box"/>
+      <text x="104" y="84" text-anchor="middle" font-weight="600" class="dg-ink">① 侵入</text>
+      <text x="104" y="106" text-anchor="middle" font-size="11.5" class="dg-quiet">サービスの基盤に</text>
+      <text x="104" y="122" text-anchor="middle" font-size="11.5" class="dg-quiet">セキュリティ上の問題</text>
+      <text x="104" y="138" text-anchor="middle" font-size="11.5" class="dg-quiet">（経路は未公表）</text>
+      <rect x="208" y="60" width="160" height="88" rx="8" class="dg-box"/>
+      <text x="288" y="84" text-anchor="middle" font-weight="600" class="dg-ink">② 不正プログラム</text>
+      <text x="288" y="106" text-anchor="middle" font-size="11.5" class="dg-quiet">利用者の Windows</text>
+      <text x="288" y="122" text-anchor="middle" font-size="11.5" class="dg-quiet">サーバーに設置</text>
+      <text x="288" y="138" text-anchor="middle" font-size="11.5" class="dg-quiet">（最大26,739台）</text>
+      <rect x="392" y="60" width="160" height="88" rx="8" class="dg-main"/>
+      <text x="472" y="84" text-anchor="middle" font-weight="600" class="dg-ink">③ 認証情報を取得</text>
+      <text x="472" y="106" text-anchor="middle" font-size="11.5" class="dg-ink">MT4/MT5 に記憶した</text>
+      <text x="472" y="122" text-anchor="middle" font-size="11.5" class="dg-ink">FX口座の ID・パスワード</text>
+      <text x="472" y="138" text-anchor="middle" font-size="11.5" class="dg-ink">ブラウザ保存のパスワード等</text>
+      <rect x="576" y="60" width="160" height="88" rx="8" class="dg-box"/>
+      <text x="656" y="84" text-anchor="middle" font-weight="600" class="dg-ink">④ 外部へ持ち出し</text>
+      <text x="656" y="106" text-anchor="middle" font-size="11.5" class="dg-quiet">10/24 に会社が</text>
+      <text x="656" y="122" text-anchor="middle" font-size="11.5" class="dg-quiet">持ち出しを確認</text>
+      <rect x="208" y="196" width="244" height="72" rx="8" class="dg-box"/>
+      <text x="330" y="220" text-anchor="middle" font-weight="600" class="dg-ink">⑤a 口座の不正操作</text>
+      <text x="330" y="242" text-anchor="middle" font-size="11.5" class="dg-quiet">盗んだパスワードで証券・FX口座に</text>
+      <text x="330" y="258" text-anchor="middle" font-size="11.5" class="dg-quiet">ログインし、身に覚えのない取引</text>
+      <rect x="476" y="196" width="260" height="72" rx="8" class="dg-box"/>
+      <text x="606" y="220" text-anchor="middle" font-weight="600" class="dg-ink">⑤b 脅迫（二重脅迫）</text>
+      <text x="606" y="242" text-anchor="middle" font-size="11.5" class="dg-quiet">100万ドルを要求。払わなければ</text>
+      <text x="606" y="258" text-anchor="middle" font-size="11.5" class="dg-quiet">情報公開・さらなる攻撃と予告</text>
+      <path d="M184 104H208" class="dg-line" marker-end="url(#arrow)"/>
+      <path d="M368 104H392" class="dg-line" marker-end="url(#arrow)"/>
+      <path d="M552 104H576" class="dg-line" marker-end="url(#arrow)"/>
+      <path d="M656 148V172H330V196" class="dg-line" marker-end="url(#arrow)"/>
+      <path d="M606 172V196" class="dg-line" marker-end="url(#arrow)"/>
+    </svg>
+    <figcaption>公表内容と報道から整理した攻撃の流れ（侵入経路と不正プログラムの種類は未公表）</figcaption>
+  </figure>
+
+  <h2>4. 技術的なポイント</h2>
+
+  <h3>① 「サーバーに保存したパスワード」が一番の被害になった</h3>
+  <p>盗まれた情報の中心は、GMO の会員情報ではなく、<strong>利用者がサーバーの中に保存していた別サービス（証券会社・FX会社）のパスワード</strong>です。</p>
+  <ul>
+    <li>MT4 / MT5 は、再起動しても自動でログインできるよう<strong>口座のIDとパスワードを記憶</strong>できる</li>
+    <li>24時間無人で動かす用途なので、パスワードを保存しておくのが前提の使い方になっていた</li>
+    <li>そのサーバーに入られると、<strong>保存されたパスワードがまとめて読める</strong></li>
+  </ul>
+  <p>GMO は「クレジットカード情報は持っていない」と説明していますが、利用者がサーバーに置いたファイルや認証情報は影響範囲に含まれます。<strong>自分の会社が持っているデータだけ守っても、預かっている環境の中身が盗まれれば被害になる</strong>、という例です。</p>
+
+  <h3>② 26,739台すべてが対象になった ＝ 共通の基盤が問題だった可能性</h3>
+  <p>個々の利用者が弱いパスワードを使っていただけなら、被害はその人のサーバーにとどまるはずです。今回は<strong>全プランを止める</strong>判断になり、GMO も「サービスのシステムにセキュリティ上の問題があった」と認めています。また、現行の基盤はそのまま再開せず、<strong>別の独立したクラウド基盤へ移行</strong>する方針です。</p>
+  <p class="note">ここから考えられるのは、<strong>多くのサーバーに共通する部分（管理システム・共通のOSイメージ・配布の仕組みなど）</strong>が入口になった可能性です。⚠ ただしこれは公表内容からの推測で、侵入経路は正式には発表されていません。</p>
+
+  <h3>③ 情報の公表が「閲覧の可能性」→「不正利用の可能性」→「持ち出し確認」と変わった</h3>
+  <p>不正アクセスの調査は、ログを追いながら少しずつ事実が確定していくため、発表が段階的に変わるのは珍しくありません。一方で、利用者側から見ると<strong>最初の「悪用は確認されていない」という説明で対応が遅れる</strong>危険があります。事件対応では、確定していなくても「最悪の場合はこう動いてください」と早めに伝えることが大切です。</p>
+
+  <h3>④ ランサムウェア型の「二重脅迫」</h3>
+  <p>最近の攻撃は、データを暗号化して使えなくする（ランサムウェア）だけでなく、<strong>先にデータを盗んでおき「払わなければ公開する」と脅す</strong>やり方（二重脅迫）が主流です。今回も、口座の不正操作の継続、情報の公開、ランサムウェア攻撃などを予告していると公表されています。報道では、攻撃者は約14万口座分の認証情報を得たと主張し、社内資料の一部を公開したとされます（いずれも攻撃者側の主張で、会社は確認していません）。</p>
+  <p>GMO は「払っても情報の削除や悪用防止が保証されない」として支払いを拒否しました。身代金を払うと攻撃者の資金源になり、次の攻撃を助けることにもなるため、<strong>支払わないのが原則</strong>とされています。</p>
+
+  <h3>⑤ 能動的サイバー防御</h3>
+  <p>GMO は政府に「能動的サイバー防御」の適用を要請しました。重大なサイバー攻撃に対して、<strong>警察や自衛隊が攻撃元のサーバーに入り込んで無害化できる</strong>しくみで、報道によると2026年10月1日に本格的に始まった制度です。ただし個別企業からの要請は想定されておらず、政府は適用に慎重とされています。</p>
+
+  <h2>5. 利用者に求められた対応</h2>
+  <ol>
+    <li>証券・FX口座のパスワードを変更する（<strong>同じパスワードを使っている他のサービスもすべて</strong>）</li>
+    <li>ログイン中のセッションをすべて切断する（パスワードを変えても、すでにログイン済みの攻撃者は追い出せないため）</li>
+    <li>二要素認証を有効にする</li>
+    <li>取引履歴と残高を確認する</li>
+    <li>手元のPCをウイルススキャンし、データをバックアップする</li>
+    <li>「補償の手続き」を装ったフィッシングメールに注意する</li>
+  </ol>
+
+  <h2>6. この事件から学べること</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>教訓</th><th>Web 制作・開発ではどうするか</th></tr></thead>
+    <tbody>
+      <tr><td>パスワードを平文で置かない</td><td>コードにパスワードやAPIキーを書かない。GitHub に上げない（<code>.gitignore</code>・環境変数を使う）</td></tr>
+      <tr><td>パスワードの使い回しをしない</td><td>1か所漏れると全部やられる。パスワードマネージャーを使う</td></tr>
+      <tr><td>二要素認証を必ず有効にする</td><td>GitHub も二要素認証を設定できる。パスワードが漏れても入られにくくなる</td></tr>
+      <tr><td>クラウドでも安全とは限らない</td><td>「サービス側が守る範囲」と「自分で守る範囲」がある（責任共有モデル）。預けたものを過信しない</td></tr>
+      <tr><td>事件の発表は段階的に変わる</td><td>「確認されていない」は「起きていない」ではない。早めに自衛する</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>7. まだ分かっていないこと</h2>
+  <ul>
+    <li>侵入経路・使われた脆弱性・不正プログラムの種類</li>
+    <li>実際に情報を取られたサーバーの数・人数・情報の項目</li>
+    <li>不正取引の被害口座数と損失総額</li>
+    <li>攻撃者の特定</li>
+  </ul>
+
+  <h2>出典</h2>
+  <ul>
+    <li><a href="https://www.onamae.com/news/article/11584">お名前.com 公式のお知らせ（2026年10月21日 4:00時点）</a></li>
+    <li><a href="https://news.yahoo.co.jp/articles/d6083f71bbeab0f1488fac1edbb1e75d9156e358">J-CASTニュース「GMO『悪用確認されず』から一転」（2026-10-22）</a></li>
+    <li><a href="https://news.livedoor.com/article/detail/32646553/">共同通信「GMO、情報流出確認し全利用者に見舞金」（2026-10-24）</a></li>
+    <li><a href="https://news.livedoor.com/article/detail/32655387/">東スポWEB「不正アクセス受けたGMOに高まる不信感」（2026-10-26）</a></li>
+    <li><a href="https://www.tousaiblog.org/gmo-unauthorized-access-2026">GMOの不正アクセスで何が起きた？（第1報〜第5報の整理）</a></li>
+    <li><a href="https://atsoho.com/blog/onamae-desktop-cloud-unauthorized-access">お名前.com デスクトップクラウドの不正アクセス解説（サービスの仕組み）</a></li>
+    <li><a href="https://news.web.nhk/newsweb/na/nd-20261006de55007">NHK「GMOグループ会社に不正アクセス 個人情報最大94万件余流出か」（別件・2026-10-06）</a></li>
+  </ul>
+</main>
+</body>
+</html>
