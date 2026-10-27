@@ -398,6 +398,8 @@ user.email=xxxxx@gmail.com</code></pre>
   </table></div>
 
   <h3 id="step-login">STEP 5. GitHub と接続する（ログイン・最初に1回だけ）</h3>
+  <p class="note"><strong>VS Code をインストールした後に「<a href="#vscode-github">初期セットアップ 1. VS Code と GitHub を連携する</a>」をすでにやっている人は、この STEP は不要です。</strong>STEP 6 へ進んでください。<br>
+  ※ その場合も、STEP 7 で <code>git push</code> した時にユーザー名やパスワードを聞かれたら、この STEP をやってください（VS Code の外のターミナルから push する時などは、こちらのログインが必要になります）。</p>
   <p>⚠ GitHub は<strong>パスワードでのアップロードを受け付けません</strong>。GitHub CLI（<code>gh</code>）でログインします。</p>
 <pre><code>sudo apt install -y gh
 gh auth login</code></pre>
