@@ -117,7 +117,7 @@ code index.html # ファイルを指定して開く</code></pre>
   </ol>
 
   <h2 id="setup">初期セットアップ</h2>
-  <p class="note"><strong>この章で必ずやるのは「1. VS Code と GitHub を連携する」だけです。</strong>2 から先は「やっておくと便利」な設定集なので、余裕がある人だけどうぞ（あわせて Git の章の <a href="#step2">名前とメールの登録（STEP 2）</a>と <a href="#step3">GitHub へのログイン（STEP 3）</a>も必ずやります）。</p>
+  <p class="note"><strong>この章で必ずやるのは「1. VS Code と GitHub を連携する」だけです。</strong>2 から先は「やっておくと便利」な設定集なので、余裕がある人だけどうぞ（あわせて Git の章の <a href="#step-name">名前とメールの登録（STEP 4）</a>と <a href="#step-login">GitHub へのログイン（STEP 5）</a>も必ずやります）。</p>
 
   <h3 id="vscode-github">1. VS Code と GitHub を連携する（必ずやる）</h3>
   <p>VS Code を入れて最初に起動すると、<strong>GitHub アカウントでサインインする案内</strong>が出てきます。<strong>これは授業で必ずやってください。</strong>数分で終わります。</p>
@@ -140,7 +140,6 @@ code index.html # ファイルを指定して開く</code></pre>
     <li>VS Code のターミナルで <code>git push</code> した時も、VS Code がログインを肩代わりしてくれる</li>
     <li>GitHub Copilot（AI の補完）や、設定の同期も同じアカウントで使える</li>
   </ul>
-  <p class="note warn">学校の共有PCでは、使い終わったら <strong>左下のアカウントアイコン → 自分のユーザー名 → サインアウト</strong>しておきましょう（次の人があなたのアカウントでアップロードできてしまいます）。</p>
 
   <h3>2. 日本語化（任意）</h3>
   <p><strong>やってもやらなくてもOKです。</strong>英語のメニューのまま使うのもおすすめです。</p>
@@ -202,6 +201,8 @@ code index.html # ファイルを指定して開く</code></pre>
 
   <h2 id="git">Git / GitHub と接続して課題を上げる（03-18）</h2>
   <p>VS Code で作った課題を GitHub にアップロードし、GitHub Pages で公開するまでの手順です。例として、教科書の練習問題 <strong>03-18（お問い合わせフォーム）</strong>を上げます。</p>
+  <p class="note warn"><strong>この章は Vagrant（仮想マシン）を起動せずに進めてください。</strong><br>
+  皆さんの PC はそのまま Ubuntu なので、Vagrant を起動しなくても VS Code もブラウザも他のアプリも使えます。Vagrant を通しても通さなくても課題は上げられますが、<strong>まずは Vagrant を使わない方法</strong>を説明します。いつも Vagrant の中で作業している人向けのやり方は、この章の後の「<a href="#vagrant">Vagrant（仮想マシン）からやる場合</a>」にまとめてあります。</p>
 
   <h3 id="git-overview">まず全体像：自分のPCと GitHub の関係</h3>
   <p>ファイルは <strong>自分のPCの中で2段階セーブ</strong>（<span class="chip">git add</span> → <span class="chip">git commit</span>）してから、<span class="chip">git push</span> で GitHub に送ります。ゲームにたとえると、PC の中のセーブが「本体セーブ」、GitHub が「クラウドセーブ」です。</p>
@@ -273,59 +274,13 @@ code index.html # ファイルを指定して開く</code></pre>
     ├── index.html
     └── style.css</code></pre>
 
-  <h3 id="git-steps">STEP 1. Git が入っているか確認する</h3>
-  <p>VS Code のターミナル（<code>Ctrl+@</code>）で実行します。</p>
-<pre><code>git --version</code></pre>
-  <p><code>git version 2.xx.x</code> と出ればOK。出なければインストールします。</p>
-<pre><code>sudo apt update
-sudo apt install -y git</code></pre>
-
-  <h3 id="step2">STEP 2. 名前とメールアドレスを登録する（最初に1回だけ）</h3>
-  <p>コミット（セーブ）に「誰が変更したか」として記録されます。<strong>GitHub のユーザー名と、GitHub に登録したメールアドレス</strong>を使います。</p>
-<pre><code>git config --global user.name "h-kondo"
-git config --global user.email "GitHubに登録したメールアドレス"</code></pre>
-  <p>登録できたか確認します。</p>
-<pre><code>git config --global --list</code></pre>
-  <p>次のように出れば成功です（<code>q</code> で閉じる）。</p>
-<pre><code>user.name=h-kondo
-user.email=xxxxx@gmail.com</code></pre>
-  <ul>
-    <li><code>--global</code> を付けると、<strong>そのPCのすべてのリポジトリ</strong>に設定されます</li>
-    <li>⚠ <strong>学校の共有PC</strong>では、次の人のコミットに自分の名前が付いてしまうので <code>--global</code> を付けず、STEP 6 の <code>git init</code> の後に <code>ch03</code> フォルダの中で <code>git config user.name "h-kondo"</code> のように実行するのがおすすめです</li>
-    <li>メールアドレスを公開したくない人は、GitHub の <strong>Settings → Emails</strong> にある <code>数字+ユーザー名@users.noreply.github.com</code> を使えます</li>
-  </ul>
-  <div class="table-wrap"><table>
-    <thead><tr><th>よくある間違い</th><th>出るエラー</th><th>正しい書き方</th></tr></thead>
-    <tbody>
-      <tr><td>名前とメールを登録していない</td><td><code>Please tell me who you are</code> / <code>unable to auto-detect email address</code></td><td>上の2行を実行する</td></tr>
-      <tr><td><code>user.name</code> を書き忘れた<br><code>git config --global h-kondo</code></td><td><code>error: key does not contain a section: h-kondo</code></td><td><code>git config --global user.name "h-kondo"</code></td></tr>
-    </tbody>
-  </table></div>
-
-  <h3 id="step3">STEP 3. GitHub と接続する（ログイン・最初に1回だけ）</h3>
-  <p>⚠ GitHub は<strong>パスワードでのアップロードを受け付けません</strong>。GitHub CLI（<code>gh</code>）でログインします。</p>
-<pre><code>sudo apt install -y gh
-gh auth login</code></pre>
-  <div class="table-wrap"><table>
-    <thead><tr><th>質問</th><th>選ぶもの</th></tr></thead>
-    <tbody>
-      <tr><td>Where do you use GitHub?</td><td><code>GitHub.com</code></td></tr>
-      <tr><td>What is your preferred protocol?</td><td><code>HTTPS</code></td></tr>
-      <tr><td>Authenticate Git with your GitHub credentials?</td><td><code>Yes</code></td></tr>
-      <tr><td>How would you like to authenticate?</td><td><code>Login with a web browser</code></td></tr>
-    </tbody>
-  </table></div>
-  <p>画面に出た <strong>8桁のコード</strong>をコピー → ブラウザで GitHub にログインしてコードを入力 → <strong>Authorize</strong>。</p>
-<pre><code>gh auth status</code></pre>
-  <p><code>Logged in to github.com account h-kondo</code> と出ればOK。</p>
-
-  <h3>STEP 4. ch03 フォルダを作って VS Code で開く</h3>
+  <h3 id="git-steps">STEP 1. ch03 フォルダを作って VS Code で開く</h3>
 <pre><code>mkdir -p ~/ch03/03-18   # ch03 と、その中の 03-18 をまとめて作る
 cd ~/ch03
 code .                  # ch03 フォルダを VS Code で開く</code></pre>
   <p>⚠ VS Code では<strong>課題のフォルダ（03-18）ではなく、<code>ch03</code> フォルダを開く</strong>のがポイントです。Git はリポジトリ（<code>ch03</code>）単位で管理するためです。</p>
 
-  <h3 id="step5">STEP 5. 03-18 の HTML と CSS を書く</h3>
+  <h3 id="step-code">STEP 2. 03-18 の HTML と CSS を書く</h3>
   <p>左のエクスプローラーで <code>03-18</code> フォルダを右クリック →「新しいファイル」で、<code>index.html</code> と <code>style.css</code> を作ります。⚠ ファイル名は<strong>すべて小文字</strong>（<code>Index.html</code> だと Pages で開けません）。</p>
 <div class="code-frame"><span class="code-name">03-18/index.html</span>
 <pre><code>&lt;!DOCTYPE html&gt;
@@ -373,9 +328,8 @@ textarea {
   <p>GitHub に上げる前に、<strong>自分のPCのブラウザできちんと表示されるか</strong>を必ず確認します。ここで崩れているものは、GitHub に上げても崩れたままです。</p>
   <p>VS Code のターミナルで <code>03-18</code> フォルダに移動して、ブラウザで開きます。</p>
 <pre><code>cd ~/ch03/03-18
-xdg-open index.html      # Ubuntu：いつものブラウザ（Chrome など）で開く
-google-chrome index.html # Ubuntu：Chrome を指定して開く場合</code></pre>
-  <p>※ Mac の場合は <code>open index.html</code>（Chrome を指定するなら <code>open -a "Google Chrome" index.html</code>）。<code>open</code> は Mac のコマンドなので、Ubuntu では <code>xdg-open</code> を使います。</p>
+open index.html     # ブラウザ（Chrome など）で開く</code></pre>
+  <p>※ ファイルマネージャーで <code>index.html</code> をダブルクリックしても開けます。</p>
   <p>確認するポイント：</p>
   <ul>
     <li>見出し・入力欄・選択肢・テキストエリアがすべて表示されているか</li>
@@ -401,7 +355,52 @@ google-chrome index.html # Ubuntu：Chrome を指定して開く場合</code></p
 &lt;/body&gt;
 &lt;/html&gt;</code></pre></div>
 
-  <h3>STEP 6. GitHub に ch03 リポジトリを作る（ブラウザ）</h3>
+  <h3 id="step-git">STEP 3. Git が入っているか確認する</h3>
+  <p>VS Code のターミナル（<code>Ctrl+@</code>）で実行します。</p>
+<pre><code>git --version</code></pre>
+  <p><code>git version 2.xx.x</code> と出ればOK。出なければインストールします。</p>
+<pre><code>sudo apt update
+sudo apt install -y git</code></pre>
+
+  <h3 id="step-name">STEP 4. 名前とメールアドレスを登録する（最初に1回だけ）</h3>
+  <p>コミット（セーブ）に「誰が変更したか」として記録されます。<strong>GitHub のユーザー名と、GitHub に登録したメールアドレス</strong>を使います。</p>
+<pre><code>git config --global user.name "h-kondo"
+git config --global user.email "GitHubに登録したメールアドレス"</code></pre>
+  <p>登録できたか確認します。</p>
+<pre><code>git config --global --list</code></pre>
+  <p>次のように出れば成功です（<code>q</code> で閉じる）。</p>
+<pre><code>user.name=h-kondo
+user.email=xxxxx@gmail.com</code></pre>
+  <ul>
+    <li><code>--global</code> を付けると、<strong>そのPCのすべてのリポジトリ</strong>に設定されます</li>
+    <li>メールアドレスを公開したくない人は、GitHub の <strong>Settings → Emails</strong> にある <code>数字+ユーザー名@users.noreply.github.com</code> を使えます</li>
+  </ul>
+  <div class="table-wrap"><table>
+    <thead><tr><th>よくある間違い</th><th>出るエラー</th><th>正しい書き方</th></tr></thead>
+    <tbody>
+      <tr><td>名前とメールを登録していない</td><td><code>Please tell me who you are</code> / <code>unable to auto-detect email address</code></td><td>上の2行を実行する</td></tr>
+      <tr><td><code>user.name</code> を書き忘れた<br><code>git config --global h-kondo</code></td><td><code>error: key does not contain a section: h-kondo</code></td><td><code>git config --global user.name "h-kondo"</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="step-login">STEP 5. GitHub と接続する（ログイン・最初に1回だけ）</h3>
+  <p>⚠ GitHub は<strong>パスワードでのアップロードを受け付けません</strong>。GitHub CLI（<code>gh</code>）でログインします。</p>
+<pre><code>sudo apt install -y gh
+gh auth login</code></pre>
+  <div class="table-wrap"><table>
+    <thead><tr><th>質問</th><th>選ぶもの</th></tr></thead>
+    <tbody>
+      <tr><td>Where do you use GitHub?</td><td><code>GitHub.com</code></td></tr>
+      <tr><td>What is your preferred protocol?</td><td><code>HTTPS</code></td></tr>
+      <tr><td>Authenticate Git with your GitHub credentials?</td><td><code>Yes</code></td></tr>
+      <tr><td>How would you like to authenticate?</td><td><code>Login with a web browser</code></td></tr>
+    </tbody>
+  </table></div>
+  <p>画面に出た <strong>8桁のコード</strong>をコピー → ブラウザで GitHub にログインしてコードを入力 → <strong>Authorize</strong>。</p>
+<pre><code>gh auth status</code></pre>
+  <p><code>Logged in to github.com account h-kondo</code> と出ればOK。</p>
+
+  <h3 id="step6">STEP 6. GitHub に ch03 リポジトリを作る（ブラウザ）</h3>
   <ol>
     <li>GitHub 右上の <strong>＋</strong> → <strong>New repository</strong></li>
     <li>Repository name：<strong><code>ch03</code></strong></li>
@@ -451,7 +450,7 @@ origin  https://github.com/h-kondo/ch03.git (push)</code></pre>
       <tr><td>GitHub Pages URL</td><td><code>https://h-kondo.github.io/ch03/03-18/</code></td><td>完成した画面</td></tr>
     </tbody>
   </table></div>
-  <p>⚠ Pages の URL は<strong>最後の <code>/</code> まで</strong>付けて開きます。CSS が効いていなければ STEP 5 の <code>&lt;link&gt;</code> を確認しましょう。</p>
+  <p>⚠ Pages の URL は<strong>最後の <code>/</code> まで</strong>付けて開きます。CSS が効いていなければ STEP 2 の <code>&lt;link&gt;</code> を確認しましょう。</p>
 
   <h3 id="next">2回目以降（03-19 からは毎回これだけ）</h3>
 <pre><code>cd ~/ch03
@@ -495,18 +494,77 @@ git push origin main</code></pre>
   <div class="table-wrap"><table>
     <thead><tr><th>出てくる文</th><th>対処</th></tr></thead>
     <tbody>
-      <tr><td><code>Please tell me who you are</code></td><td>STEP 2 の名前とメールの登録をする</td></tr>
+      <tr><td><code>Please tell me who you are</code></td><td>STEP 4 の名前とメールの登録をする</td></tr>
       <tr><td><code>key does not contain a section</code></td><td><code>git config</code> の後に <code>user.name</code> / <code>user.email</code> を書き忘れている</td></tr>
       <tr><td><code>fatal: not a git repository</code></td><td><code>ch03</code> フォルダにいない → <code>cd ~/ch03</code></td></tr>
       <tr><td><code>src refspec main does not match any</code></td><td>まだコミットしていない → <code>git add .</code> → <code>git commit -m "…"</code> の後に push</td></tr>
-      <tr><td><code>Authentication failed</code> / パスワードを聞かれる</td><td>GitHub にログインしていない → STEP 3 の <code>gh auth login</code></td></tr>
+      <tr><td><code>Authentication failed</code> / パスワードを聞かれる</td><td>GitHub にログインしていない → STEP 5 の <code>gh auth login</code></td></tr>
       <tr><td><code>Repository not found</code></td><td>送り先の URL が違う、または GitHub にリポジトリを作っていない → <code>git remote -v</code> で確認（STEP 6・7）</td></tr>
       <tr><td><code>rejected ... (fetch first)</code></td><td>GitHub 側で編集した → <code>git pull origin main</code> してからもう一度 push</td></tr>
       <tr><td>Pages が 404</td><td>①Pages の設定が main / (root) か ②ファイル名が小文字の <code>index.html</code> か ③10分ほど待ったか</td></tr>
       <tr><td>Pages で CSS が効かない</td><td><code>&lt;head&gt;</code> に <code>&lt;link rel="stylesheet" href="style.css"&gt;</code> があるか、ファイル名が一致しているか</td></tr>
     </tbody>
   </table></div>
-  <p class="note warn">学校の共有PCを使い終わったら、次の人があなたのアカウントでアップロードできないよう <code>gh auth logout</code> でログアウトしておきましょう。</p>
+
+  <h2 id="vagrant">Vagrant（仮想マシン）からやる場合</h2>
+  <p class="note"><strong>ここは、いつも Vagrant の中で Vim を使って作業している人向けです。</strong>上の「Vagrant を使わない方法」でできた人は読まなくてOKです。</p>
+
+  <h3>仕組み：Vagrant のフォルダは PC と仮想マシンで共有されている</h3>
+  <p><code>Vagrantfile</code> がある PC 側のフォルダは、仮想マシンの中では <strong><code>/vagrant</code></strong> として見えます。どちらで書き換えても、<strong>同じファイル</strong>が変わります。</p>
+<pre><code>PC（Ubuntu）側                   仮想マシンの中
+~/vagrant/            ⇔  共有  ⇔  /vagrant/
+└── ch03/                          └── ch03/
+    └── 03-18/                         └── 03-18/</code></pre>
+  <p>※ <code>~/vagrant</code> は例です。自分の <code>Vagrantfile</code> がある場所に読み替えてください。</p>
+
+  <h3>やり方1：共有フォルダを PC 側の VS Code で開く（おすすめ）</h3>
+  <p>ファイルは共有フォルダに置き、<strong>編集も Git も PC 側の VS Code でやる</strong>方法です。手順は「Vagrant を使わない方法」とまったく同じで、<code>ch03</code> を作る場所が違うだけです。</p>
+<pre><code>cd ~/vagrant              # Vagrantfile がある場所
+mkdir -p ch03/03-18
+cd ch03
+code .</code></pre>
+  <p>あとは STEP 2〜9 と同じです（名前の登録・GitHub へのログインも PC 側で1回やれば OK）。仮想マシンの中からも <code>/vagrant/ch03</code> で同じファイルが見えます。</p>
+
+  <h3>やり方2：仮想マシンの中で Git を使う</h3>
+  <p>いつもどおり仮想マシンに入って、Vim で書き、Git も仮想マシンの中で実行する方法です。</p>
+<pre><code>vagrant up                # 仮想マシンを起動
+vagrant ssh               # 仮想マシンに入る
+cd /vagrant/ch03          # 共有フォルダの ch03 に移動</code></pre>
+  <p class="note warn"><strong>仮想マシンは PC とは別のコンピューター</strong>なので、Git の準備をもう一度やり直す必要があります。</p>
+  <ol>
+    <li>Git の確認とインストール（STEP 3）：<code>git --version</code></li>
+    <li>名前とメールの登録（STEP 4）：<code>git config --global user.name "h-kondo"</code> など</li>
+    <li>GitHub へのログイン（STEP 5）：<code>sudo apt install -y gh</code> → <code>gh auth login</code><br>
+      仮想マシンにはブラウザが無いので、「Login with a web browser」を選んで画面に出た <strong>8桁のコード</strong>をメモし、<strong>PC 側のブラウザ</strong>で <code>https://github.com/login/device</code> を開いてコードを入力します。</li>
+  </ol>
+  <p>あとは STEP 6〜9 と同じコマンド（<code>git add</code> → <code>git commit</code> → <code>git push</code>）を仮想マシンの中で実行します。</p>
+  <p><strong>ブラウザでの確認</strong>：仮想マシンの中に画面（デスクトップ）がある場合は、次のコマンドで開けます（<code>xdg-open</code> は Linux 共通の「いつものアプリで開く」コマンドです）。</p>
+<pre><code>cd /vagrant/ch03/03-18
+xdg-open index.html</code></pre>
+  <p>画面が無い仮想マシン（文字だけの画面）では開けないので、<strong>PC 側</strong>で共有フォルダの中のファイルを開きます。</p>
+<pre><code># PC 側のターミナルで
+cd ~/vagrant/ch03/03-18
+open index.html</code></pre>
+
+  <h3>やり方3：VS Code から仮想マシンに接続する（Remote - SSH）</h3>
+  <p>VS Code の画面のまま、仮想マシンの中のファイルを編集し、VS Code のターミナルも仮想マシンの中で動かす方法です。</p>
+  <ol>
+    <li>VS Code に拡張機能 <strong>「Remote - SSH」</strong>（Microsoft 製）を入れる</li>
+    <li>PC 側のターミナルで、接続情報を SSH の設定に追加する（最初の1回だけ）
+<pre><code>cd ~/vagrant              # Vagrantfile がある場所
+vagrant up
+vagrant ssh-config --host vagrant &gt;&gt; ~/.ssh/config</code></pre></li>
+    <li>VS Code でコマンドパレット（<code>Ctrl+Shift+P</code>）→ <code>Remote-SSH: Connect to Host</code> → <strong><code>vagrant</code></strong> を選ぶ</li>
+    <li>新しいウィンドウが開いたら「フォルダーを開く」→ <code>/vagrant/ch03</code></li>
+    <li>左下に <strong>SSH: vagrant</strong> と出ていれば接続できています。ターミナルも仮想マシンの中なので、Git の準備は「やり方2」と同じく仮想マシン側で必要です</li>
+  </ol>
+
+  <h3>Vagrant を使う時の注意</h3>
+  <ul>
+    <li><strong>Git を実行する場所はどちらか片方に決める</strong>（PC 側か仮想マシン側か）。名前の登録やログインは場所ごとに別々なので、混ぜると「片方ではログインできているのに、もう片方では失敗する」ことになります</li>
+    <li>作業が終わったら仮想マシンを止める：<code>vagrant halt</code></li>
+    <li>共有フォルダの外（仮想マシンの中だけにあるフォルダ）に置いたファイルは PC 側からは見えません。課題は必ず <code>/vagrant</code> の中に置きましょう</li>
+  </ul>
 
   <h2 id="shortcut">よく使うショートカット</h2>
   <p>まずは「コマンドパレット」だけ覚えれば十分です。全機能を名前で検索して実行できるので、Vim の <code>:</code> コマンドの代わりになります。</p>
@@ -553,16 +611,17 @@ git push origin main</code></pre>
       <li><a href="#vim">Vim との違い</a></li>
       <li><a href="#install">インストール手順<span class="toc-sub">授業では Ubuntu の .deb を使う</span></a></li>
       <li><a href="#setup">初期セットアップ<span class="toc-sub">※ 必ずやるのは「1. VS Code と GitHub を連携」だけ。2 以降は任意</span></a></li>
-      <li><a href="#git">Git / GitHub と接続して課題を上げる（03-18）<span class="toc-sub">ここが本題</span></a>
+      <li><a href="#git">Git / GitHub と接続して課題を上げる（03-18）<span class="toc-sub">ここが本題（Vagrant は起動しないで進める）</span></a>
         <ol>
           <li><a href="#git-overview">全体像：自分のPCと GitHub の関係</a></li>
-          <li><a href="#git-steps">STEP 1〜4：Git の準備・名前の登録・GitHub にログイン・フォルダを作る</a></li>
-          <li><a href="#step5">STEP 5：HTML と CSS を書いて、ローカルで表示を確認する</a></li>
-          <li><a href="#step7">STEP 6〜9：GitHub に上げて、Pages で公開・提出する</a></li>
+          <li><a href="#git-steps">STEP 1〜2：フォルダを作って HTML と CSS を書き、ローカルで確認</a></li>
+          <li><a href="#step-git">STEP 3〜5：Git の準備・名前の登録・GitHub にログイン</a></li>
+          <li><a href="#step6">STEP 6〜9：GitHub に上げて、Pages で公開・提出する</a></li>
           <li><a href="#next">2回目以降（03-19〜）</a></li>
           <li><a href="#git-trouble">うまくいかない時</a></li>
         </ol>
       </li>
+      <li><a href="#vagrant">Vagrant（仮想マシン）からやる場合<span class="toc-sub">いつも仮想マシンで作業している人向け</span></a></li>
       <li><a href="#shortcut">よく使うショートカット</a></li>
       <li><a href="#trouble">よくあるトラブル</a></li>
       <li><a href="#ref">参考</a></li>
