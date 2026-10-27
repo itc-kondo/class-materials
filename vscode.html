@@ -524,7 +524,9 @@ git push origin main</code></pre>
   </table></div>
 
   <h2 id="vagrant">Vagrant（仮想マシン）からやる場合</h2>
-  <p class="note"><strong>ここは、いつも Vagrant の中で Vim を使って作業している人向けです。</strong>上の「Vagrant を使わない方法」でできた人は読まなくてOKです。</p>
+  <p class="note"><strong>これは、皆さんがこれまで行ってきた方法です。</strong><br>
+  今までは Vagrant の中で Vim を使って書き、そのまま GitHub に push していたと思います。ここでは改めて、<strong>「自分は今どのコンピューターの、どのフォルダで Git を動かしているのか」</strong>という仕組みを理解し、Vagrant あり・なしのどちらでも自由に扱えるように手順をまとめます。<br>
+  Vagrant の中から GitHub に上げる場合も、<strong>なんとなくコマンドを打つのではなく、状況と仕組みを理解したうえで</strong>行うようにしてください。</p>
 
   <h3>仕組み：Vagrant のフォルダは PC と仮想マシンで共有されている</h3>
   <p><code>Vagrantfile</code> がある PC 側のフォルダは、仮想マシンの中では <strong><code>/vagrant</code></strong> として見えます。どちらで書き換えても、<strong>同じファイル</strong>が変わります。</p>
@@ -548,7 +550,7 @@ code .</code></pre>
 <pre><code>vagrant up                # 仮想マシンを起動
 vagrant ssh               # 仮想マシンに入る
 cd /vagrant/ch03          # 共有フォルダの ch03 に移動</code></pre>
-  <p class="note warn"><strong>仮想マシンは PC とは別のコンピューター</strong>なので、Git の準備をもう一度やり直す必要があります。</p>
+  <p class="note warn"><strong>仮想マシンは PC とは別のコンピューター（PC の中で起動している、もう1台の別の PC という扱い）</strong>なので、Git の準備をもう一度やり直す必要があります。PC 側で登録した名前やログインは、仮想マシンの中には引き継がれません。</p>
   <ol>
     <li>Git の確認とインストール（STEP 3）：<code>git --version</code></li>
     <li>名前とメールの登録（STEP 4）：<code>git config --global user.name "h-kondo"</code> など</li>
