@@ -110,3 +110,11 @@ figcaption { color: var(--muted); font-size: 13px; text-align: center; margin-to
   font-weight: 700;
   white-space: nowrap;
 }
+
+/* 目次 */
+.toc { border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; margin: 0 0 32px; background: var(--code-bg); }
+.toc-title { margin: 0 0 6px; font-weight: 700; }
+.toc ol { margin: 0; padding-left: 1.4em; }
+.toc ol ol { margin: 2px 0 4px; font-size: 14px; }
+.toc li { margin: 2px 0; }
+h2, h3 { scroll-margin-top: 16px; }
