@@ -513,6 +513,7 @@ git push origin main</code></pre>
       <tr><td><code>Please tell me who you are</code></td><td>STEP 4 の名前とメールの登録をする</td></tr>
       <tr><td><code>key does not contain a section</code></td><td><code>git config</code> の後に <code>user.name</code> / <code>user.email</code> を書き忘れている</td></tr>
       <tr><td><code>fatal: not a git repository</code></td><td><code>ch03</code> フォルダにいない → <code>cd ~/ch03</code></td></tr>
+      <tr><td><code>git status</code> に関係ないファイルがたくさん出る／<code>warning: adding embedded git repository</code>／GitHub で ch03 が空のフォルダに見える</td><td>親のフォルダが Git につながっている → 「<a href="#nested-git">親のフォルダがすでに Git につながっていると失敗する</a>」</td></tr>
       <tr><td><code>src refspec main does not match any</code></td><td>まだコミットしていない → <code>git add .</code> → <code>git commit -m "…"</code> の後に push</td></tr>
       <tr><td><code>Authentication failed</code> / パスワードを聞かれる</td><td>GitHub にログインしていない → STEP 5 の <code>gh auth login</code></td></tr>
       <tr><td><code>Repository not found</code></td><td>送り先の URL が違う、または GitHub にリポジトリを作っていない → <code>git remote -v</code> で確認（STEP 6・7）</td></tr>
@@ -539,6 +540,7 @@ git push origin main</code></pre>
 mkdir -p ch03/03-18
 cd ch03
 code .</code></pre>
+  <p class="note warn">⚠ Vagrant のフォルダ（例：<code>webex1</code>）がすでに Git につながっている場合、この方法は使えません。先に「<a href="#nested-git">親のフォルダがすでに Git につながっていると失敗する</a>」の確認をしてください。</p>
   <p>あとは STEP 2〜9 と同じです（名前の登録・GitHub へのログインも PC 側で1回やれば OK）。仮想マシンの中からも <code>/vagrant/ch03</code> で同じファイルが見えます。</p>
 
   <h3>やり方2：仮想マシンの中で Git を使う</h3>
@@ -574,6 +576,41 @@ vagrant ssh-config --host vagrant &gt;&gt; ~/.ssh/config</code></pre></li>
     <li>新しいウィンドウが開いたら「フォルダーを開く」→ <code>/vagrant/ch03</code></li>
     <li>左下に <strong>SSH: vagrant</strong> と出ていれば接続できています。ターミナルも仮想マシンの中なので、Git の準備は「やり方2」と同じく仮想マシン側で必要です</li>
   </ol>
+
+  <h3 id="nested-git">⚠ 親のフォルダがすでに Git につながっていると失敗する</h3>
+  <p class="note warn"><strong>すでに Git につながっているフォルダ（例：<code>webex1</code>）の中に <code>ch03</code> を作ると、うまくいきません。</strong>Vagrant のフォルダや今までの授業のフォルダが Git で管理されている場合に起きます。</p>
+<pre><code>webex1/          ← すでに Git につながっている（.git がある）
+├── .git/
+├── Vagrantfile
+└── ch03/        ← ✕ この中で git init して GitHub に上げようとすると失敗する
+    └── 03-18/</code></pre>
+  <p>Git は、今いるフォルダに <code>.git</code> が無いと<strong>親のフォルダをさかのぼって探しに行きます</strong>。そのため、次のどちらかの状態になります。</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>やったこと</th><th>何が起きるか</th></tr></thead>
+    <tbody>
+      <tr><td><code>ch03</code> で <code>git init</code> <strong>せずに</strong> <code>git add</code> / <code>commit</code> / <code>push</code></td><td>Git の操作が<strong>親の <code>webex1</code> に対して</strong>行われる。<code>git status</code> に関係ないファイルがたくさん出る、<code>git remote add</code> で <code>remote origin already exists</code> と言われる、<code>git push</code> すると<strong>親の別のリポジトリ</strong>に送られてしまう</td></tr>
+      <tr><td><code>ch03</code> で <code>git init</code> <strong>した</strong></td><td>Git の中に Git がある「入れ子」の状態になる。親の <code>webex1</code> 側で <code>warning: adding embedded git repository</code> と出たり、GitHub 上で <code>ch03</code> が<strong>中身の見えない空のフォルダ</strong>（矢印つきのアイコン）として表示されたりする</td></tr>
+    </tbody>
+  </table></div>
+  <h4>自分のフォルダが大丈夫か確認する方法</h4>
+  <p><code>ch03</code> フォルダの中で次を実行します。</p>
+<pre><code>git rev-parse --show-toplevel   # 今いる場所が、どのフォルダの Git に入っているかを表示
+git remote -v                   # 送り先の GitHub の URL を表示</code></pre>
+  <div class="table-wrap"><table>
+    <thead><tr><th>結果</th><th>判定</th></tr></thead>
+    <tbody>
+      <tr><td><code>fatal: not a git repository</code>（まだ <code>git init</code> 前）</td><td>◯ 親は Git につながっていない。このまま STEP 7 の <code>git init</code> へ進んでOK</td></tr>
+      <tr><td><code>/home/ユーザー名/ch03</code> のように <strong><code>ch03</code> で終わる</strong>パス</td><td>◯ <code>ch03</code> が独立したリポジトリになっている</td></tr>
+      <tr><td><code>/home/ユーザー名/webex1</code> のように<strong>親のフォルダ</strong>が出る</td><td>✕ 親の Git に入っている。下の方法で直す</td></tr>
+    </tbody>
+  </table></div>
+  <h4>直し方</h4>
+  <p><code>ch03</code> を<strong>Git につながっていない場所へ移動</strong>します（STEP 1 のとおりホームフォルダの直下が安全です）。</p>
+<pre><code>mv ~/webex1/ch03 ~/ch03   # webex1 の外へ移動（場所は自分の環境に合わせる）
+cd ~/ch03
+git rev-parse --show-toplevel   # まだ git init 前なら「not a git repository」と出れば OK</code></pre>
+  <p class="note warn">親のフォルダの <code>.git</code> を消して直そうとしないでください。今までの授業の履歴や、親が GitHub に上げていた内容とのつながりがすべて消えます。<strong>消すのではなく、ch03 の方を外に出す</strong>のが正解です。<br>
+  なお Vagrant の中から作業したい場合も、共有フォルダ（<code>Vagrantfile</code> がある場所）自体が Git につながっていないかを、先に上のコマンドで確認してください。</p>
 
   <h3>Vagrant を使う時の注意</h3>
   <ul>
