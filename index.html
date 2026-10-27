@@ -3,39 +3,60 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>授業資料</title>
+  <title>ITC 授業資料</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="site-logo" href="./">ITC 授業資料</a>
+    <nav class="site-nav"><a href="./">記事一覧</a></nav>
+  </div>
+</header>
+<div class="layout">
 <main>
   <h1>授業資料</h1>
-  <p class="date">読みたい資料を選んでください。</p>
-  <div class="cards">
-    <a class="card" href="threejs.html">
-      <h2>Three.js 入門</h2>
-      <p>ブラウザで3Dを動かそう。HTML/CSS の次の一歩。</p>
-    </a>
-    <a class="card" href="vscode.html">
-      <h2>VS Code 手順書</h2>
-      <p>概要・Vim との違い・セットアップ・GitHub への課題の上げ方（03-18）。</p>
-    </a>
-    <a class="card" href="sekai-seifuku.html">
-      <h2>要約：『「世界征服」は可能か？』</h2>
-      <p>岡田斗司夫の本を要約。組織論・現代社会論として読む。</p>
-    </a>
-    <a class="card" href="gmo-incident.html">
-      <h2>GMO 不正アクセス事件</h2>
-      <p>2026年10月の事件を技術的に解説。何が盗まれ、なぜ口座が操作されたのか。</p>
-    </a>
-    <a class="card" href="games.html">
-      <h2>超大作ゲームの技術と数字</h2>
-      <p>サイバーパンク2077・GTA V・GTA VI の技術要件、売上、何がすごいか。</p>
-    </a>
-    <a class="card" href="demo/cube.html">
-      <h2>サンプル：回る立方体</h2>
+  <p class="date">読みたい記事を選んでください。</p>
+
+  <ul class="feed">
+    <li>
+      <div class="feed-meta"><span class="avatar">K</span>itc-kondo・更新日 2026-10-27</div>
+      <a class="feed-title" href="vscode.html">VS Code 概要とインストール・セットアップ手順書</a>
+      <p>Vim との違い、Ubuntu へのインストール、GitHub への課題の上げ方（03-18）と GitHub Pages での公開まで。</p>
+      <ul class="tags"><li>VSCode</li><li>Git</li><li>GitHub</li><li>Ubuntu</li><li>初心者</li></ul>
+    </li>
+    <li>
+      <div class="feed-meta"><span class="avatar">K</span>itc-kondo・投稿日 2026-10-05</div>
+      <a class="feed-title" href="threejs.html">Three.js 入門 ― ブラウザで3Dを動かそう</a>
+      <p>HTML/CSS の次の一歩。なぜ今流行っているのか、3D の基本、HTML 1枚で回る立方体まで。</p>
+      <ul class="tags"><li>Three.js</li><li>JavaScript</li><li>HTML</li><li>CSS</li><li>3D</li></ul>
+    </li>
+    <li>
+      <div class="feed-meta"><span class="avatar">K</span>itc-kondo・投稿日 2026-10-26</div>
+      <a class="feed-title" href="gmo-incident.html">GMO 不正アクセス事件 ― 技術的に何が起きたのか</a>
+      <p>2026年10月の事件を解説。サーバーに保存したパスワードが盗まれ、口座が操作されるまでの流れ。</p>
+      <ul class="tags"><li>セキュリティ</li><li>不正アクセス</li><li>ランサムウェア</li><li>クラウド</li></ul>
+    </li>
+    <li>
+      <div class="feed-meta"><span class="avatar">K</span>itc-kondo・投稿日 2026-10-26</div>
+      <a class="feed-title" href="games.html">超大作ゲームの技術と数字 ― サイバーパンク2077・GTA V・GTA VI</a>
+      <p>PC の技術要件、売上、プレイヤー数、何がすごいのか。</p>
+      <ul class="tags"><li>ゲーム</li><li>GTA</li><li>サイバーパンク2077</li><li>グラフィックス</li></ul>
+    </li>
+    <li>
+      <div class="feed-meta"><span class="avatar">K</span>itc-kondo・投稿日 2026-10-05</div>
+      <a class="feed-title" href="sekai-seifuku.html">要約：岡田斗司夫『「世界征服」は可能か？』</a>
+      <p>悪の組織から学ぶ、組織と社会のしくみ。結論は「たぶん可能。でも割に合わない」。</p>
+      <ul class="tags"><li>読書</li><li>要約</li><li>組織論</li></ul>
+    </li>
+    <li>
+      <div class="feed-meta"><span class="avatar">K</span>itc-kondo・サンプル</div>
+      <a class="feed-title" href="demo/cube.html">サンプル：回る立方体（Three.js）</a>
       <p>Three.js 入門のサンプルコードが実際に動くページ。</p>
-    </a>
-  </div>
+      <ul class="tags"><li>Three.js</li><li>デモ</li></ul>
+    </li>
+  </ul>
 </main>
+</div>
 </body>
 </html>

@@ -7,33 +7,18 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="site-logo" href="./">ITC 授業資料</a>
+    <nav class="site-nav"><a href="./">記事一覧</a></nav>
+  </div>
+</header>
+<div class="layout has-side">
 <main>
-  <nav class="top"><a href="./">← 授業資料トップ</a></nav>
-  <h1>VS Code 概要とインストール・セットアップ手順書</h1>
-  <p class="date">2026-10-05（2026-10-27 更新）</p>
+  <div class="article-meta"><span class="avatar">K</span><span class="author">itc-kondo</span><span>投稿日 2026-10-05　更新日 2026-10-27</span></div>
+  <div class="article-title"><img src="img/vscode.svg" alt="" width="56" height="56"><h1>VS Code 概要とインストール・セットアップ手順書</h1></div>
+  <ul class="tags"><li>VSCode</li><li>Git</li><li>GitHub</li><li>Ubuntu</li><li>初心者</li></ul>
 
-  <nav class="toc" aria-label="目次">
-    <p class="toc-title">目次</p>
-    <ol>
-      <li><a href="#about">VS Code とは</a></li>
-      <li><a href="#vim">Vim との違い</a></li>
-      <li><a href="#install">インストール手順</a>（授業では Ubuntu の <code>.deb</code>）</li>
-      <li><a href="#setup">初期セットアップ</a></li>
-      <li><a href="#git">Git / GitHub と接続して課題を上げる（03-18）</a>
-        <ol>
-          <li><a href="#git-overview">全体像：自分のPCと GitHub の関係</a></li>
-          <li><a href="#git-steps">STEP 1〜4：Git の準備・名前の登録・GitHub にログイン・フォルダを作る</a></li>
-          <li><a href="#step5">STEP 5：HTML と CSS を書いて、ローカルで表示を確認する</a></li>
-          <li><a href="#step7">STEP 6〜9：GitHub に上げて、Pages で公開・提出する</a></li>
-          <li><a href="#next">2回目以降（03-19〜）</a></li>
-          <li><a href="#git-trouble">うまくいかない時</a></li>
-        </ol>
-      </li>
-      <li><a href="#shortcut">よく使うショートカット</a></li>
-      <li><a href="#trouble">よくあるトラブル</a></li>
-      <li><a href="#ref">参考</a></li>
-    </ol>
-  </nav>
 
   <h2 id="about">VS Code とは</h2>
   <p>Visual Studio Code（略称 VS Code）は、Microsoft が無料で配布しているコードエディタです。2015年に公開され、現在は世界で最も使われている開発用エディタです。</p>
@@ -74,7 +59,7 @@
   <h2 id="install">インストール手順</h2>
   <p>どのOSでも、公式サイト <a href="https://code.visualstudio.com/">code.visualstudio.com</a> から無料でダウンロードできます。所要時間は5〜10分です。</p>
   <p class="note"><strong>この授業の皆さんは Ubuntu を使っているので、<code>.deb</code> をダウンロードしてください。</strong>すぐ下の「Linux（Ubuntu / Debian）」の手順で進めます。</p>
-  <p class="note">似た名前の「Visual Studio」は別の重い開発ツールなので間違えないように。</p>
+  <p class="note warn">似た名前の「Visual Studio」は別の重い開発ツールなので間違えないように。</p>
 
   <h3 id="linux">Linux（Ubuntu / Debian）← 授業ではこれ</h3>
   <p class="note">皆さんは Ubuntu なので、<strong><code>.deb</code></strong> を選んでダウンロードしてください（<code>.rpm</code> ではありません）。</p>
@@ -87,6 +72,12 @@ sudo apt install ./code_*.deb</code></pre>
     </li>
     <li>アプリ一覧の「Visual Studio Code」か、ターミナルで <code>code</code> と打って起動</li>
   </ol>
+
+  <p class="note"><strong>ターミナルで <code>code</code> と打つと VS Code が開きます。</strong><br>
+  <code>code .</code> なら「今いるフォルダ」を、<code>code index.html</code> ならそのファイルを開きます。Vim で <code>vim index.html</code> と打っていたのと同じ感覚で使えます。</p>
+<pre><code>code            # VS Code を起動する
+code .          # 今いるフォルダを VS Code で開く（いちばんよく使う）
+code index.html # ファイルを指定して開く</code></pre>
 
   <h3>補足：<code>.deb</code> と <code>.rpm</code> の違い</h3>
   <p>どちらも Linux 用の「インストール用パッケージ」ですが、<strong>Linux の系統（ディストリビューション）ごとに形式が違います</strong>。自分の OS に合わない方を選ぶとインストールできません。</p>
@@ -126,7 +117,7 @@ sudo apt install ./code_*.deb</code></pre>
   </ol>
 
   <h2 id="setup">初期セットアップ</h2>
-  <p>インストールしたら、上から順にやれば「保存し忘れず、ターミナルから開ける」状態になります。</p>
+  <p class="note"><strong>この章はやらなくてもOKです。</strong>授業で必ずやるのは、Git の <a href="#step2">名前とメールの登録（STEP 2）</a>と <a href="#step3">GitHub へのログイン（STEP 3）</a>だけ。ここは「やっておくと便利」な設定集なので、余裕がある人だけどうぞ。</p>
 
   <h3>1. 日本語化（任意）</h3>
   <p><strong>やってもやらなくてもOKです。</strong>英語のメニューのまま使うのもおすすめです。</p>
@@ -169,7 +160,7 @@ sudo apt install ./code_*.deb</code></pre>
     </tbody>
   </table></div>
 
-  <h3>4. ターミナルから <code>code</code> コマンドで開けるようにする</h3>
+  <h3>4. ターミナルから <code>code</code> で開く（Ubuntu は設定不要）</h3>
   <p>Vim で <code>vim index.html</code> と打っていた感覚で、<code>code .</code>（今いるフォルダを開く）や <code>code index.html</code> が使えるようになります。</p>
   <ul>
     <li><strong>Mac</strong> ― <code>Cmd+Shift+P</code> でコマンドパレットを開き、<code>Shell Command: Install 'code' command in PATH</code> を実行</li>
@@ -266,7 +257,7 @@ sudo apt install ./code_*.deb</code></pre>
 <pre><code>sudo apt update
 sudo apt install -y git</code></pre>
 
-  <h3>STEP 2. 名前とメールアドレスを登録する（最初に1回だけ）</h3>
+  <h3 id="step2">STEP 2. 名前とメールアドレスを登録する（最初に1回だけ）</h3>
   <p>コミット（セーブ）に「誰が変更したか」として記録されます。<strong>GitHub のユーザー名と、GitHub に登録したメールアドレス</strong>を使います。</p>
 <pre><code>git config --global user.name "h-kondo"
 git config --global user.email "GitHubに登録したメールアドレス"</code></pre>
@@ -288,7 +279,7 @@ user.email=xxxxx@gmail.com</code></pre>
     </tbody>
   </table></div>
 
-  <h3>STEP 3. GitHub と接続する（ログイン・最初に1回だけ）</h3>
+  <h3 id="step3">STEP 3. GitHub と接続する（ログイン・最初に1回だけ）</h3>
   <p>⚠ GitHub は<strong>パスワードでのアップロードを受け付けません</strong>。GitHub CLI（<code>gh</code>）でログインします。</p>
 <pre><code>sudo apt install -y gh
 gh auth login</code></pre>
@@ -313,7 +304,7 @@ code .                  # ch03 フォルダを VS Code で開く</code></pre>
 
   <h3 id="step5">STEP 5. 03-18 の HTML と CSS を書く</h3>
   <p>左のエクスプローラーで <code>03-18</code> フォルダを右クリック →「新しいファイル」で、<code>index.html</code> と <code>style.css</code> を作ります。⚠ ファイル名は<strong>すべて小文字</strong>（<code>Index.html</code> だと Pages で開けません）。</p>
-  <p><strong>03-18/index.html</strong></p>
+<div class="code-frame"><span class="code-name">03-18/index.html</span>
 <pre><code>&lt;!DOCTYPE html&gt;
 &lt;html lang="ja"&gt;
 &lt;head&gt;
@@ -336,9 +327,9 @@ code .                  # ch03 フォルダを VS Code で開く</code></pre>
     &lt;p&gt;ご意見・ご質問&lt;/p&gt;
     &lt;textarea name="message"&gt;&lt;/textarea&gt;
 &lt;/body&gt;
-&lt;/html&gt;</code></pre>
-  <p class="note">⚠ <code>&lt;link rel="stylesheet" href="style.css"&gt;</code> を <code>&lt;head&gt;</code> の中に入れないと、<strong>CSS を別ファイルに分けたときに反映されません</strong>。<code>href</code> の名前と CSS のファイル名（<code>style.css</code>）が1文字も違わないことも確認しましょう。</p>
-  <p><strong>03-18/style.css</strong></p>
+&lt;/html&gt;</code></pre></div>
+  <p class="note warn">⚠ <code>&lt;link rel="stylesheet" href="style.css"&gt;</code> を <code>&lt;head&gt;</code> の中に入れないと、<strong>CSS を別ファイルに分けたときに反映されません</strong>。<code>href</code> の名前と CSS のファイル名（<code>style.css</code>）が1文字も違わないことも確認しましょう。</p>
+<div class="code-frame"><span class="code-name">03-18/style.css</span>
 <pre><code>/* 入力フィールド共通の装飾 */
 input[type="text"],
 select,
@@ -354,7 +345,7 @@ textarea {
 /* テキストエリアの高さ指定 */
 textarea {
     height: 150px;           /* 高さを固定して入力しやすくする */
-}</code></pre>
+}</code></pre></div>
   <h4>まずはローカル（自分のPC）で表示を確認する</h4>
   <p>GitHub に上げる前に、<strong>自分のPCのブラウザできちんと表示されるか</strong>を必ず確認します。ここで崩れているものは、GitHub に上げても崩れたままです。</p>
   <p>VS Code のターミナルで <code>03-18</code> フォルダに移動して、ブラウザで開きます。</p>
@@ -372,6 +363,7 @@ google-chrome index.html # Ubuntu：Chrome を指定して開く場合</code></p
 
   <h4>トップページ（リンク集）も作る</h4>
   <p><code>ch03</code> の直下（<code>03-18</code> フォルダの外）に <code>index.html</code> を作ります。課題が増えたら <code>&lt;li&gt;</code> を1行ずつ足します。</p>
+<div class="code-frame"><span class="code-name">ch03/index.html</span>
 <pre><code>&lt;!DOCTYPE html&gt;
 &lt;html lang="ja"&gt;
 &lt;head&gt;
@@ -384,7 +376,7 @@ google-chrome index.html # Ubuntu：Chrome を指定して開く場合</code></p
         &lt;li&gt;&lt;a href="03-18/"&gt;03-18 お問い合わせ&lt;/a&gt;&lt;/li&gt;
     &lt;/ul&gt;
 &lt;/body&gt;
-&lt;/html&gt;</code></pre>
+&lt;/html&gt;</code></pre></div>
 
   <h3>STEP 6. GitHub に ch03 リポジトリを作る（ブラウザ）</h3>
   <ol>
@@ -491,7 +483,7 @@ git push origin main</code></pre>
       <tr><td>Pages で CSS が効かない</td><td><code>&lt;head&gt;</code> に <code>&lt;link rel="stylesheet" href="style.css"&gt;</code> があるか、ファイル名が一致しているか</td></tr>
     </tbody>
   </table></div>
-  <p class="note">学校の共有PCを使い終わったら、次の人があなたのアカウントでアップロードできないよう <code>gh auth logout</code> でログアウトしておきましょう。</p>
+  <p class="note warn">学校の共有PCを使い終わったら、次の人があなたのアカウントでアップロードできないよう <code>gh auth logout</code> でログアウトしておきましょう。</p>
 
   <h2 id="shortcut">よく使うショートカット</h2>
   <p>まずは「コマンドパレット」だけ覚えれば十分です。全機能を名前で検索して実行できるので、Vim の <code>:</code> コマンドの代わりになります。</p>
@@ -531,5 +523,29 @@ git push origin main</code></pre>
     <li><a href="https://code.visualstudio.com/docs/getstarted/keybindings">キーボードショートカット一覧</a></li>
   </ul>
 </main>
+<aside class="side">  <nav class="toc" aria-label="目次">
+    <p class="toc-title">目次</p>
+    <ol>
+      <li><a href="#about">VS Code とは</a></li>
+      <li><a href="#vim">Vim との違い</a></li>
+      <li><a href="#install">インストール手順<span class="toc-sub">授業では Ubuntu の .deb を使う</span></a></li>
+      <li><a href="#setup">初期セットアップ<span class="toc-sub">※ 任意。必ずやるのは Git の名前登録と GitHub ログインだけ</span></a></li>
+      <li><a href="#git">Git / GitHub と接続して課題を上げる（03-18）<span class="toc-sub">ここが本題</span></a>
+        <ol>
+          <li><a href="#git-overview">全体像：自分のPCと GitHub の関係</a></li>
+          <li><a href="#git-steps">STEP 1〜4：Git の準備・名前の登録・GitHub にログイン・フォルダを作る</a></li>
+          <li><a href="#step5">STEP 5：HTML と CSS を書いて、ローカルで表示を確認する</a></li>
+          <li><a href="#step7">STEP 6〜9：GitHub に上げて、Pages で公開・提出する</a></li>
+          <li><a href="#next">2回目以降（03-19〜）</a></li>
+          <li><a href="#git-trouble">うまくいかない時</a></li>
+        </ol>
+      </li>
+      <li><a href="#shortcut">よく使うショートカット</a></li>
+      <li><a href="#trouble">よくあるトラブル</a></li>
+      <li><a href="#ref">参考</a></li>
+    </ol>
+  </nav>
+</aside>
+</div>
 </body>
 </html>
