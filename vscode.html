@@ -117,9 +117,32 @@ code index.html # ファイルを指定して開く</code></pre>
   </ol>
 
   <h2 id="setup">初期セットアップ</h2>
-  <p class="note"><strong>この章はやらなくてもOKです。</strong>授業で必ずやるのは、Git の <a href="#step2">名前とメールの登録（STEP 2）</a>と <a href="#step3">GitHub へのログイン（STEP 3）</a>だけ。ここは「やっておくと便利」な設定集なので、余裕がある人だけどうぞ。</p>
+  <p class="note"><strong>この章で必ずやるのは「1. VS Code と GitHub を連携する」だけです。</strong>2 から先は「やっておくと便利」な設定集なので、余裕がある人だけどうぞ（あわせて Git の章の <a href="#step2">名前とメールの登録（STEP 2）</a>と <a href="#step3">GitHub へのログイン（STEP 3）</a>も必ずやります）。</p>
 
-  <h3>1. 日本語化（任意）</h3>
+  <h3 id="vscode-github">1. VS Code と GitHub を連携する（必ずやる）</h3>
+  <p>VS Code を入れて最初に起動すると、<strong>GitHub アカウントでサインインする案内</strong>が出てきます。<strong>これは授業で必ずやってください。</strong>数分で終わります。</p>
+  <ol>
+    <li>VS Code を起動する</li>
+    <li>次のどちらかからサインインを始める
+      <ul>
+        <li>起動直後の<strong>ウェルカム画面</strong>に出る「<strong>Sign in</strong>（サインイン）」のボタン</li>
+        <li>出てこなかった・閉じてしまった時は、<strong>左下の人の形のアイコン（アカウント）</strong>→「<strong>GitHub でサインイン</strong>」（Sign in with GitHub）</li>
+      </ul>
+    </li>
+    <li>ブラウザが開くので、GitHub にログインして <strong>Authorize（許可）</strong>を押す</li>
+    <li>「Visual Studio Code を開きますか？」と聞かれたら <strong>開く</strong> を押して VS Code に戻る</li>
+    <li>VS Code に「拡張機能 'GitHub' がサインインしようとしています」などと出たら <strong>許可</strong></li>
+    <li>左下のアカウントアイコンを押して、<strong>自分の GitHub ユーザー名</strong>が表示されていれば完了</li>
+  </ol>
+  <p>これをやっておくと、</p>
+  <ul>
+    <li>VS Code の<strong>ソース管理のボタン</strong>（同期・プッシュ）から、パスワードを聞かれずに GitHub へアップロードできる</li>
+    <li>VS Code のターミナルで <code>git push</code> した時も、VS Code がログインを肩代わりしてくれる</li>
+    <li>GitHub Copilot（AI の補完）や、設定の同期も同じアカウントで使える</li>
+  </ul>
+  <p class="note warn">学校の共有PCでは、使い終わったら <strong>左下のアカウントアイコン → 自分のユーザー名 → サインアウト</strong>しておきましょう（次の人があなたのアカウントでアップロードできてしまいます）。</p>
+
+  <h3>2. 日本語化（任意）</h3>
   <p><strong>やってもやらなくてもOKです。</strong>英語のメニューのまま使うのもおすすめです。</p>
   <ul>
     <li><strong>英語のままのメリット</strong>：Git、GitHub、ターミナル、エラーメッセージなど、開発で使うツールはほとんどが英語。VS Code で <code>File</code> / <code>Terminal</code> / <code>Source Control</code> などの英語に慣れておくと、他のツールを使う時やネットで調べる時に困らない（検索で出てくる解説も英語メニュー前提のものが多い）</li>
@@ -133,7 +156,7 @@ code index.html # ファイルを指定して開く</code></pre>
   </ol>
   <p>英語に戻したくなったら、コマンドパレット（<code>Ctrl+Shift+P</code>）で <code>Configure Display Language</code> → <code>en</code> を選んで再起動します。</p>
 
-  <h3>2. 入れておくと便利な拡張機能</h3>
+  <h3>3. 入れておくと便利な拡張機能</h3>
   <div class="table-wrap"><table>
     <thead><tr><th>拡張機能</th><th>何ができるか</th><th>向いている人</th></tr></thead>
     <tbody>
@@ -147,7 +170,7 @@ code index.html # ファイルを指定して開く</code></pre>
     </tbody>
   </table></div>
 
-  <h3>3. おすすめの設定</h3>
+  <h3>4. おすすめの設定</h3>
   <p>設定画面は <code>Cmd+,</code>（Windows/Linux は <code>Ctrl+,</code>）。上の検索欄に設定名を入れて変更します。</p>
   <div class="table-wrap"><table>
     <thead><tr><th>設定</th><th>おすすめ</th><th>理由</th></tr></thead>
@@ -160,14 +183,14 @@ code index.html # ファイルを指定して開く</code></pre>
     </tbody>
   </table></div>
 
-  <h3>4. ターミナルから <code>code</code> で開く（Ubuntu は設定不要）</h3>
+  <h3>5. ターミナルから <code>code</code> で開く（Ubuntu は設定不要）</h3>
   <p>Vim で <code>vim index.html</code> と打っていた感覚で、<code>code .</code>（今いるフォルダを開く）や <code>code index.html</code> が使えるようになります。</p>
   <ul>
     <li><strong>Mac</strong> ― <code>Cmd+Shift+P</code> でコマンドパレットを開き、<code>Shell Command: Install 'code' command in PATH</code> を実行</li>
     <li><strong>Windows / Linux</strong> ― インストール時に自動で使えるようになる（使えない時はターミナルを開き直す）</li>
   </ul>
 
-  <h3>5. Vim から移る人向け：Vim キーバインド</h3>
+  <h3>6. Vim から移る人向け：Vim キーバインド</h3>
   <ol>
     <li>拡張機能で <code>Vim</code>（vscodevim）をインストール</li>
     <li>これだけでノーマル/挿入/ビジュアルモード、<code>:w</code> <code>:q</code>、<code>dd</code> <code>yy</code> <code>p</code> などが使える</li>
@@ -529,7 +552,7 @@ git push origin main</code></pre>
       <li><a href="#about">VS Code とは</a></li>
       <li><a href="#vim">Vim との違い</a></li>
       <li><a href="#install">インストール手順<span class="toc-sub">授業では Ubuntu の .deb を使う</span></a></li>
-      <li><a href="#setup">初期セットアップ<span class="toc-sub">※ 任意。必ずやるのは Git の名前登録と GitHub ログインだけ</span></a></li>
+      <li><a href="#setup">初期セットアップ<span class="toc-sub">※ 必ずやるのは「1. VS Code と GitHub を連携」だけ。2 以降は任意</span></a></li>
       <li><a href="#git">Git / GitHub と接続して課題を上げる（03-18）<span class="toc-sub">ここが本題</span></a>
         <ol>
           <li><a href="#git-overview">全体像：自分のPCと GitHub の関係</a></li>
