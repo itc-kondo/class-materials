@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GMO 不正アクセス事件の技術解説</title>
+  <title>図解：GMO お名前.com 不正アクセス事件</title>
   <link rel="stylesheet" href="style.css">
   <script src="site.js" defer></script>
 </head>
@@ -22,7 +22,7 @@
 </header>
 <div class="article-layout">
 <aside class="rail" aria-label="共有">
-  <a href="https://x.com/intent/post?url=https%3A%2F%2Fitc-kondo.github.io%2Fclass-materials%2Fgmo-incident.html&amp;text=GMO%20%E4%B8%8D%E6%AD%A3%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E4%BA%8B%E4%BB%B6%E3%81%AE%E6%8A%80%E8%A1%93%E8%A7%A3%E8%AA%AC" target="_blank" rel="noopener" title="X でシェア">𝕏</a>
+  <a href="https://x.com/intent/post?url=https%3A%2F%2Fitc-kondo.github.io%2Fclass-materials%2Fgmo-incident.html&amp;text=%E5%9B%B3%E8%A7%A3%EF%BC%9AGMO%20%E3%81%8A%E5%90%8D%E5%89%8D.com%20%E4%B8%8D%E6%AD%A3%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E4%BA%8B%E4%BB%B6" target="_blank" rel="noopener" title="X でシェア">𝕏</a>
   <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fitc-kondo.github.io%2Fclass-materials%2Fgmo-incident.html" target="_blank" rel="noopener" title="Facebook でシェア">f</a>
   <a href="https://b.hatena.ne.jp/entry/s/itc-kondo.github.io/class-materials/gmo-incident.html" target="_blank" rel="noopener" title="はてなブックマーク">B!</a>
   <button type="button" data-copy title="URL をコピー">🔗</button>
@@ -30,148 +30,275 @@
 </aside>
 <main>
   <div class="article-meta"><span class="avatar">K</span><span class="author">@itc-kondo</span></div>
-  <div class="article-title"><h1>GMO「お名前.com デスクトップクラウド」不正アクセス事件 ― 技術的に何が起きたのか</h1></div>
-  <ul class="tags"><li>セキュリティ</li><li>不正アクセス</li><li>ランサムウェア</li><li>クラウド</li></ul>
-  <p class="article-dates"><span>投稿日 2026年10月26日</span></p>
-  <p class="note warn">2026-10-26 時点の公表内容と報道にもとづきます。調査は継続中で、内容は今後変わる可能性があります。</p>
+  <div class="article-title"><h1>図解：GMO「お名前.com デスクトップクラウド」不正アクセス事件 ― 1本の合鍵から、2万台と利用者のPCまで</h1></div>
+  <ul class="tags"><li>セキュリティ</li><li>不正アクセス</li><li>ランサムウェア</li><li>クラウド</li><li>リモートデスクトップ</li></ul>
+  <p class="article-dates"><span>最終更新日 2026年11月09日</span><span>投稿日 2026年10月26日</span></p>
+  <p class="note warn">2026年11月9日時点の公式発表・11月2日の記者会見・報道にもとづきます。捜査と調査は続いていて、内容は今後変わる可能性があります。<strong>会社が認めたこと</strong>と<strong>攻撃者の主張（本当かどうか分からないこと）</strong>は分けて書いています。</p>
 
-  <p class="note">FX の自動売買用に貸し出されていた <strong>Windows のクラウドサーバー（VPS）26,739台</strong>に不正なプログラムが仕掛けられ、サーバー内に保存されていた<strong>証券・FX口座のIDとパスワードが盗まれて、実際に口座が不正操作された</strong>事件です。攻撃者は100万ドルの身代金を要求し、GMO は支払いを拒否しました。</p>
+  <h2 id="summary">3行でいうと</h2>
+  <ol>
+    <li>FX の自動売買に使う「クラウドの上のパソコン」を貸すサービスで、<strong>1台に入り込まれたところから、全部を管理する「合鍵」を奪われ、最大26,739台に不正なプログラムを配られた</strong>。</li>
+    <li>そのパソコンに<strong>保存されていた証券・FX口座のパスワード</strong>が使われて口座が勝手に操作され、さらに<strong>リモートデスクトップの「ドライブ共有」を通って、利用者の自宅PCのファイルまで盗まれた</strong>。</li>
+    <li>侵入は<strong>8月から始まっていたのに、約2か月半だれも気づかなかった</strong>。2024年には同じグループのセキュリティ会社から弱点を指摘されていたが、社長まで届いていなかった。</li>
+  </ol>
 
-  <h2>1. 対象サービス：デスクトップクラウドとは</h2>
-  <p>FX（外国為替証拠金取引）の<strong>自動売買ソフトを24時間動かし続けるための、Windows のクラウドPC</strong>です。自分のPCを一晩中つけっぱなしにしなくて済むので、個人投資家に使われていました。</p>
+  <!-- ===================================================== -->
+  <h2 id="service">1. どんなサービスだったの？</h2>
+  <p>「お名前.com デスクトップクラウド」は、<strong>インターネットの向こうにある Windows のパソコン（VPS）を1台まるごと借りられる</strong>サービスです。FX（外国のお金の売り買い）の<strong>自動売買ソフトを24時間動かしっぱなしにする</strong>ために、個人投資家に使われていました。</p>
+  <figure>
+    <img src="img/gmo/m1-remote.webp" alt="家の子どもが、雲の上で24時間動き続けるパソコンをリモートで操作しているイラスト" width="1280" height="720" loading="lazy">
+    <figcaption>自分の家のパソコンから、雲の上のパソコンを遠隔で操作する。寝ている間もロボットが売り買いを続ける</figcaption>
+  </figure>
+  <figure>
+    <svg viewBox="0 0 760 300" role="img" aria-label="自宅のPCからリモートデスクトップでクラウドのPCを操作し、クラウドのPCがFX会社と自動で取引する。全部のクラウドPCはGMOの管理サーバーが管理している" font-size="13">
+      <defs><marker id="ga1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="dg-head"/></marker></defs>
+      <text x="24" y="28" font-size="15" font-weight="600" class="dg-ink">家から雲の上のパソコンを操作し、そのパソコンが自動で取引する</text>
+      <rect x="24" y="76" width="160" height="112" rx="8" class="dg-box"/>
+      <text x="104" y="102" text-anchor="middle" font-weight="600" class="dg-ink">🏠 自宅のPC</text>
+      <text x="104" y="126" text-anchor="middle" font-size="11.5" class="dg-quiet">画面を見て操作する</text>
+      <text x="104" y="144" text-anchor="middle" font-size="11.5" class="dg-quiet">C ドライブに</text>
+      <text x="104" y="160" text-anchor="middle" font-size="11.5" class="dg-quiet">自分のファイル</text>
+      <rect x="332" y="72" width="200" height="132" rx="8" class="dg-box"/>
+      <rect x="324" y="66" width="200" height="132" rx="8" class="dg-box"/>
+      <rect x="316" y="60" width="200" height="132" rx="8" class="dg-main"/>
+      <text x="416" y="86" text-anchor="middle" font-weight="600" class="dg-ink">☁ クラウドのPC（VPS）</text>
+      <text x="416" y="110" text-anchor="middle" font-size="11.5" class="dg-ink">Windows Server</text>
+      <text x="416" y="128" text-anchor="middle" font-size="11.5" class="dg-ink">MT4/MT5 と自動売買ソフト</text>
+      <text x="416" y="146" text-anchor="middle" font-size="11.5" class="dg-ink">口座のパスワードを保存</text>
+      <text x="416" y="176" text-anchor="middle" font-size="11.5" class="dg-quiet">1人1台・最大26,739台</text>
+      <rect x="592" y="76" width="144" height="112" rx="8" class="dg-box"/>
+      <text x="664" y="102" text-anchor="middle" font-weight="600" class="dg-ink">💹 FX 会社</text>
+      <text x="664" y="126" text-anchor="middle" font-size="11.5" class="dg-quiet">取引口座</text>
+      <text x="664" y="144" text-anchor="middle" font-size="11.5" class="dg-quiet">（GMO とは別の会社）</text>
+      <rect x="316" y="240" width="200" height="48" rx="8" class="dg-box"/>
+      <text x="416" y="262" text-anchor="middle" font-weight="600" class="dg-ink">🗄 GMO の管理サーバー</text>
+      <text x="416" y="280" text-anchor="middle" font-size="11.5" class="dg-quiet">全部のクラウドPCを管理</text>
+      <path d="M184 130H316" class="dg-line" marker-end="url(#ga1)"/>
+      <path d="M532 130H592" class="dg-line" marker-end="url(#ga1)"/>
+      <path d="M416 240V204" class="dg-line" marker-end="url(#ga1)" stroke-dasharray="4 4"/>
+      <rect x="190" y="98" width="120" height="22" rx="11" class="dg-chip"/>
+      <text x="250" y="113" text-anchor="middle" font-size="11" class="dg-chip-text">リモートデスクトップ</text>
+      <text x="562" y="120" text-anchor="middle" font-size="11" class="dg-quiet">自動で取引</text>
+    </svg>
+    <figcaption>サービスのしくみ。<strong>全部のクラウドPCを、1つの管理サーバーが管理していた</strong>ことが、あとで大きな意味を持つ</figcaption>
+  </figure>
+  <ul>
+    <li><strong>リモートデスクトップ（RDP）</strong>：遠くのパソコンの画面を、自分のパソコンに映して操作するしくみ</li>
+    <li><strong>MT4 / MT5</strong>：FX の取引ソフト。再起動しても自動でログインできるよう、<strong>口座のIDとパスワードを覚えさせる</strong>のが普通の使い方だった</li>
+  </ul>
+
+  <!-- ===================================================== -->
+  <h2 id="timeline">2. 何がいつ起きた？（時系列）</h2>
+  <figure>
+    <svg viewBox="0 0 760 392" role="img" aria-label="8月5日の侵入から11月6日の合同捜査本部設置までの時系列" font-size="13">
+      <text x="24" y="28" font-size="15" font-weight="600" class="dg-ink">侵入は8月。気づいたのは10月19日</text>
+      <rect x="24" y="44" width="712" height="122" rx="8" fill="#e3c64a" fill-opacity="0.18"/>
+      <text x="728" y="62" text-anchor="end" font-size="11.5" font-weight="600" class="dg-ink">気づかなかった期間</text>
+      <line x1="150" y1="56" x2="150" y2="376" class="dg-line"/>
+      <g class="dg-ink">
+        <circle cx="150" cy="70" r="5" fill="#dc2626"/><text x="136" y="74" text-anchor="end" font-weight="600">8/5</text><text x="168" y="74">顧客のクラウドPC（VPS）に入り込まれる</text>
+        <circle cx="150" cy="96" r="5" fill="#dc2626"/><text x="136" y="100" text-anchor="end" font-weight="600">8/17</text><text x="168" y="100">管理者アカウント（合鍵）を奪われ、GMO の管理サーバーに入られる</text>
+        <circle cx="150" cy="122" r="5" fill="#dc2626"/><text x="136" y="126" text-anchor="end" font-weight="600">9/20〜10/14</text><text x="168" y="126">管理サーバーから、最大26,739台に不正なプログラムを配られる</text>
+        <text x="168" y="152" font-size="11.5" class="dg-quiet">（この間 約2か月半、会社はだれも気づかなかった）</text>
+        <circle cx="150" cy="182" r="5" fill="#0f83fd"/><text x="136" y="186" text-anchor="end" font-weight="600">10/19</text><text x="168" y="186">利用者からの問い合わせで、初めて調査を始める</text>
+        <circle cx="150" cy="208" r="5" fill="#0f83fd"/><text x="136" y="212" text-anchor="end" font-weight="600">10/20</text><text x="168" y="212">不正なプログラムを見つける。管理画面と新規申し込みを停止</text>
+        <circle cx="150" cy="234" r="5" fill="#0f83fd"/><text x="136" y="238" text-anchor="end" font-weight="600">10/21</text><text x="168" y="238">全プランのサーバーを停止</text>
+        <circle cx="150" cy="260" r="5" fill="#0f83fd"/><text x="136" y="264" text-anchor="end" font-weight="600">10/24</text><text x="168" y="264">情報の持ち出しを確認。見舞金・補償を発表。身代金は払わないと表明</text>
+        <circle cx="150" cy="286" r="5" fill="#dc2626"/><text x="136" y="290" text-anchor="end" font-weight="600">10/27</text><text x="168" y="290">身代金の期限。攻撃者が1人分の個人情報をネットに公開</text>
+        <circle cx="150" cy="312" r="5" fill="#16a34a"/><text x="136" y="316" text-anchor="end" font-weight="600">10/28</text><text x="168" y="316">攻撃者のサイトが止まる（その後の公開は確認されていない）</text>
+        <circle cx="150" cy="338" r="5" fill="#16a34a"/><text x="136" y="342" text-anchor="end" font-weight="600">11/2</text><text x="168" y="342">社長らが記者会見。侵入の経緯を説明</text>
+        <circle cx="150" cy="364" r="5" fill="#16a34a"/><text x="136" y="368" text-anchor="end" font-weight="600">11/6</text><text x="168" y="368">警察庁が全国合同捜査本部を設置。補償の個別連絡が始まる</text>
+      </g>
+    </svg>
+    <figcaption>赤：攻撃者の動き ／ 青：会社の対応 ／ 緑：その後（11/2 の記者会見と報道より）</figcaption>
+  </figure>
+
+  <!-- ===================================================== -->
+  <h2 id="attack">3. 攻撃の流れ ― 1本の合鍵から全部へ</h2>
+  <p>11月2日の記者会見で、会社は侵入の流れを次のように説明しました。</p>
+  <figure>
+    <svg viewBox="0 0 760 344" role="img" aria-label="1台に侵入、合鍵を奪う、管理サーバーへ、全台に配る、そして口座の操作と自宅PCのファイル窃取" font-size="13">
+      <defs><marker id="ga3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="dg-head"/></marker></defs>
+      <text x="24" y="28" font-size="15" font-weight="600" class="dg-ink">1台への侵入が、管理サーバー経由で全台に広がった</text>
+      <rect x="24" y="52" width="160" height="104" rx="8" class="dg-box"/>
+      <text x="104" y="78" text-anchor="middle" font-weight="600" class="dg-ink">① 1台に侵入</text>
+      <text x="104" y="100" text-anchor="middle" font-size="11.5" class="dg-quiet">8月5日</text>
+      <text x="104" y="118" text-anchor="middle" font-size="11.5" class="dg-quiet">顧客のVPSに入る</text>
+      <text x="104" y="136" text-anchor="middle" font-size="11.5" class="dg-quiet">（入口は調査中）</text>
+      <rect x="208" y="52" width="160" height="104" rx="8" class="dg-main"/>
+      <text x="288" y="78" text-anchor="middle" font-weight="600" class="dg-ink">② 合鍵を奪う</text>
+      <text x="288" y="100" text-anchor="middle" font-size="11.5" class="dg-ink">8月17日</text>
+      <text x="288" y="118" text-anchor="middle" font-size="11.5" class="dg-ink">管理者アカウント</text>
+      <text x="288" y="136" text-anchor="middle" font-size="11.5" class="dg-ink">を手に入れる</text>
+      <rect x="392" y="52" width="160" height="104" rx="8" class="dg-box"/>
+      <text x="472" y="78" text-anchor="middle" font-weight="600" class="dg-ink">③ 管理サーバーへ</text>
+      <text x="472" y="100" text-anchor="middle" font-size="11.5" class="dg-quiet">8月17日</text>
+      <text x="472" y="118" text-anchor="middle" font-size="11.5" class="dg-quiet">全部のVPSを</text>
+      <text x="472" y="136" text-anchor="middle" font-size="11.5" class="dg-quiet">管理する親玉</text>
+      <rect x="576" y="52" width="160" height="104" rx="8" class="dg-box"/>
+      <text x="656" y="78" text-anchor="middle" font-weight="600" class="dg-ink">④ 全台に配る</text>
+      <text x="656" y="100" text-anchor="middle" font-size="11.5" class="dg-quiet">9/20〜10/14</text>
+      <text x="656" y="118" text-anchor="middle" font-size="11.5" class="dg-quiet">最大26,739台に</text>
+      <text x="656" y="136" text-anchor="middle" font-size="11.5" class="dg-quiet">不正なプログラム</text>
+      <path d="M184 104H208" class="dg-line" marker-end="url(#ga3)"/>
+      <path d="M368 104H392" class="dg-line" marker-end="url(#ga3)"/>
+      <path d="M552 104H576" class="dg-line" marker-end="url(#ga3)"/>
+      <path d="M656 156V188H328V216" class="dg-line" marker-end="url(#ga3)"/>
+      <path d="M604 188V216" class="dg-line" marker-end="url(#ga3)"/>
+      <rect x="208" y="216" width="240" height="104" rx="8" class="dg-box"/>
+      <text x="328" y="242" text-anchor="middle" font-weight="600" class="dg-ink">⑤ 口座を勝手に操作</text>
+      <text x="328" y="266" text-anchor="middle" font-size="11.5" class="dg-quiet">VPS に保存されていた</text>
+      <text x="328" y="284" text-anchor="middle" font-size="11.5" class="dg-quiet">口座のパスワードを使って</text>
+      <text x="328" y="302" text-anchor="middle" font-size="11.5" class="dg-quiet">FX 口座にログイン</text>
+      <rect x="472" y="216" width="264" height="104" rx="8" class="dg-box"/>
+      <text x="604" y="242" text-anchor="middle" font-weight="600" class="dg-ink">⑥ 自宅PCのファイルを盗む</text>
+      <text x="604" y="266" text-anchor="middle" font-size="11.5" class="dg-quiet">リモートデスクトップの</text>
+      <text x="604" y="284" text-anchor="middle" font-size="11.5" class="dg-quiet">「ドライブ共有」を通って</text>
+      <text x="604" y="302" text-anchor="middle" font-size="11.5" class="dg-quiet">利用者の手元の PC へ</text>
+    </svg>
+    <figcaption>会社が会見で説明した流れ。①の最初の入口は「正確にはまだ分かっていない」とされている</figcaption>
+  </figure>
+  <div class="table-wrap"><table>
+    <thead><tr><th>ステップ</th><th>何が起きた？</th><th>たとえると</th></tr></thead>
+    <tbody>
+      <tr><td>① 1台に侵入</td><td>利用者のクラウドPC 1台に入り込まれた</td><td>マンションの1部屋に忍び込まれる</td></tr>
+      <tr><td>② 合鍵を奪う</td><td>そこから<strong>管理者アカウント</strong>（全部を操作できる強い権限）を奪われた</td><td>管理人の<strong>マスターキー</strong>を盗まれる</td></tr>
+      <tr><td>③ 管理サーバーへ</td><td>全部のクラウドPCを管理している<strong>GMO 側のサーバー</strong>に入られた</td><td>管理人室に入られる</td></tr>
+      <tr><td>④ 全台に配る</td><td>管理サーバーの「全台に配る機能」で、<strong>最大26,739台</strong>に不正なプログラムを入れられた</td><td>全部の部屋に、一度に盗聴器を仕掛けられる</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- ===================================================== -->
+  <h2 id="points">4. 技術的に何がまずかった？</h2>
+
+  <h3 id="masterkey">① 1本の合鍵で、全部が開いてしまった</h3>
+  <figure>
+    <img src="img/gmo/m2-masterkey.webp" alt="泥棒が1本の合鍵で、ずらりと並んだ部屋のドアを次々に開けていくイラスト" width="1280" height="720" loading="lazy">
+    <figcaption>管理者の合鍵（管理者アカウント）が1本盗まれると、全部の部屋が開いてしまう</figcaption>
+  </figure>
+  <p>たくさんのサーバーを少ない人数で管理するには、<strong>全部をまとめて操作できる管理のしくみ</strong>が便利です。でも、その<strong>合鍵が1本盗まれると、全部が一度にやられる</strong>という弱点にもなります。今回は1台への侵入から合鍵を奪われ、被害が最大26,739台まで広がりました。</p>
+  <p>攻撃者は「<strong>全部のサーバーに共通の管理者アカウントがあった</strong>」と主張していますが、これは<strong>会社は認めていない、攻撃者の主張</strong>です。</p>
+  <p class="note"><strong>考え方：権限は「必要な分だけ」</strong>（最小権限の原則）。1つの鍵で全部を開けられるようにしない、鍵を部屋ごとに分ける、強い鍵を使ったら記録を残してすぐ気づけるようにする、が基本です。</p>
+
+  <h3 id="drive">② 「ドライブ共有」で、自宅のPCまでつながっていた</h3>
+  <figure>
+    <img src="img/gmo/m3-drive.webp" alt="雲の上の部屋と家がトンネルでつながっていて、雲の部屋に入った泥棒が家の引き出しに手を伸ばしているイラスト" width="1280" height="720" loading="lazy">
+    <figcaption>便利なトンネルがあったせいで、雲の上の部屋に入った泥棒が、家の中にまで手が届いてしまった</figcaption>
+  </figure>
+  <p>リモートデスクトップには、<strong>自分のパソコンのドライブ（C ドライブなど）を、遠くのパソコンからも見えるようにする「ドライブ共有」</strong>という便利な機能があります。手元のファイルをクラウドのPCに渡したい時に使います。このサービスでは、<strong>便利さのために最初から有効になっていた</strong>と会社が認めました。</p>
+  <figure>
+    <svg viewBox="0 0 760 260" role="img" aria-label="ドライブ共有がオンだと、クラウドのPCから自宅のCドライブが見える" font-size="13">
+      <defs><marker id="ga4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="dg-head"/></marker></defs>
+      <text x="24" y="28" font-size="15" font-weight="600" class="dg-ink">ドライブ共有が ON だと、クラウド側から自宅の C ドライブが見える</text>
+      <rect x="24" y="56" width="240" height="160" rx="8" class="dg-box"/>
+      <text x="144" y="82" text-anchor="middle" font-weight="600" class="dg-ink">🏠 自宅のPC</text>
+      <rect x="44" y="104" width="200" height="92" rx="8" class="dg-main"/>
+      <text x="144" y="130" text-anchor="middle" font-weight="600" class="dg-ink">C ドライブ</text>
+      <text x="144" y="152" text-anchor="middle" font-size="11.5" class="dg-ink">書類・写真・税金の書類</text>
+      <text x="144" y="170" text-anchor="middle" font-size="11.5" class="dg-ink">ブラウザに保存したパスワード</text>
+      <rect x="496" y="56" width="240" height="160" rx="8" class="dg-box"/>
+      <text x="616" y="82" text-anchor="middle" font-weight="600" class="dg-ink">☁ クラウドのPC</text>
+      <text x="616" y="104" text-anchor="middle" font-size="11.5" class="dg-quiet">ここに侵入された</text>
+      <rect x="516" y="120" width="200" height="76" rx="8" class="dg-box"/>
+      <text x="616" y="148" text-anchor="middle" font-size="12" class="dg-ink" font-family="SFMono-Regular, Menlo, monospace">\\tsclient\C</text>
+      <text x="616" y="172" text-anchor="middle" font-size="11.5" class="dg-quiet">＝ 自宅の C ドライブが見える</text>
+      <path d="M264 96H496" class="dg-line" marker-end="url(#ga4)"/>
+      <text x="380" y="88" text-anchor="middle" font-size="11.5" class="dg-quiet">画面を見て操作する</text>
+      <path d="M516 160H244" class="dg-line" marker-end="url(#ga4)" stroke-dasharray="5 4"/>
+      <rect x="320" y="148" width="120" height="24" rx="12" class="dg-chip"/>
+      <text x="380" y="164" text-anchor="middle" font-size="11.5" class="dg-chip-text">ドライブ共有 ON</text>
+      <text x="380" y="240" text-anchor="middle" font-size="11.5" class="dg-quiet">ふつうは「画面だけ」の通り道。共有を ON にすると、ファイルの通り道も開く</text>
+    </svg>
+    <figcaption>クラウドのPCに入った攻撃者からは、接続中の利用者の C ドライブが <code>\\tsclient\C</code> という場所として見える</figcaption>
+  </figure>
+  <p>そのため、<strong>クラウドのPCに入り込んだ攻撃者が、接続してきた利用者の自宅PCのファイルまで盗めてしまいました</strong>。会社は会見で、利用者の手元のファイルが盗まれたことを確認したと説明しています（範囲は調査中）。</p>
+  <p>攻撃者は「書類やブラウザに保存したパスワードなどを集めた」とするログを公開しましたが、<strong>本物かどうかは確認されていません</strong>。</p>
+  <p class="note"><strong>考え方：便利な機能は「使う時だけ ON」</strong>。初期設定で ON にしておくと、使わない人まで危険にさらすことになります。</p>
+
+  <h3 id="password">③ パスワードを「保存したまま」だった</h3>
+  <p>FX の自動売買は24時間無人で動かすので、<strong>口座のパスワードをソフトに覚えさせておくのが普通</strong>でした。クラウドのPCに入られると、<strong>保存されたパスワードがまとめて読めてしまいます</strong>。報道では、<strong>2秒で400万円以上の損失</strong>が出た例も伝えられています。</p>
+  <p class="note"><strong>考え方：二要素認証（2段階認証）</strong>を ON にしておけば、パスワードが盗まれても、スマホの確認がないとログインできません。会社も利用者に二要素認証を呼びかけました。</p>
+
+  <h3 id="detect">④ 2か月半、だれも気づかなかった</h3>
+  <p>8月5日に入り込まれ、9月20日から10月14日まで全台に不正なプログラムが配られていたのに、<strong>会社が気づいたのは10月19日の利用者からの問い合わせ</strong>でした。なぜ気づけなかったのかについて、会見では「（答えを）今持っていない」と説明されています。</p>
+  <p class="note"><strong>考え方：「入られないこと」と同じくらい「入られたらすぐ気づくこと」が大事</strong>。強い権限の使用や、普段と違う大量の操作は、記録（ログ）を見て自動で知らせるしくみが要ります。</p>
+
+  <h3 id="report">⑤ 2024年の指摘が、上まで届いていなかった</h3>
+  <p>2024年4月、同じグループのセキュリティ会社（GMOサイバーセキュリティ byイエラエ）がこのサービスを診断し、弱点を報告していました。会社は4回の緊急メンテナンスで対応しましたが、<strong>「深さと速さの両面で不足していた」</strong>と認めています。報告は当時の担当役員までは届いていましたが、<strong>グループ代表には上がっておらず、再診断もしていませんでした</strong>。</p>
+  <p>この時の指摘が今回の入口と同じだったかどうかは、まだ分かっていません。また、ドライブ共有の問題はこの時の指摘には含まれていなかったと説明されています。</p>
+  <p class="note"><strong>考え方：セキュリティは技術だけでなく「組織」の問題</strong>。危険の報告が、判断できる人までちゃんと届くしくみが要ります。</p>
+
+  <!-- ===================================================== -->
+  <h2 id="ransom">5. 身代金の脅迫と、会社の判断</h2>
+  <figure>
+    <img src="img/gmo/m4-ransom.webp" alt="泥棒がお金を要求し、会社の人がバツ印で断り、後ろで警察官と技術者が調べているイラスト" width="1280" height="720" loading="lazy">
+    <figcaption>脅迫には応じず、警察と一緒に犯人を追う</figcaption>
+  </figure>
+  <p>攻撃者は、<strong>盗んだ情報を「払わなければ公開する」</strong>と脅し、お金（身代金）を要求しました。データを盗んでから脅す、最近のランサムウェア攻撃でよく使われる「<strong>二重脅迫</strong>」という手口です。</p>
   <div class="table-wrap"><table>
     <thead><tr><th>項目</th><th>内容</th></tr></thead>
     <tbody>
-      <tr><td>サービスの種類</td><td>VPS（Virtual Private Server＝1台の物理サーバーを分割して貸す仮想サーバー）</td></tr>
-      <tr><td>OS</td><td>Windows Server 2019</td></tr>
-      <tr><td>接続方法</td><td>リモートデスクトップ（手元のPCから画面ごと遠隔操作する）</td></tr>
-      <tr><td>主な用途</td><td>MT4 / MT5（FXの取引ソフト）と EA（自動売買プログラム）を24時間稼働</td></tr>
-      <tr><td>影響の可能性があるサーバー数</td><td><strong>26,739台</strong>（＝全プラン。人数ではなくサーバーの台数）</td></tr>
+      <tr><td>最初の要求</td><td>5,000万ドル（約80億円）。その後、攻撃者のサイトで 100万ドル（約1億5,700万円）に下げて、10月27日正午を期限にした（報道）</td></tr>
+      <tr><td>脅しの中身</td><td>情報の公開、利用者のPCへの攻撃、取引口座の不正操作の継続（攻撃者の主張）</td></tr>
+      <tr><td>会社の判断</td><td><strong>払わない</strong>。払っても、情報を消してくれる保証も、悪用しない保証もないため</td></tr>
+      <tr><td>期限のあと</td><td>攻撃者が1人分とされる個人情報を公開。10月28日に攻撃者のサイトが止まり、その後の公開は確認されていない（11月8日時点の報道）</td></tr>
+      <tr><td>犯人探し</td><td>会社が犯人特定につながる情報に最大100万ドルの懸賞金を出すと発表。11月6日に警察庁が全国合同捜査本部を設置（11月8日時点で逮捕の発表なし）</td></tr>
     </tbody>
   </table></div>
-  <p>⚠ 同じ時期に、GMO グループの別会社「GMOリサーチ&amp;AI」のアンケートサイトでも会員情報が最大約94万件流出した可能性が発表されています（10/6）。<strong>これは別の事件</strong>なので混同しないようにしましょう。</p>
+  <p>身代金を払うと、攻撃者の次の攻撃の資金になり、「この会社は払う」と思われて再び狙われることにもなります。そのため、<strong>払わないのが原則</strong>とされています。</p>
 
-  <h2>2. 時系列</h2>
+  <!-- ===================================================== -->
+  <h2 id="response">6. 会社と国の対応</h2>
+  <h3>利用者への補償</h3>
   <div class="table-wrap"><table>
-    <thead><tr><th>日付</th><th>出来事</th></tr></thead>
+    <thead><tr><th>補償</th><th>内容</th></tr></thead>
     <tbody>
-      <tr><td>10/19</td><td>利用者からの問い合わせを受けて調査開始</td></tr>
-      <tr><td>10/20</td><td>一部のサーバーで<strong>第三者が設置した不正プログラム</strong>を確認。新規申し込みと管理画面を停止</td></tr>
-      <tr><td>10/21</td><td>4時から<strong>全プランのサーバーを順次停止</strong>。第1報「情報が閲覧された可能性。悪用は確認されていない」</td></tr>
-      <tr><td>10/22</td><td>第2報で「<strong>不正に利用された可能性</strong>」に表現を変更。取引口座の不正操作の報告があると公表。警察に相談</td></tr>
-      <tr><td>10/23</td><td>第3報。口座パスワードの変更と、ログイン中のセッションの切断を要請</td></tr>
-      <tr><td>10/24</td><td>第4報で<strong>情報の外部持ち出しを確認</strong>。システムにセキュリティ上の問題があったと認める。全契約者に見舞金5,000円、不正取引の実損を補償、身代金には応じないと発表。政府に「能動的サイバー防御」を要請</td></tr>
-      <tr><td>10/27 正午</td><td>攻撃者が示した身代金（100万ドル＝約1億5,600万円）の支払い期限（報道）</td></tr>
+      <tr><td>お見舞金</td><td>全利用者に一律 5,000円</td></tr>
+      <tr><td>不正取引の損失</td><td>全額を補償（相場の上がり下がりによる損失などは対象外）。11月6日から個別に連絡</td></tr>
+      <tr><td>情報が流出した人</td><td>特別見舞金（最大300万円）</td></tr>
+      <tr><td>代わりのサービス</td><td>別の基盤のサービスへの移行を案内。6か月無料。今のサービスを再開するかどうかは検討中</td></tr>
     </tbody>
   </table></div>
-
-  <h2>3. 攻撃の流れ</h2>
-  <p>公表されている事実をつなぐと、次のような流れになります。<strong>どうやって最初に入り込んだか（侵入経路）はまだ公表されていません。</strong></p>
-  <figure>
-    <svg viewBox="0 0 760 300" role="img" aria-label="サーバーに保存された口座のパスワードが盗まれ、別の場所から口座が操作された" font-size="13">
-      <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="dg-head"/></marker></defs>
-      <text x="24" y="30" font-size="15" font-weight="600" class="dg-ink">サーバーに保存された口座のパスワードが盗まれ、口座が操作された</text>
-      <rect x="24" y="60" width="160" height="88" rx="8" class="dg-box"/>
-      <text x="104" y="84" text-anchor="middle" font-weight="600" class="dg-ink">① 侵入</text>
-      <text x="104" y="106" text-anchor="middle" font-size="11.5" class="dg-quiet">サービスの基盤に</text>
-      <text x="104" y="122" text-anchor="middle" font-size="11.5" class="dg-quiet">セキュリティ上の問題</text>
-      <text x="104" y="138" text-anchor="middle" font-size="11.5" class="dg-quiet">（経路は未公表）</text>
-      <rect x="208" y="60" width="160" height="88" rx="8" class="dg-box"/>
-      <text x="288" y="84" text-anchor="middle" font-weight="600" class="dg-ink">② 不正プログラム</text>
-      <text x="288" y="106" text-anchor="middle" font-size="11.5" class="dg-quiet">利用者の Windows</text>
-      <text x="288" y="122" text-anchor="middle" font-size="11.5" class="dg-quiet">サーバーに設置</text>
-      <text x="288" y="138" text-anchor="middle" font-size="11.5" class="dg-quiet">（最大26,739台）</text>
-      <rect x="392" y="60" width="160" height="88" rx="8" class="dg-main"/>
-      <text x="472" y="84" text-anchor="middle" font-weight="600" class="dg-ink">③ 認証情報を取得</text>
-      <text x="472" y="106" text-anchor="middle" font-size="11.5" class="dg-ink">MT4/MT5 に記憶した</text>
-      <text x="472" y="122" text-anchor="middle" font-size="11.5" class="dg-ink">FX口座の ID・パスワード</text>
-      <text x="472" y="138" text-anchor="middle" font-size="11.5" class="dg-ink">ブラウザ保存のパスワード等</text>
-      <rect x="576" y="60" width="160" height="88" rx="8" class="dg-box"/>
-      <text x="656" y="84" text-anchor="middle" font-weight="600" class="dg-ink">④ 外部へ持ち出し</text>
-      <text x="656" y="106" text-anchor="middle" font-size="11.5" class="dg-quiet">10/24 に会社が</text>
-      <text x="656" y="122" text-anchor="middle" font-size="11.5" class="dg-quiet">持ち出しを確認</text>
-      <rect x="208" y="196" width="244" height="72" rx="8" class="dg-box"/>
-      <text x="330" y="220" text-anchor="middle" font-weight="600" class="dg-ink">⑤a 口座の不正操作</text>
-      <text x="330" y="242" text-anchor="middle" font-size="11.5" class="dg-quiet">盗んだパスワードで証券・FX口座に</text>
-      <text x="330" y="258" text-anchor="middle" font-size="11.5" class="dg-quiet">ログインし、身に覚えのない取引</text>
-      <rect x="476" y="196" width="260" height="72" rx="8" class="dg-box"/>
-      <text x="606" y="220" text-anchor="middle" font-weight="600" class="dg-ink">⑤b 脅迫（二重脅迫）</text>
-      <text x="606" y="242" text-anchor="middle" font-size="11.5" class="dg-quiet">100万ドルを要求。払わなければ</text>
-      <text x="606" y="258" text-anchor="middle" font-size="11.5" class="dg-quiet">情報公開・さらなる攻撃と予告</text>
-      <path d="M184 104H208" class="dg-line" marker-end="url(#arrow)"/>
-      <path d="M368 104H392" class="dg-line" marker-end="url(#arrow)"/>
-      <path d="M552 104H576" class="dg-line" marker-end="url(#arrow)"/>
-      <path d="M656 148V172H330V196" class="dg-line" marker-end="url(#arrow)"/>
-      <path d="M606 172V196" class="dg-line" marker-end="url(#arrow)"/>
-    </svg>
-    <figcaption>公表内容と報道から整理した攻撃の流れ（侵入経路と不正プログラムの種類は未公表）</figcaption>
-  </figure>
-
-  <h2>4. 技術的なポイント</h2>
-
-  <h3>① 「サーバーに保存したパスワード」が一番の被害になった</h3>
-  <p>盗まれた情報の中心は、GMO の会員情報ではなく、<strong>利用者がサーバーの中に保存していた別サービス（証券会社・FX会社）のパスワード</strong>です。</p>
+  <h3>国の動き</h3>
   <ul>
-    <li>MT4 / MT5 は、再起動しても自動でログインできるよう<strong>口座のIDとパスワードを記憶</strong>できる</li>
-    <li>24時間無人で動かす用途なので、パスワードを保存しておくのが前提の使い方になっていた</li>
-    <li>そのサーバーに入られると、<strong>保存されたパスワードがまとめて読める</strong></li>
+    <li>GMO は政府に「<strong>能動的サイバー防御</strong>」（警察などが攻撃元のサーバーに入って無害化できる制度）の適用を求めた。ただし会見で、<strong>会社が申し込めば政府が動く仕組みではなかった</strong>と認めた</li>
+    <li>総務省が通信会社の団体に、攻撃者のサイトへの接続を止めるよう求めた（報道）</li>
+    <li>11月6日、政府が緊急対策のパッケージを決め、能動的サイバー防御に関する法律の改正の検討を指示した（報道）</li>
   </ul>
-  <p>GMO は「クレジットカード情報は持っていない」と説明していますが、利用者がサーバーに置いたファイルや認証情報は影響範囲に含まれます。<strong>自分の会社が持っているデータだけ守っても、預かっている環境の中身が盗まれれば被害になる</strong>、という例です。</p>
 
-  <h3>② 26,739台すべてが対象になった ＝ 共通の基盤が問題だった可能性</h3>
-  <p>個々の利用者が弱いパスワードを使っていただけなら、被害はその人のサーバーにとどまるはずです。今回は<strong>全プランを止める</strong>判断になり、GMO も「サービスのシステムにセキュリティ上の問題があった」と認めています。また、現行の基盤はそのまま再開せず、<strong>別の独立したクラウド基盤へ移行</strong>する方針です。</p>
-  <p class="note">ここから考えられるのは、<strong>多くのサーバーに共通する部分（管理システム・共通のOSイメージ・配布の仕組みなど）</strong>が入口になった可能性です。⚠ ただしこれは公表内容からの推測で、侵入経路は正式には発表されていません。</p>
-
-  <h3>③ 情報の公表が「閲覧の可能性」→「不正利用の可能性」→「持ち出し確認」と変わった</h3>
-  <p>不正アクセスの調査は、ログを追いながら少しずつ事実が確定していくため、発表が段階的に変わるのは珍しくありません。一方で、利用者側から見ると<strong>最初の「悪用は確認されていない」という説明で対応が遅れる</strong>危険があります。事件対応では、確定していなくても「最悪の場合はこう動いてください」と早めに伝えることが大切です。</p>
-
-  <h3>④ ランサムウェア型の「二重脅迫」</h3>
-  <p>最近の攻撃は、データを暗号化して使えなくする（ランサムウェア）だけでなく、<strong>先にデータを盗んでおき「払わなければ公開する」と脅す</strong>やり方（二重脅迫）が主流です。今回も、口座の不正操作の継続、情報の公開、ランサムウェア攻撃などを予告していると公表されています。報道では、攻撃者は約14万口座分の認証情報を得たと主張し、社内資料の一部を公開したとされます（いずれも攻撃者側の主張で、会社は確認していません）。</p>
-  <p>GMO は「払っても情報の削除や悪用防止が保証されない」として支払いを拒否しました。身代金を払うと攻撃者の資金源になり、次の攻撃を助けることにもなるため、<strong>支払わないのが原則</strong>とされています。</p>
-
-  <h3>⑤ 能動的サイバー防御</h3>
-  <p>GMO は政府に「能動的サイバー防御」の適用を要請しました。重大なサイバー攻撃に対して、<strong>警察や自衛隊が攻撃元のサーバーに入り込んで無害化できる</strong>しくみで、報道によると2026年10月1日に本格的に始まった制度です。ただし個別企業からの要請は想定されておらず、政府は適用に慎重とされています。</p>
-
-  <h2>5. 利用者に求められた対応</h2>
-  <ol>
-    <li>証券・FX口座のパスワードを変更する（<strong>同じパスワードを使っている他のサービスもすべて</strong>）</li>
-    <li>ログイン中のセッションをすべて切断する（パスワードを変えても、すでにログイン済みの攻撃者は追い出せないため）</li>
-    <li>二要素認証を有効にする</li>
-    <li>取引履歴と残高を確認する</li>
-    <li>手元のPCをウイルススキャンし、データをバックアップする</li>
-    <li>「補償の手続き」を装ったフィッシングメールに注意する</li>
-  </ol>
-
-  <h2>6. この事件から学べること</h2>
+  <!-- ===================================================== -->
+  <h2 id="lessons">7. 自分たちが Web を作る時に気をつけること</h2>
   <div class="table-wrap"><table>
-    <thead><tr><th>教訓</th><th>Web 制作・開発ではどうするか</th></tr></thead>
+    <thead><tr><th>今回の問題</th><th>自分たちはどうする？</th></tr></thead>
     <tbody>
-      <tr><td>パスワードを平文で置かない</td><td>コードにパスワードやAPIキーを書かない。GitHub に上げない（<code>.gitignore</code>・環境変数を使う）</td></tr>
-      <tr><td>パスワードの使い回しをしない</td><td>1か所漏れると全部やられる。パスワードマネージャーを使う</td></tr>
-      <tr><td>二要素認証を必ず有効にする</td><td>GitHub も二要素認証を設定できる。パスワードが漏れても入られにくくなる</td></tr>
-      <tr><td>クラウドでも安全とは限らない</td><td>「サービス側が守る範囲」と「自分で守る範囲」がある（責任共有モデル）。預けたものを過信しない</td></tr>
-      <tr><td>事件の発表は段階的に変わる</td><td>「確認されていない」は「起きていない」ではない。早めに自衛する</td></tr>
+      <tr><td>1本の合鍵で全部が開いた</td><td>強い権限のアカウントを作りすぎない・使い回さない。GitHub でも、他人に Owner 権限をむやみに渡さない</td></tr>
+      <tr><td>便利な機能が最初から ON だった</td><td>使わない機能は OFF にしておく。公開する前に「誰が何をできるか」を見直す</td></tr>
+      <tr><td>パスワードが保存されていた</td><td>コードや GitHub にパスワード・API キーを書かない（<code>.gitignore</code> や環境変数を使う）</td></tr>
+      <tr><td>パスワードだけで入れた</td><td>GitHub もメールも二要素認証を ON にする</td></tr>
+      <tr><td>2か月半気づかなかった</td><td>ログイン通知・アクセス記録を確認する習慣をつける</td></tr>
+      <tr><td>指摘が上まで届かなかった</td><td>チーム開発で「これ危ないかも」と思ったら、黙らずにすぐ共有する</td></tr>
     </tbody>
   </table></div>
 
-  <h2>7. まだ分かっていないこと</h2>
+  <h2 id="unknown">8. まだ分かっていないこと</h2>
   <ul>
-    <li>侵入経路・使われた脆弱性・不正プログラムの種類</li>
-    <li>実際に情報を取られたサーバーの数・人数・情報の項目</li>
-    <li>不正取引の被害口座数と損失総額</li>
-    <li>攻撃者の特定</li>
+    <li>最初の入口（8月5日にどうやって入られたか）</li>
+    <li>実際に情報を取られた人数・項目、不正取引の件数と被害の総額</li>
+    <li>2024年の指摘と、今回の入口が同じだったか</li>
+    <li>犯人がだれか（攻撃者を名乗る人物と、実際に侵入した人が同じかどうかも含めて）</li>
   </ul>
 
-  <h2>出典</h2>
+  <h2 id="sources">出典</h2>
   <ul>
-    <li><a href="https://www.onamae.com/news/article/11584">お名前.com 公式のお知らせ（2026年10月21日 4:00時点）</a></li>
-    <li><a href="https://news.yahoo.co.jp/articles/d6083f71bbeab0f1488fac1edbb1e75d9156e358">J-CASTニュース「GMO『悪用確認されず』から一転」（2026-10-22）</a></li>
-    <li><a href="https://news.livedoor.com/article/detail/32646553/">共同通信「GMO、情報流出確認し全利用者に見舞金」（2026-10-24）</a></li>
-    <li><a href="https://news.livedoor.com/article/detail/32655387/">東スポWEB「不正アクセス受けたGMOに高まる不信感」（2026-10-26）</a></li>
-    <li><a href="https://www.tousaiblog.org/gmo-unauthorized-access-2026">GMOの不正アクセスで何が起きた？（第1報〜第5報の整理）</a></li>
-    <li><a href="https://atsoho.com/blog/onamae-desktop-cloud-unauthorized-access">お名前.com デスクトップクラウドの不正アクセス解説（サービスの仕組み）</a></li>
-    <li><a href="https://news.web.nhk/newsweb/na/nd-20261006de55007">NHK「GMOグループ会社に不正アクセス 個人情報最大94万件余流出か」（別件・2026-10-06）</a></li>
+    <li><a href="https://www.onamae.com/news/article/11584">お名前.com 公式のお知らせ（2026年10月21日 第1報）</a></li>
+    <li><a href="https://www.watch.impress.co.jp/docs/news/2150663.html">Impress Watch「お名前.comデスクトップクラウドで不正アクセス FXで不正利用も発生」</a></li>
+    <li><a href="https://www.nikkei.com/article/DGXZQOUC250PP0V21C26A0000000/">日本経済新聞「GMOへの攻撃者、利用者PCの乗っ取りを画策 会社は注意喚起」</a></li>
+    <li><a href="https://rocket-boys.co.jp/security-measures-lab/gmo_onamae_hacker_statement_lab_sources_20261025/">セキュリティ対策Lab「ハッカーが犯行声明、100万ドルを要求」（攻撃者の主張とログの分析）</a></li>
+    <li><a href="https://pivo-te.co.jp/article/1357">ピボーテ「GMO不正アクセスの原因をわかりやすく図解解説」（11月2日の会見と、その後の報道の整理）</a></li>
+    <li><a href="https://note.com/seiichi3141/n/ncaf371458f50">note「GMO『お名前.com デスクトップクラウド』不正アクセス会見を読む」（会見の書き起こし）</a></li>
+    <li><a href="https://news.web.nhk/newsweb/na/nd-20261006de55007">NHK「GMOグループ会社に不正アクセス 個人情報最大94万件余流出か」（別の事件・2026年10月6日）</a></li>
   </ul>
+  <p class="date">※ 10月6日に発表された GMOリサーチ&amp;AI のアンケートサイトの件（最大約94万件）は、<strong>別の事件</strong>です。</p>
 </main>
 <aside class="side"><nav class="toc" data-auto aria-label="目次"></nav></aside>
 </div>
