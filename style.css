@@ -338,3 +338,12 @@ figcaption { color: var(--muted); font-size: 13px; text-align: center; margin-to
   line-height: 1.6;
   white-space: nowrap;
 }
+
+/* イラスト（画像） */
+figure img { width: 100%; height: auto; display: block; border-radius: 8px; border: 1px solid var(--line); }
+
+/* クイズ（クリックで答え） */
+details.quiz { border: 1px solid var(--line); border-radius: 6px; padding: 10px 14px; margin: 0 0 10px; }
+details.quiz summary { cursor: pointer; font-weight: 700; }
+details.quiz[open] summary { margin-bottom: 8px; }
+details.quiz p { margin: 0; }

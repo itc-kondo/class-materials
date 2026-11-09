@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Git と GitHub とホスティングのしくみ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="site-header-inner">
+    <a class="site-logo" href="./">ITC 授業資料</a>
+    <nav class="site-nav"><a href="./">記事一覧</a></nav>
+  </div>
+</header>
+<div class="layout has-side">
+<main>
+  <div class="article-meta"><span class="avatar">K</span><span class="author">itc-kondo</span><span>投稿日 2026-11-09</span></div>
+  <div class="article-title"><h1>小学生でもわかる Git と GitHub とホスティングのしくみ ― 隠しフォルダ「.git」の正体から、サイトが届くまで</h1></div>
+  <ul class="tags"><li>Git</li><li>GitHub</li><li>GitHub Pages</li><li>ホスティング</li><li>初心者</li></ul>
+
+  <p class="note">このページでは、いつも打っている <span class="chip">git add</span> <span class="chip">git commit</span> <span class="chip">git push</span> が<strong>パソコンの中で本当は何をしているのか</strong>を、本物のフォルダの中身を見ながら説明します。後半では、作ったページが <strong>GitHub Pages で世界中から見られるしくみ（ホスティング）</strong>も、本物のデータでのぞいてみます。<br>
+  ※ このページに出てくるコマンドの結果は、説明のために実際に作ったフォルダで<strong>本当に実行した出力</strong>です（ユーザー名とメールだけ例の <code>h-kondo</code> に置き換え、「←」の説明を書き足しています）。</p>
+
+  <!-- ===================================================== -->
+  <h2 id="version">1. バージョン管理ってなに？</h2>
+  <p><strong>バージョン管理</strong>とは、作品の<strong>「その時点の状態」を、何回でもセーブしておけるしくみ</strong>のことです。ゲームのセーブポイントと同じです。</p>
+  <figure>
+    <img src="img/git-basics/g1-save.webp" alt="子どもが作品を作り、その上にセーブした作品の写真が時間の順に並んでいるイラスト" width="1280" height="720" loading="lazy">
+    <figcaption>セーブしておけば、いつでも前の状態に戻れる</figcaption>
+  </figure>
+  <h3>バージョン管理がないと…</h3>
+  <p>セーブのしくみがないと、こんなフォルダになりがちです。</p>
+<pre><code>index.html
+index_コピー.html
+index_最終.html
+index_最終2.html
+index_本当に最終.html
+index_本当に最終_先生に出す用.html   ← どれが最新？ 何を変えたの？</code></pre>
+  <p><strong>Git</strong> を使うと、ファイルは <code>index.html</code> の1つのまま、「いつ・だれが・何を変えたか」が全部記録されます。間違えても前のセーブに戻れるので、<strong>安心してどんどん書き直せる</strong>のがいちばんの良さです。</p>
+
+  <!-- ===================================================== -->
+  <h2 id="git-vs-github">2. Git と GitHub はちがうもの</h2>
+  <p>名前が似ていますが、<strong>別のもの</strong>です。</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th></th><th>Git（ギット）</th><th>GitHub（ギットハブ）</th></tr></thead>
+    <tbody>
+      <tr><td>なに？</td><td>セーブするための<strong>道具（ソフト）</strong></td><td>セーブデータを預けておく<strong>インターネット上の場所（サービス）</strong></td></tr>
+      <tr><td>どこにある？</td><td><strong>自分のパソコンの中</strong></td><td><strong>どこか遠くにあるパソコン</strong>（GitHub という会社のもの）</td></tr>
+      <tr><td>たとえると</td><td>自分の机にある<strong>セーブノート</strong></td><td>町の<strong>大きな図書館の保管庫</strong></td></tr>
+      <tr><td>インターネットは？</td><td>なくても使える</td><td>必要</td></tr>
+    </tbody>
+  </table></div>
+  <p>つまり、<strong>セーブ（add・commit）は自分のパソコンの中だけ</strong>で行われ、<strong>push した時に初めて GitHub に送られる</strong>、という順番です。</p>
+
+  <!-- ===================================================== -->
+  <h2 id="folder">3. 本物のフォルダをのぞいてみよう</h2>
+  <p>セーブデータは、どこに保存されているのでしょうか？ 答えは、<strong>作業フォルダの中にある「<code>.git</code>」という隠しフォルダ</strong>です。</p>
+  <figure>
+    <img src="img/git-basics/g2-folder.webp" alt="フォルダの奥に隠れた、光る秘密の宝箱を子どもが虫めがねで見つけるイラスト" width="1280" height="720" loading="lazy">
+    <figcaption>フォルダの中に、ふだんは見えない「秘密の記録箱」が隠れている</figcaption>
+  </figure>
+
+  <h3>ファイルの画面で見ると</h3>
+  <p>Ubuntu の「ファイル」アプリで <code>ch03</code> フォルダを開くと、ふだんは課題のフォルダしか見えません。<strong><code>Ctrl + H</code> を押すと、隠れていた <code>.git</code> が現れます</strong>（もう一度押すと隠れます）。</p>
+  <figure>
+    <svg viewBox="0 0 760 300" role="img" aria-label="ふつうの表示では 03-18 だけ、Ctrl+H を押すと .git も見える" font-size="13">
+      <text x="24" y="28" font-size="15" font-weight="600" class="dg-ink">ふつうは見えない .git が、Ctrl + H で現れる</text>
+      <!-- 左のウィンドウ -->
+      <rect x="24" y="48" width="340" height="228" rx="10" class="dg-box"/>
+      <rect x="24" y="48" width="340" height="36" rx="10" class="dg-zone"/>
+      <text x="40" y="71" font-weight="600" class="dg-ink">ch03</text>
+      <text x="348" y="71" text-anchor="end" font-size="11.5" class="dg-quiet">ふつうの表示</text>
+      <rect x="64" y="116" width="64" height="48" rx="6" fill="#f2b84b"/>
+      <rect x="64" y="108" width="28" height="12" rx="3" fill="#f2b84b"/>
+      <text x="96" y="188" text-anchor="middle" class="dg-ink">03-18</text>
+      <text x="194" y="232" text-anchor="middle" font-size="11.5" class="dg-quiet">課題のフォルダだけが見える</text>
+      <!-- 矢印 -->
+      <path d="M372 162H404" class="dg-line" marker-end="url(#gbarrow)"/>
+      <defs><marker id="gbarrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="dg-head"/></marker></defs>
+      <rect x="350" y="118" width="64" height="22" rx="11" class="dg-chip"/>
+      <text x="382" y="133" text-anchor="middle" font-size="11.5" class="dg-chip-text">Ctrl+H</text>
+      <!-- 右のウィンドウ -->
+      <rect x="420" y="48" width="316" height="228" rx="10" class="dg-main"/>
+      <rect x="420" y="48" width="316" height="36" rx="10" class="dg-zone"/>
+      <text x="436" y="71" font-weight="600" class="dg-ink">ch03</text>
+      <text x="720" y="71" text-anchor="end" font-size="11.5" class="dg-quiet">隠しファイルも表示</text>
+      <g opacity="0.55">
+        <rect x="456" y="116" width="64" height="48" rx="6" fill="#8a9bb0"/>
+        <rect x="456" y="108" width="28" height="12" rx="3" fill="#8a9bb0"/>
+      </g>
+      <text x="488" y="188" text-anchor="middle" font-weight="600" class="dg-ink">.git</text>
+      <rect x="560" y="116" width="64" height="48" rx="6" fill="#f2b84b"/>
+      <rect x="560" y="108" width="28" height="12" rx="3" fill="#f2b84b"/>
+      <text x="592" y="188" text-anchor="middle" class="dg-ink">03-18</text>
+      <text x="578" y="232" text-anchor="middle" font-size="11.5" class="dg-ink">名前が「.（ドット）」で始まるものは</text>
+      <text x="578" y="250" text-anchor="middle" font-size="11.5" class="dg-ink">「隠しファイル」として、ふだん隠れる</text>
+    </svg>
+    <figcaption>ファイル画面のイメージ（Ubuntu の「ファイル」アプリでは Ctrl + H、Mac の Finder では Cmd + Shift + .）</figcaption>
+  </figure>
+
+  <h3>ターミナルで見ると（本物の出力）</h3>
+  <p><code>ls -la</code> は「隠しファイルも含めて、くわしく一覧を出す」コマンドです。<code>git init</code> の前と後で比べてみます。</p>
+<div class="code-frame"><span class="code-name">git init する前</span>
+<pre><code>$ ls -la
+drwxr-xr-x  3 h-kondo  staff   96 Nov  9 11:09 .
+drwxr-xr-x  3 h-kondo  staff   96 Nov  9 11:09 ..
+drwxr-xr-x  4 h-kondo  staff  128 Nov  9 11:09 03-18</code></pre></div>
+<div class="code-frame"><span class="code-name">git init した後</span>
+<pre><code>$ git init
+$ ls -la
+drwxr-xr-x  4 h-kondo  staff  128 Nov  9 11:09 .
+drwxr-xr-x  3 h-kondo  staff   96 Nov  9 11:09 ..
+drwxr-xr-x  9 h-kondo  staff  288 Nov  9 11:09 .git      ← 増えた！
+drwxr-xr-x  4 h-kondo  staff  128 Nov  9 11:09 03-18</code></pre></div>
+  <p><strong><code>git init</code> がやっていることは、この <code>.git</code> フォルダを作るだけ</strong>です。「このフォルダの中身をセーブしていきますよ」という<strong>セーブ用の箱を置いた</strong>、ということです。</p>
+  <p class="note warn"><strong><code>.git</code> フォルダは消したり、中のファイルを手で書き換えたりしないでください。</strong>消すと、それまでのセーブ（履歴）が全部なくなり、GitHub とのつながりも切れます。見るだけなら大丈夫です。</p>
+
+  <!-- ===================================================== -->
+  <h2 id="inside">4. .git の中には何が入っている？</h2>
+<div class="code-frame"><span class="code-name">.git の中身（本物の出力）</span>
+<pre><code>$ ls -F .git
+HEAD          config        description   hooks/        index         info/         objects/      refs/</code></pre></div>
+  <p>名前はむずかしそうですが、役割はシンプルです。まずは<strong>色をつけた4つ</strong>だけ覚えれば十分です。</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>名前</th><th>たとえると</th><th>中身</th></tr></thead>
+    <tbody>
+      <tr><td><strong><code>objects/</code></strong></td><td>📸 <strong>写真アルバム</strong></td><td>セーブしたファイルの中身が全部しまってある。<strong>セーブデータの本体</strong></td></tr>
+      <tr><td><strong><code>index</code></strong></td><td>🧺 <strong>買い物カゴ</strong></td><td>「次にセーブするもの」のリスト。<span class="chip">git add</span> すると中身が入る</td></tr>
+      <tr><td><strong><code>HEAD</code></strong></td><td>🔖 <strong>しおり</strong></td><td>「今どのセーブのところにいるか」の目印</td></tr>
+      <tr><td><strong><code>config</code></strong></td><td>📒 <strong>住所録</strong></td><td>このフォルダの設定と、<strong>GitHub の住所</strong>が書いてある</td></tr>
+      <tr><td><code>refs/</code></td><td>付箋</td><td>ブランチ（<code>main</code> など）が、どのセーブを指しているかのメモ</td></tr>
+      <tr><td><code>hooks/</code> <code>info/</code> <code>description</code></td><td>おまけ</td><td>授業では気にしなくてOK</td></tr>
+    </tbody>
+  </table></div>
+  <p>ちなみに、この時点での <code>.git</code> の大きさは <strong>120KB</strong>（写真1枚より小さい）でした。</p>
+
+  <!-- ===================================================== -->
+  <h2 id="add-commit">5. add と commit で、.git の中では何が起きている？</h2>
+  <figure>
+    <img src="img/git-basics/g3-add-commit.webp" alt="作品を買い物カゴに入れ、カメラで撮ってアルバムに貼るまでの3コマのイラスト" width="1280" height="720" loading="lazy">
+    <figcaption>add ＝ カゴに入れる／commit ＝ 写真を撮ってアルバムに貼る</figcaption>
+  </figure>
+  <p><span class="chip">git add</span> と <span class="chip">git commit</span> は、<strong>自分のパソコンの中の <code>.git</code> フォルダに書き込んでいる</strong>だけです。インターネットには一切つながっていません。本当にそうなっているか、<code>.git/objects</code> の中のファイルの数を数えて確かめてみます。</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>やったこと</th><th><code>.git/objects</code> のファイルの数</th><th>何が起きた？</th></tr></thead>
+    <tbody>
+      <tr><td><code>git init</code> 直後</td><td><strong>0 個</strong></td><td>まだ空っぽのアルバム</td></tr>
+      <tr><td><span class="chip">git add .</span> の後</td><td><strong>2 個</strong></td><td><code>index.html</code> と <code>style.css</code> の中身がしまわれた（＋カゴのリスト <code>index</code> ができた）</td></tr>
+      <tr><td><span class="chip">git commit</span> の後</td><td><strong>5 個</strong></td><td>フォルダの地図2枚と、「セーブ記録」1枚が増えた</td></tr>
+    </tbody>
+  </table></div>
+<div class="code-frame"><span class="code-name">commit した後の objects（本物の出力）</span>
+<pre><code>$ find .git/objects -type f
+.git/objects/16/f776aea4ba394664bde8af6d924ba92f097b53
+.git/objects/6c/8438155fa63290b84c758ee7df165d718409a9
+.git/objects/74/74a5758ea8852f6a6a6fd433cc52bdc0036562
+.git/objects/a8/b442bba55617f7b1169374a9e6af115565a930   ← これが「セーブ記録」
+.git/objects/ff/a9c076f19fb4ae50fef5cac373f93b0377c053</code></pre></div>
+  <p>ファイル名がぐちゃぐちゃの英数字なのは、<strong>中身から自動で作られた「指紋」のような番号（ハッシュ）</strong>だからです。中身が1文字でも違えば、まったく違う番号になります。</p>
+
+  <h3>セーブ記録の中身をのぞいてみる</h3>
+  <p>ファイルの中身は機械用に圧縮されているので、そのままでは読めません。</p>
+<div class="code-frame"><span class="code-name">そのまま開くと…（本物の出力）</span>
+<pre><code>$ xxd .git/objects/16/f776aea4ba394664bde8af6d924ba92f097b53 | head -2
+00000000: 7801 2b29 4a4d 5530 3765 3034 3030 3331  x.+)JMU07e040031
+00000010: 51c8 cc4b 49ad d0cb 28c9 cd61 2829 595a  Q..KI...(..a()YZ</code></pre></div>
+  <p>Git に「読める形で見せて」と頼むと、セーブ記録（コミット）の正体が分かります。</p>
+<div class="code-frame"><span class="code-name">セーブ記録の中身（本物の出力）</span>
+<pre><code>$ git cat-file -p HEAD
+tree ffa9c076f19fb4ae50fef5cac373f93b0377c053       ← その時のフォルダの地図
+author h-kondo &lt;h-kondo@example.com&gt; 1794190182 +0900   ← だれが・いつ
+committer h-kondo &lt;h-kondo@example.com&gt; 1794190182 +0900
+
+Complete 03-18                                       ← commit -m で書いたメッセージ</code></pre></div>
+  <p>セーブ記録は、<strong>「この時のフォルダの地図」＋「だれが・いつ」＋「メッセージ」が書かれた、ただのメモ</strong>でした。<code>git config user.name</code> で登録した名前が、ここに入ります（だから最初に名前の登録が必要なのです）。</p>
+  <p>そして、しおり（<code>HEAD</code>）はこう書いてあります。</p>
+<div class="code-frame"><span class="code-name">しおりの中身（本物の出力）</span>
+<pre><code>$ cat .git/HEAD
+ref: refs/heads/main                         ← 「main のところを見てね」
+$ cat .git/refs/heads/main
+a8b442bba55617f7b1169374a9e6af115565a930     ← main は、さっきのセーブ記録を指している</code></pre></div>
+  <figure>
+    <svg viewBox="0 0 760 250" role="img" aria-label="add はカゴ（index）に、commit はアルバム（objects）にセーブ記録を作る" font-size="13">
+      <defs><marker id="gbarrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="dg-head"/></marker></defs>
+      <text x="24" y="28" font-size="15" font-weight="600" class="dg-ink">add も commit も、自分のPCの .git の中だけで起きている</text>
+      <rect x="24" y="52" width="712" height="176" rx="12" class="dg-zone"/>
+      <text x="40" y="76" font-weight="600" class="dg-ink">自分のパソコン（ch03 フォルダ）</text>
+      <rect x="44" y="104" width="176" height="96" rx="8" class="dg-box"/>
+      <text x="132" y="130" text-anchor="middle" font-weight="600" class="dg-ink">作業フォルダ</text>
+      <text x="132" y="152" text-anchor="middle" font-size="11.5" class="dg-quiet">03-18/index.html</text>
+      <text x="132" y="168" text-anchor="middle" font-size="11.5" class="dg-quiet">03-18/style.css</text>
+      <text x="132" y="184" text-anchor="middle" font-size="11.5" class="dg-quiet">（VS Code で書く所）</text>
+      <rect x="300" y="88" width="420" height="128" rx="10" class="dg-main"/>
+      <text x="316" y="110" font-weight="600" class="dg-ink">.git（隠しフォルダ）</text>
+      <rect x="316" y="122" width="176" height="78" rx="8" class="dg-box"/>
+      <text x="404" y="146" text-anchor="middle" font-weight="600" class="dg-ink">🧺 index</text>
+      <text x="404" y="168" text-anchor="middle" font-size="11.5" class="dg-quiet">次にセーブするもの</text>
+      <text x="404" y="184" text-anchor="middle" font-size="11.5" class="dg-quiet">のリスト</text>
+      <rect x="528" y="122" width="176" height="78" rx="8" class="dg-box"/>
+      <text x="616" y="146" text-anchor="middle" font-weight="600" class="dg-ink">📸 objects</text>
+      <text x="616" y="168" text-anchor="middle" font-size="11.5" class="dg-quiet">ファイルの中身と</text>
+      <text x="616" y="184" text-anchor="middle" font-size="11.5" class="dg-quiet">セーブ記録</text>
+      <path d="M220 160H316" class="dg-line" marker-end="url(#gbarrow2)"/>
+      <path d="M492 160H528" class="dg-line" marker-end="url(#gbarrow2)"/>
+      <rect x="230" y="148" width="76" height="22" rx="11" class="dg-chip"/>
+      <text x="268" y="163" text-anchor="middle" font-size="12" class="dg-chip-text">git add</text>
+      <rect x="470" y="206" width="92" height="22" rx="11" class="dg-chip"/>
+      <text x="516" y="221" text-anchor="middle" font-size="12" class="dg-chip-text">git commit</text>
+      <path d="M516 206V182" class="dg-line"/>
+    </svg>
+    <figcaption>インターネットは使っていない。だから電車の中でもセーブできる</figcaption>
+  </figure>
+
+  <!-- ===================================================== -->
+  <h2 id="github">6. .git と GitHub はどうつながっている？</h2>
+  <p>では、自分のパソコンの <code>.git</code> と GitHub は、どうやってつながっているのでしょう？ 住所録（<code>.git/config</code>）を開いてみます。</p>
+<div class="code-frame"><span class="code-name">.git/config（本物の出力）</span>
+<pre><code>$ git remote add origin https://github.com/h-kondo/ch03.git
+$ cat .git/config
+[core]
+	repositoryformatversion = 0
+	...
+[user]
+	name = h-kondo                                  ← git config で登録した名前
+	email = h-kondo@example.com
+[remote "origin"]                                   ← 「origin」という名前の送り先
+	url = https://github.com/h-kondo/ch03.git       ← GitHub の住所！
+	fetch = +refs/heads/*:refs/remotes/origin/*</code></pre></div>
+  <p><span class="chip">git remote add origin …</span> がやったのは、<strong>この住所録に GitHub の住所を1行書き足しただけ</strong>です。<span class="chip">git remote -v</span> は、この住所を読んで表示しているだけです。</p>
+  <p class="note"><strong>ポイント：<code>.git</code> は GitHub と「ずっとつながっている」わけではありません。</strong><br>
+  住所がメモしてあるだけで、ふだんは切れています。<strong><span class="chip">git push</span> や <span class="chip">git pull</span> を打った、その瞬間だけ</strong>、住所あてに通信します。</p>
+  <figure>
+    <img src="img/git-basics/g4-push.webp" alt="小さな家から光る箱が飛んでいき、雲の上の大きな図書館に届くイラスト" width="1280" height="720" loading="lazy">
+    <figcaption>push ＝ 自分の .git のセーブを、GitHub に届ける</figcaption>
+  </figure>
+  <div class="table-wrap"><table>
+    <thead><tr><th>コマンド</th><th>実際にやっていること</th></tr></thead>
+    <tbody>
+      <tr><td><span class="chip">git push</span></td><td>自分の <code>.git/objects</code> にあって、GitHub にまだ無いセーブを、<strong>住所あてに送る</strong></td></tr>
+      <tr><td><span class="chip">git pull</span></td><td>GitHub にあって、自分の <code>.git</code> にまだ無いセーブを<strong>もらってくる</strong></td></tr>
+      <tr><td><span class="chip">git clone URL</span></td><td>GitHub のセーブを <strong><code>.git</code> ごと丸ごとコピー</strong>してくる（別のパソコンで続きをやる時など）</td></tr>
+    </tbody>
+  </table></div>
+  <p>GitHub の側にも、実は<strong>同じ形のセーブデータ（<code>.git</code> の中身と同じもの）</strong>が置いてあります。push は「自分のアルバムの新しい写真を、図書館のアルバムにも貼ってもらう」ことです。だから、自分のパソコンが壊れても、GitHub から <code>git clone</code> すれば全部の履歴ごと取り戻せます。</p>
+  <p class="note warn">Git の中に Git を作る（すでに <code>.git</code> があるフォルダの中で、さらに <code>git init</code> する）と、どの住所録が使われるか分からなくなって失敗します。くわしくは <a href="vscode.html#nested-git">VS Code 手順書の「親のフォルダがすでに Git につながっていると失敗する」</a>を見てください。</p>
+
+  <!-- ===================================================== -->
+  <h2 id="hosting">7. ホスティングってなに？</h2>
+  <p><strong>ホスティング</strong>とは、作ったファイルを<strong>「24時間ずっと電源が入っているパソコン」に置いてもらい、世界中のだれでも見られるようにすること</strong>です。この「ずっと動いているパソコン」を<strong>サーバー</strong>と呼びます。</p>
+  <figure>
+    <img src="img/git-basics/g5-datacenter.webp" alt="夜も明かりがついた建物の中に、ランプの光る黒い棚がずらりと並ぶデータセンターを子どもが見学しているイラスト" width="1280" height="720" loading="lazy">
+    <figcaption>サーバーは、データセンターという建物の中に何千台も並んでいる本物のパソコン</figcaption>
+  </figure>
+  <h3>自分のパソコンで開くのと、何がちがう？</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th></th><th>自分のパソコンで <code>open index.html</code></th><th>GitHub Pages で公開</th></tr></thead>
+    <tbody>
+      <tr><td>アドレスの形</td><td><code>file:///home/…/ch03/03-18/index.html</code></td><td><code>https://h-kondo.github.io/ch03/03-18/</code></td></tr>
+      <tr><td>だれが見られる？</td><td><strong>自分だけ</strong>（そのパソコンの前にいる人）</td><td><strong>世界中のだれでも</strong></td></tr>
+      <tr><td>パソコンを閉じたら？</td><td>見られない</td><td><strong>見られる</strong>（サーバーは自分のパソコンとは別に動いている）</td></tr>
+      <tr><td>たとえると</td><td>家の冷蔵庫にしまったケーキ</td><td>お店のショーケースに並べたケーキ</td></tr>
+    </tbody>
+  </table></div>
+  <p>クラウドやインターネット上というと、ふわふわしたものに聞こえますが、<strong>実際にはどこかの建物の中に本物のパソコン（サーバー）が置いてあり、電気で24時間動いている</strong>のです。「ホスティングする」とは、そのパソコンの場所を少し借りることです。GitHub Pages は、その場所を<strong>無料で貸してくれるサービス</strong>です。</p>
+
+  <!-- ===================================================== -->
+  <h2 id="pages">8. GitHub Pages のうら側を、本物のデータでのぞく</h2>
+  <p>この授業資料のサイト（<code>itc-kondo.github.io</code>）も GitHub Pages で公開しています。ブラウザでアドレスを打ってからページが届くまでに、何が起きているのかを本物のデータで見てみます。</p>
+
+  <h3>① アドレスを「サーバーの番号」に変える（DNS ＝ インターネットの電話帳）</h3>
+  <p>パソコン同士は、名前ではなく<strong>番号（IP アドレス）</strong>で相手を探します。名前から番号を調べるしくみを <strong>DNS</strong> といいます。電話帳で名前から電話番号を調べるのと同じです。</p>
+<div class="code-frame"><span class="code-name">ターミナル（本物の出力）</span>
+<pre><code>$ dig +short itc-kondo.github.io
+185.199.108.153
+185.199.110.153
+185.199.109.153
+185.199.111.153</code></pre></div>
+  <p><code>itc-kondo.github.io</code> の正体は、<code>185.199.108.153</code> などの番号でした。4つあるのは、1つが故障しても他で受け付けられるようにするためです。</p>
+
+  <h3>② 近くの「配達用の倉庫」から届く（CDN）</h3>
+  <p>サイトに来た返事の「送り状」（ヘッダー）を見ると、だれが届けてくれたのかが書いてあります。</p>
+<div class="code-frame"><span class="code-name">ターミナル（本物の出力）</span>
+<pre><code>$ curl -sI https://itc-kondo.github.io/class-materials/
+HTTP/2 200                              ← 「ページあるよ、どうぞ」
+server: GitHub.com                      ← 元の持ち主は GitHub
+via: 1.1 varnish                        ← 途中で配達用のしくみを通った
+x-served-by: cache-itm1220075-ITM       ← 実際に届けたサーバー（ITM ＝ 大阪伊丹空港の記号）</code></pre></div>
+  <figure>
+    <img src="img/git-basics/g6-cdn.webp" alt="地球の上のいくつもの小さな倉庫から、近くの家やスマホへページが届けられているイラスト" width="1280" height="720" loading="lazy">
+    <figcaption>世界中に置かれた「配達用の倉庫」から、いちばん近いところが届けてくれる</figcaption>
+  </figure>
+  <p><code>ITM</code> は空港の記号で、<strong>大阪（伊丹）</strong>のことです。つまりこのページは、アメリカにある GitHub の本部から毎回取ってきているのではなく、<strong>大阪にある配達用のサーバーから届いていた</strong>のです。このしくみを <strong>CDN</strong>（コンテンツ配信ネットワーク）といいます。GitHub Pages は、Fastly という会社の CDN を使っています。<br>
+  ※ どの配達サーバーが届けるかは、<strong>見る人の場所や時間によって変わります</strong>。自分のパソコンで同じ <code>curl</code> を打つと、<code>ITM</code> 以外の記号（東京なら <code>NRT</code> や <code>HND</code> など）が出ることもあります。ぜひ試してみてください。</p>
+  <figure>
+    <svg viewBox="0 0 760 230" role="img" aria-label="ブラウザ、DNS、大阪の配達サーバー、GitHub の順にページが届く" font-size="13">
+      <defs><marker id="gbarrow3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="dg-head"/></marker></defs>
+      <text x="24" y="28" font-size="15" font-weight="600" class="dg-ink">アドレスを打ってから、ページが届くまで</text>
+      <rect x="24" y="64" width="150" height="88" rx="8" class="dg-box"/>
+      <text x="99" y="92" text-anchor="middle" font-weight="600" class="dg-ink">💻 ブラウザ</text>
+      <text x="99" y="114" text-anchor="middle" font-size="11.5" class="dg-quiet">アドレスを打つ</text>
+      <text x="99" y="130" text-anchor="middle" font-size="11.5" class="dg-quiet">（自分のPC）</text>
+      <rect x="214" y="64" width="150" height="88" rx="8" class="dg-box"/>
+      <text x="289" y="92" text-anchor="middle" font-weight="600" class="dg-ink">📖 DNS</text>
+      <text x="289" y="114" text-anchor="middle" font-size="11.5" class="dg-quiet">名前 → 番号</text>
+      <text x="289" y="130" text-anchor="middle" font-size="11.5" class="dg-quiet">185.199.108.153</text>
+      <rect x="404" y="64" width="150" height="88" rx="8" class="dg-main"/>
+      <text x="479" y="92" text-anchor="middle" font-weight="600" class="dg-ink">🏬 配達サーバー</text>
+      <text x="479" y="114" text-anchor="middle" font-size="11.5" class="dg-ink">大阪（Fastly の CDN）</text>
+      <text x="479" y="130" text-anchor="middle" font-size="11.5" class="dg-ink">コピーを持っている</text>
+      <rect x="594" y="64" width="142" height="88" rx="8" class="dg-box"/>
+      <text x="665" y="92" text-anchor="middle" font-weight="600" class="dg-ink">🏢 GitHub</text>
+      <text x="665" y="114" text-anchor="middle" font-size="11.5" class="dg-quiet">元のファイル</text>
+      <text x="665" y="130" text-anchor="middle" font-size="11.5" class="dg-quiet">（push した場所）</text>
+      <path d="M174 96H214" class="dg-line" marker-end="url(#gbarrow3)"/>
+      <path d="M364 96H404" class="dg-line" marker-end="url(#gbarrow3)"/>
+      <path d="M554 96H594" class="dg-line" marker-end="url(#gbarrow3)"/>
+      <path d="M479 152V188H99V152" class="dg-line" marker-end="url(#gbarrow3)"/>
+      <text x="289" y="206" text-anchor="middle" font-size="11.5" class="dg-quiet">近くの配達サーバーがページを送り返す（持っていなければ GitHub から取ってくる）</text>
+    </svg>
+    <figcaption>①名前を番号に → ②近くの配達サーバーへ → ③ページが届く</figcaption>
+  </figure>
+  <p>まとめると、<strong>push したファイルは GitHub のサーバー（どこかの建物の中の本物のパソコン）に置かれ、そのコピーが世界中の配達サーバーに配られて、見る人の近くから届けられている</strong>、ということです。push してから公開ページに反映されるまで少し時間がかかるのは、この配達の準備をしているからです。</p>
+
+  <!-- ===================================================== -->
+  <h2 id="summary">9. まとめ</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>ことば</th><th>ひとことで</th></tr></thead>
+    <tbody>
+      <tr><td>バージョン管理</td><td>作品を何回でもセーブして、前に戻れるしくみ</td></tr>
+      <tr><td><code>.git</code></td><td>作業フォルダの中の<strong>隠しフォルダ</strong>。セーブデータは全部ここにある</td></tr>
+      <tr><td><span class="chip">git init</span></td><td><code>.git</code> を作る（セーブ用の箱を置く）</td></tr>
+      <tr><td><span class="chip">git add</span></td><td>カゴ（<code>.git/index</code>）に入れる。<strong>自分のPCの中だけ</strong></td></tr>
+      <tr><td><span class="chip">git commit</span></td><td>アルバム（<code>.git/objects</code>）にセーブ記録を作る。<strong>自分のPCの中だけ</strong></td></tr>
+      <tr><td><span class="chip">git remote add</span></td><td>住所録（<code>.git/config</code>）に GitHub の住所を書く</td></tr>
+      <tr><td><span class="chip">git push</span></td><td>セーブを GitHub に送る。<strong>ここで初めてインターネットを使う</strong></td></tr>
+      <tr><td>ホスティング</td><td>24時間動いている本物のパソコン（サーバー）に置いて、みんなに見せること</td></tr>
+      <tr><td>GitHub Pages</td><td>GitHub が無料でやってくれるホスティング</td></tr>
+      <tr><td>DNS / CDN</td><td>名前を番号に変える電話帳 ／ 近くから届ける配達用の倉庫</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- ===================================================== -->
+  <h2 id="quiz">10. クイズ</h2>
+  <p>答えはクリックすると出てきます。</p>
+  <details class="quiz"><summary>Q1. <code>git commit</code> した時、インターネットは使われている？</summary><p><strong>使われていない。</strong>commit は自分のパソコンの <code>.git</code> の中にセーブ記録を作るだけ。インターネットを使うのは <code>git push</code> や <code>git pull</code> の時だけです。</p></details>
+  <details class="quiz"><summary>Q2. ファイルの画面で <code>.git</code> が見えません。どうすればいい？</summary><p>Ubuntu の「ファイル」アプリで <strong><code>Ctrl + H</code></strong>（隠しファイルの表示）。ターミナルなら <code>ls -la</code>。名前が「.」で始まるファイルはふだん隠れています。</p></details>
+  <details class="quiz"><summary>Q3. <code>.git</code> フォルダを消すと、どうなる？</summary><p>それまでのセーブ（履歴）と、GitHub の住所のメモが<strong>全部消えます</strong>。作業中のファイル（<code>index.html</code> など）は残りますが、ただのフォルダに戻ります。だから消してはいけません。</p></details>
+  <details class="quiz"><summary>Q4. 自分のパソコンの電源を切ったら、GitHub Pages のサイトは見られなくなる？</summary><p><strong>見られます。</strong>サイトは GitHub のサーバー（どこかの建物で24時間動いている別のパソコン）から配られているからです。</p></details>
+  <details class="quiz"><summary>Q5. <code>git remote -v</code> で表示される URL は、どこに書いてある？</summary><p><strong><code>.git/config</code>（住所録）</strong>の <code>[remote "origin"]</code> のところ。<code>git remote add</code> がここに書き込んでいます。</p></details>
+
+  <h2 id="ref">参考</h2>
+  <ul>
+    <li><a href="https://git-scm.com/book/ja/v2/Git%E3%81%AE%E5%86%85%E5%81%B4-Git%E3%82%AA%E3%83%96%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88">Pro Git（日本語版）「Git の内側 - Git オブジェクト」</a></li>
+    <li><a href="https://docs.github.com/ja/pages/getting-started-with-github-pages/about-github-pages">GitHub Docs「GitHub Pages について」</a></li>
+    <li><a href="vscode.html">VS Code 概要とインストール・セットアップ手順書（課題の上げ方）</a></li>
+  </ul>
+</main>
+<aside class="side">
+  <nav class="toc" aria-label="目次">
+    <p class="toc-title">目次</p>
+    <ol>
+      <li><a href="#version">1. バージョン管理ってなに？</a></li>
+      <li><a href="#git-vs-github">2. Git と GitHub はちがうもの</a></li>
+      <li><a href="#folder">3. 本物のフォルダをのぞいてみよう<span class="toc-sub">隠しフォルダ .git</span></a></li>
+      <li><a href="#inside">4. .git の中には何が入っている？</a></li>
+      <li><a href="#add-commit">5. add と commit で起きていること</a></li>
+      <li><a href="#github">6. .git と GitHub のつながり<span class="toc-sub">push / pull / clone</span></a></li>
+      <li><a href="#hosting">7. ホスティングってなに？</a></li>
+      <li><a href="#pages">8. GitHub Pages のうら側<span class="toc-sub">DNS と CDN を本物のデータで</span></a></li>
+      <li><a href="#summary">9. まとめ</a></li>
+      <li><a href="#quiz">10. クイズ</a></li>
+    </ol>
+  </nav>
+</aside>
+</div>
+</body>
+</html>
