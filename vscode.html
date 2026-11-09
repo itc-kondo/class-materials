@@ -5,19 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>VS Code 概要とインストール・セットアップ手順書</title>
   <link rel="stylesheet" href="style.css">
+  <script src="site.js" defer></script>
 </head>
 <body>
 <header class="site-header">
-  <div class="site-header-inner">
-    <a class="site-logo" href="./">ITC 授業資料</a>
-    <nav class="site-nav"><a href="./">記事一覧</a></nav>
+  <div class="header-top">
+    <a class="site-logo" href="./"><span class="logo-mark">ITC 授業資料</span><span class="logo-sub">Web Extension III・IV</span></a>
+    <form class="header-search" action="./" method="get" role="search"><input type="search" name="q" placeholder="記事を検索" aria-label="記事を検索"></form>
+    <a class="header-btn" href="https://github.com/itc-kondo/class-materials">GitHub</a>
   </div>
+  <nav class="header-tabs" aria-label="カテゴリ">
+    <a data-tab="all" href="./">すべて</a>
+    <a data-tab="class" href="./?tab=class" class="active">授業の手順書</a>
+    <a data-tab="column" href="./?tab=column">小話・コラム</a>
+  </nav>
 </header>
-<div class="layout has-side">
+<div class="article-layout">
+<aside class="rail" aria-label="共有">
+  <a href="https://x.com/intent/post?url=https%3A%2F%2Fitc-kondo.github.io%2Fclass-materials%2Fvscode.html&amp;text=VS%20Code%20%E6%A6%82%E8%A6%81%E3%81%A8%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%83%BB%E3%82%BB%E3%83%83%E3%83%88%E3%82%A2%E3%83%83%E3%83%97%E6%89%8B%E9%A0%86%E6%9B%B8" target="_blank" rel="noopener" title="X でシェア">𝕏</a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fitc-kondo.github.io%2Fclass-materials%2Fvscode.html" target="_blank" rel="noopener" title="Facebook でシェア">f</a>
+  <a href="https://b.hatena.ne.jp/entry/s/itc-kondo.github.io/class-materials/vscode.html" target="_blank" rel="noopener" title="はてなブックマーク">B!</a>
+  <button type="button" data-copy title="URL をコピー">🔗</button>
+  <span class="rail-label">コピー</span>
+</aside>
 <main>
-  <div class="article-meta"><span class="avatar">K</span><span class="author">itc-kondo</span><span>投稿日 2026-10-05　更新日 2026-10-27</span></div>
+  <div class="article-meta"><span class="avatar">K</span><span class="author">@itc-kondo</span></div>
   <div class="article-title"><img src="img/vscode.svg" alt="" width="56" height="56"><h1>VS Code 概要とインストール・セットアップ手順書</h1></div>
   <ul class="tags"><li>VSCode</li><li>Git</li><li>GitHub</li><li>Ubuntu</li><li>初心者</li></ul>
+  <p class="article-dates"><span>最終更新日 2026年10月27日</span><span>投稿日 2026年10月05日</span></p>
 
 
   <h2 id="about">VS Code とは</h2>

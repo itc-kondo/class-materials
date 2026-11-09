@@ -3,66 +3,124 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ITC 授業資料</title>
+  <title>ITC 授業資料｜Web Extension III・IV</title>
   <link rel="stylesheet" href="style.css">
+  <script src="site.js" defer></script>
 </head>
 <body>
 <header class="site-header">
-  <div class="site-header-inner">
-    <a class="site-logo" href="./">ITC 授業資料</a>
-    <nav class="site-nav"><a href="./">記事一覧</a></nav>
+  <div class="header-top">
+    <a class="site-logo" href="./"><span class="logo-mark">ITC 授業資料</span><span class="logo-sub">Web Extension III・IV</span></a>
+    <form class="header-search" action="./" method="get" role="search"><input type="search" name="q" placeholder="記事を検索" aria-label="記事を検索"></form>
+    <a class="header-btn" href="https://github.com/itc-kondo/class-materials">GitHub</a>
   </div>
+  <nav class="header-tabs" aria-label="カテゴリ">
+    <a data-tab="all" href="./">すべて</a>
+    <a data-tab="class" href="./?tab=class">授業の手順書</a>
+    <a data-tab="column" href="./?tab=column">小話・コラム</a>
+  </nav>
 </header>
-<div class="layout">
-<main>
-  <h1>授業資料</h1>
-  <p class="date">読みたい記事を選んでください。</p>
 
-  <ul class="feed">
-    <li>
-      <div class="feed-meta"><span class="avatar">K</span>itc-kondo・投稿日 2026-11-09</div>
-      <a class="feed-title" href="git-basics.html">小学生でもわかる Git と GitHub とホスティングのしくみ</a>
-      <p>隠しフォルダ「.git」の正体、add・commit・push で本当に起きていること、GitHub Pages でサイトが届くまでを本物のデータで。</p>
-      <ul class="tags"><li>Git</li><li>GitHub</li><li>GitHub Pages</li><li>ホスティング</li><li>初心者</li></ul>
-    </li>
-    <li>
-      <div class="feed-meta"><span class="avatar">K</span>itc-kondo・更新日 2026-10-27</div>
-      <a class="feed-title" href="vscode.html">VS Code 概要とインストール・セットアップ手順書</a>
-      <p>Vim との違い、Ubuntu へのインストール、GitHub への課題の上げ方（03-18）と GitHub Pages での公開まで。</p>
-      <ul class="tags"><li>VSCode</li><li>Git</li><li>GitHub</li><li>Ubuntu</li><li>初心者</li></ul>
-    </li>
-    <li>
-      <div class="feed-meta"><span class="avatar">K</span>itc-kondo・投稿日 2026-10-05</div>
-      <a class="feed-title" href="threejs.html">Three.js 入門 ― ブラウザで3Dを動かそう</a>
-      <p>HTML/CSS の次の一歩。なぜ今流行っているのか、3D の基本、HTML 1枚で回る立方体まで。</p>
-      <ul class="tags"><li>Three.js</li><li>JavaScript</li><li>HTML</li><li>CSS</li><li>3D</li></ul>
-    </li>
-    <li>
-      <div class="feed-meta"><span class="avatar">K</span>itc-kondo・投稿日 2026-10-26</div>
-      <a class="feed-title" href="gmo-incident.html">GMO 不正アクセス事件 ― 技術的に何が起きたのか</a>
-      <p>2026年10月の事件を解説。サーバーに保存したパスワードが盗まれ、口座が操作されるまでの流れ。</p>
-      <ul class="tags"><li>セキュリティ</li><li>不正アクセス</li><li>ランサムウェア</li><li>クラウド</li></ul>
-    </li>
-    <li>
-      <div class="feed-meta"><span class="avatar">K</span>itc-kondo・投稿日 2026-10-26</div>
-      <a class="feed-title" href="games.html">超大作ゲームの技術と数字 ― サイバーパンク2077・GTA V・GTA VI</a>
-      <p>PC の技術要件、売上、プレイヤー数、何がすごいのか。</p>
-      <ul class="tags"><li>ゲーム</li><li>GTA</li><li>サイバーパンク2077</li><li>グラフィックス</li></ul>
-    </li>
-    <li>
-      <div class="feed-meta"><span class="avatar">K</span>itc-kondo・投稿日 2026-10-05</div>
-      <a class="feed-title" href="sekai-seifuku.html">要約：岡田斗司夫『「世界征服」は可能か？』</a>
-      <p>悪の組織から学ぶ、組織と社会のしくみ。結論は「たぶん可能。でも割に合わない」。</p>
-      <ul class="tags"><li>読書</li><li>要約</li><li>組織論</li></ul>
-    </li>
-    <li>
-      <div class="feed-meta"><span class="avatar">K</span>itc-kondo・サンプル</div>
-      <a class="feed-title" href="demo/cube.html">サンプル：回る立方体（Three.js）</a>
-      <p>Three.js 入門のサンプルコードが実際に動くページ。</p>
-      <ul class="tags"><li>Three.js</li><li>デモ</li></ul>
-    </li>
-  </ul>
-</main>
+<div class="home">
+  <!-- 左：タグ -->
+  <aside class="home-side home-left">
+    <h2>タグ</h2>
+    <ol class="rank">
+      <li><a href="./?q=Git"><span class="tag-icon">🌱</span><span><span class="tag-name">Git</span><span class="tag-count">2 記事</span></span></a></li>
+      <li><a href="./?q=GitHub"><span class="tag-icon">🐙</span><span><span class="tag-name">GitHub</span><span class="tag-count">2 記事</span></span></a></li>
+      <li><a href="./?q=初心者"><span class="tag-icon">🔰</span><span><span class="tag-name">初心者</span><span class="tag-count">2 記事</span></span></a></li>
+      <li><a href="./?q=VSCode"><span class="tag-icon">🧩</span><span><span class="tag-name">VSCode</span><span class="tag-count">1 記事</span></span></a></li>
+      <li><a href="./?q=Three.js"><span class="tag-icon">🧊</span><span><span class="tag-name">Three.js</span><span class="tag-count">2 記事</span></span></a></li>
+      <li><a href="./?q=セキュリティ"><span class="tag-icon">🔐</span><span><span class="tag-name">セキュリティ</span><span class="tag-count">1 記事</span></span></a></li>
+      <li><a href="./?q=ホスティング"><span class="tag-icon">🌐</span><span><span class="tag-name">ホスティング</span><span class="tag-count">1 記事</span></span></a></li>
+      <li><a href="./?q=ゲーム"><span class="tag-icon">🎮</span><span><span class="tag-name">ゲーム</span><span class="tag-count">1 記事</span></span></a></li>
+      <li><a href="./?q=読書"><span class="tag-icon">📚</span><span><span class="tag-name">読書</span><span class="tag-count">1 記事</span></span></a></li>
+    </ol>
+  </aside>
+
+  <!-- 中央：記事一覧 -->
+  <section>
+    <div class="feed-head">
+      <span class="feed-filter">☰ すべての記事</span>
+      <span class="feed-info"></span>
+    </div>
+    <ul class="feed">
+      <li class="feed-card" data-cat="class">
+        <div class="feed-user"><span class="avatar">K</span><div><div class="name">@itc-kondo</div><div class="date">2026年11月09日</div></div></div>
+        <a class="feed-title" href="git-basics.html">小学生でもわかる Git と GitHub とホスティングのしくみ ― 隠しフォルダ「.git」の正体から、サイトが届くまで</a>
+        <p class="feed-desc">add・commit・push で .git の中では本当に何が起きているのか。GitHub Pages でサイトが届くまでを、本物のデータでのぞきます。</p>
+        <ul class="tags"><li>Git</li><li>GitHub</li><li>GitHub Pages</li><li>ホスティング</li><li>初心者</li></ul>
+        <div class="feed-foot"><span class="read">🕒 約11分で読めます</span></div>
+      </li>
+      <li class="feed-card" data-cat="class">
+        <div class="feed-user"><span class="avatar">K</span><div><div class="name">@itc-kondo</div><div class="date">2026年10月27日 更新</div></div></div>
+        <a class="feed-title" href="vscode.html">VS Code 概要とインストール・セットアップ手順書</a>
+        <p class="feed-desc">Vim との違い、Ubuntu へのインストール、GitHub への課題の上げ方（03-18）と GitHub Pages での公開、Vagrant からやる場合まで。</p>
+        <ul class="tags"><li>VSCode</li><li>Git</li><li>GitHub</li><li>Ubuntu</li><li>初心者</li></ul>
+        <div class="feed-foot"><span class="read">🕒 約28分で読めます</span></div>
+      </li>
+      <li class="feed-card" data-cat="class">
+        <div class="feed-user"><span class="avatar">K</span><div><div class="name">@itc-kondo</div><div class="date">2026年10月05日</div></div></div>
+        <a class="feed-title" href="threejs.html">Three.js 入門 ― ブラウザで3Dを動かそう</a>
+        <p class="feed-desc">HTML/CSS の次の一歩。なぜ今流行っているのか、3D の基本、HTML 1枚で回る立方体まで。</p>
+        <ul class="tags"><li>Three.js</li><li>JavaScript</li><li>HTML</li><li>CSS</li><li>3D</li></ul>
+        <div class="feed-foot"><span class="read">🕒 約5分で読めます</span></div>
+      </li>
+      <li class="feed-card" data-cat="column">
+        <div class="feed-user"><span class="avatar">K</span><div><div class="name">@itc-kondo</div><div class="date">2026年10月26日</div></div></div>
+        <a class="feed-title" href="gmo-incident.html">GMO「お名前.com デスクトップクラウド」不正アクセス事件 ― 技術的に何が起きたのか</a>
+        <p class="feed-desc">サーバーに保存したパスワードが盗まれ、口座が操作されるまでの流れと、Web 制作で気をつけること。</p>
+        <ul class="tags"><li>セキュリティ</li><li>不正アクセス</li><li>ランサムウェア</li><li>クラウド</li></ul>
+        <div class="feed-foot"><span class="read">🕒 約7分で読めます</span></div>
+      </li>
+      <li class="feed-card" data-cat="column">
+        <div class="feed-user"><span class="avatar">K</span><div><div class="name">@itc-kondo</div><div class="date">2026年10月26日</div></div></div>
+        <a class="feed-title" href="games.html">超大作ゲームの技術と数字 ― サイバーパンク2077・GTA V・GTA VI</a>
+        <p class="feed-desc">PC の技術要件、売上、プレイヤー数、何がすごいのか。</p>
+        <ul class="tags"><li>ゲーム</li><li>GTA</li><li>サイバーパンク2077</li><li>グラフィックス</li></ul>
+        <div class="feed-foot"><span class="read">🕒 約7分で読めます</span></div>
+      </li>
+      <li class="feed-card" data-cat="column">
+        <div class="feed-user"><span class="avatar">K</span><div><div class="name">@itc-kondo</div><div class="date">2026年10月05日</div></div></div>
+        <a class="feed-title" href="sekai-seifuku.html">要約：岡田斗司夫『「世界征服」は可能か？』</a>
+        <p class="feed-desc">悪の組織から学ぶ、組織と社会のしくみ。結論は「たぶん可能。でも割に合わない」。</p>
+        <ul class="tags"><li>読書</li><li>要約</li><li>組織論</li></ul>
+        <div class="feed-foot"><span class="read">🕒 約4分で読めます</span></div>
+      </li>
+      <li class="feed-card" data-cat="class">
+        <div class="feed-user"><span class="avatar">K</span><div><div class="name">@itc-kondo</div><div class="date">サンプル</div></div></div>
+        <a class="feed-title" href="demo/cube.html">サンプル：回る立方体（Three.js）</a>
+        <p class="feed-desc">Three.js 入門のサンプルコードが実際に動くページ。</p>
+        <ul class="tags"><li>Three.js</li><li>デモ</li></ul>
+        <div class="feed-foot"><span class="read">▶ 動くデモ</span></div>
+      </li>
+    </ul>
+    <p class="feed-empty" hidden>見つかりませんでした。別のことばで検索してみてください。</p>
+  </section>
+
+  <!-- 右：お知らせ -->
+  <aside class="home-side home-right">
+    <div class="box">
+      <div class="hero-box">Web Extension III・IV<small>ITカレッジ沖縄 授業資料</small></div>
+      <p>授業で使う手順書と、授業中に話した小話をまとめています。分からないことがあったら、まずはここを検索してみよう。</p>
+    </div>
+    <div class="box">
+      <h2>まずはここから</h2>
+      <ul>
+        <li><a href="git-basics.html">Git と GitHub のしくみ（小学生でもわかる）</a></li>
+        <li><a href="vscode.html#git">課題を GitHub に上げる手順（03-18）</a></li>
+        <li><a href="vscode.html#nested-git">うまく push できない時（親フォルダの Git）</a></li>
+      </ul>
+    </div>
+    <div class="box">
+      <h2>よく使うリンク</h2>
+      <ul>
+        <li><a href="https://github.com/">GitHub</a></li>
+        <li><a href="https://code.visualstudio.com/">VS Code 公式サイト</a></li>
+        <li><a href="https://threejs.org/examples/">Three.js examples</a></li>
+      </ul>
+    </div>
+  </aside>
 </div>
 </body>
 </html>

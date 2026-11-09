@@ -5,19 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Git と GitHub とホスティングのしくみ</title>
   <link rel="stylesheet" href="style.css">
+  <script src="site.js" defer></script>
 </head>
 <body>
 <header class="site-header">
-  <div class="site-header-inner">
-    <a class="site-logo" href="./">ITC 授業資料</a>
-    <nav class="site-nav"><a href="./">記事一覧</a></nav>
+  <div class="header-top">
+    <a class="site-logo" href="./"><span class="logo-mark">ITC 授業資料</span><span class="logo-sub">Web Extension III・IV</span></a>
+    <form class="header-search" action="./" method="get" role="search"><input type="search" name="q" placeholder="記事を検索" aria-label="記事を検索"></form>
+    <a class="header-btn" href="https://github.com/itc-kondo/class-materials">GitHub</a>
   </div>
+  <nav class="header-tabs" aria-label="カテゴリ">
+    <a data-tab="all" href="./">すべて</a>
+    <a data-tab="class" href="./?tab=class" class="active">授業の手順書</a>
+    <a data-tab="column" href="./?tab=column">小話・コラム</a>
+  </nav>
 </header>
-<div class="layout has-side">
+<div class="article-layout">
+<aside class="rail" aria-label="共有">
+  <a href="https://x.com/intent/post?url=https%3A%2F%2Fitc-kondo.github.io%2Fclass-materials%2Fgit-basics.html&amp;text=Git%20%E3%81%A8%20GitHub%20%E3%81%A8%E3%83%9B%E3%82%B9%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%AE%E3%81%97%E3%81%8F%E3%81%BF" target="_blank" rel="noopener" title="X でシェア">𝕏</a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fitc-kondo.github.io%2Fclass-materials%2Fgit-basics.html" target="_blank" rel="noopener" title="Facebook でシェア">f</a>
+  <a href="https://b.hatena.ne.jp/entry/s/itc-kondo.github.io/class-materials/git-basics.html" target="_blank" rel="noopener" title="はてなブックマーク">B!</a>
+  <button type="button" data-copy title="URL をコピー">🔗</button>
+  <span class="rail-label">コピー</span>
+</aside>
 <main>
-  <div class="article-meta"><span class="avatar">K</span><span class="author">itc-kondo</span><span>投稿日 2026-11-09</span></div>
+  <div class="article-meta"><span class="avatar">K</span><span class="author">@itc-kondo</span></div>
   <div class="article-title"><h1>小学生でもわかる Git と GitHub とホスティングのしくみ ― 隠しフォルダ「.git」の正体から、サイトが届くまで</h1></div>
   <ul class="tags"><li>Git</li><li>GitHub</li><li>GitHub Pages</li><li>ホスティング</li><li>初心者</li></ul>
+  <p class="article-dates"><span>投稿日 2026年11月09日</span></p>
 
   <p class="note">このページでは、いつも打っている <span class="chip">git add</span> <span class="chip">git commit</span> <span class="chip">git push</span> が<strong>パソコンの中で本当は何をしているのか</strong>を、本物のフォルダの中身を見ながら説明します。後半では、作ったページが <strong>GitHub Pages で世界中から見られるしくみ（ホスティング）</strong>も、本物のデータでのぞいてみます。<br>
   ※ このページに出てくるコマンドの結果は、説明のために実際に作ったフォルダで<strong>本当に実行した出力</strong>です（ユーザー名とメールだけ例の <code>h-kondo</code> に置き換え、「←」の説明を書き足しています）。</p>

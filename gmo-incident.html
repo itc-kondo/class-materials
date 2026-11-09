@@ -5,19 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>GMO 不正アクセス事件の技術解説</title>
   <link rel="stylesheet" href="style.css">
+  <script src="site.js" defer></script>
 </head>
 <body>
 <header class="site-header">
-  <div class="site-header-inner">
-    <a class="site-logo" href="./">ITC 授業資料</a>
-    <nav class="site-nav"><a href="./">記事一覧</a></nav>
+  <div class="header-top">
+    <a class="site-logo" href="./"><span class="logo-mark">ITC 授業資料</span><span class="logo-sub">Web Extension III・IV</span></a>
+    <form class="header-search" action="./" method="get" role="search"><input type="search" name="q" placeholder="記事を検索" aria-label="記事を検索"></form>
+    <a class="header-btn" href="https://github.com/itc-kondo/class-materials">GitHub</a>
   </div>
+  <nav class="header-tabs" aria-label="カテゴリ">
+    <a data-tab="all" href="./">すべて</a>
+    <a data-tab="class" href="./?tab=class">授業の手順書</a>
+    <a data-tab="column" href="./?tab=column" class="active">小話・コラム</a>
+  </nav>
 </header>
-<div class="layout">
+<div class="article-layout">
+<aside class="rail" aria-label="共有">
+  <a href="https://x.com/intent/post?url=https%3A%2F%2Fitc-kondo.github.io%2Fclass-materials%2Fgmo-incident.html&amp;text=GMO%20%E4%B8%8D%E6%AD%A3%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E4%BA%8B%E4%BB%B6%E3%81%AE%E6%8A%80%E8%A1%93%E8%A7%A3%E8%AA%AC" target="_blank" rel="noopener" title="X でシェア">𝕏</a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fitc-kondo.github.io%2Fclass-materials%2Fgmo-incident.html" target="_blank" rel="noopener" title="Facebook でシェア">f</a>
+  <a href="https://b.hatena.ne.jp/entry/s/itc-kondo.github.io/class-materials/gmo-incident.html" target="_blank" rel="noopener" title="はてなブックマーク">B!</a>
+  <button type="button" data-copy title="URL をコピー">🔗</button>
+  <span class="rail-label">コピー</span>
+</aside>
 <main>
-  <div class="article-meta"><span class="avatar">K</span><span class="author">itc-kondo</span><span>投稿日 2026-10-26</span></div>
+  <div class="article-meta"><span class="avatar">K</span><span class="author">@itc-kondo</span></div>
   <div class="article-title"><h1>GMO「お名前.com デスクトップクラウド」不正アクセス事件 ― 技術的に何が起きたのか</h1></div>
   <ul class="tags"><li>セキュリティ</li><li>不正アクセス</li><li>ランサムウェア</li><li>クラウド</li></ul>
+  <p class="article-dates"><span>投稿日 2026年10月26日</span></p>
   <p class="note warn">2026-10-26 時点の公表内容と報道にもとづきます。調査は継続中で、内容は今後変わる可能性があります。</p>
 
   <p class="note">FX の自動売買用に貸し出されていた <strong>Windows のクラウドサーバー（VPS）26,739台</strong>に不正なプログラムが仕掛けられ、サーバー内に保存されていた<strong>証券・FX口座のIDとパスワードが盗まれて、実際に口座が不正操作された</strong>事件です。攻撃者は100万ドルの身代金を要求し、GMO は支払いを拒否しました。</p>
@@ -158,6 +173,7 @@
     <li><a href="https://news.web.nhk/newsweb/na/nd-20261006de55007">NHK「GMOグループ会社に不正アクセス 個人情報最大94万件余流出か」（別件・2026-10-06）</a></li>
   </ul>
 </main>
+<aside class="side"><nav class="toc" data-auto aria-label="目次"></nav></aside>
 </div>
 </body>
 </html>

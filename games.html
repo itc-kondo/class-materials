@@ -5,19 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>超大作ゲームの技術と数字</title>
   <link rel="stylesheet" href="style.css">
+  <script src="site.js" defer></script>
 </head>
 <body>
 <header class="site-header">
-  <div class="site-header-inner">
-    <a class="site-logo" href="./">ITC 授業資料</a>
-    <nav class="site-nav"><a href="./">記事一覧</a></nav>
+  <div class="header-top">
+    <a class="site-logo" href="./"><span class="logo-mark">ITC 授業資料</span><span class="logo-sub">Web Extension III・IV</span></a>
+    <form class="header-search" action="./" method="get" role="search"><input type="search" name="q" placeholder="記事を検索" aria-label="記事を検索"></form>
+    <a class="header-btn" href="https://github.com/itc-kondo/class-materials">GitHub</a>
   </div>
+  <nav class="header-tabs" aria-label="カテゴリ">
+    <a data-tab="all" href="./">すべて</a>
+    <a data-tab="class" href="./?tab=class">授業の手順書</a>
+    <a data-tab="column" href="./?tab=column" class="active">小話・コラム</a>
+  </nav>
 </header>
-<div class="layout">
+<div class="article-layout">
+<aside class="rail" aria-label="共有">
+  <a href="https://x.com/intent/post?url=https%3A%2F%2Fitc-kondo.github.io%2Fclass-materials%2Fgames.html&amp;text=%E8%B6%85%E5%A4%A7%E4%BD%9C%E3%82%B2%E3%83%BC%E3%83%A0%E3%81%AE%E6%8A%80%E8%A1%93%E3%81%A8%E6%95%B0%E5%AD%97" target="_blank" rel="noopener" title="X でシェア">𝕏</a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fitc-kondo.github.io%2Fclass-materials%2Fgames.html" target="_blank" rel="noopener" title="Facebook でシェア">f</a>
+  <a href="https://b.hatena.ne.jp/entry/s/itc-kondo.github.io/class-materials/games.html" target="_blank" rel="noopener" title="はてなブックマーク">B!</a>
+  <button type="button" data-copy title="URL をコピー">🔗</button>
+  <span class="rail-label">コピー</span>
+</aside>
 <main>
-  <div class="article-meta"><span class="avatar">K</span><span class="author">itc-kondo</span><span>投稿日 2026-10-26</span></div>
+  <div class="article-meta"><span class="avatar">K</span><span class="author">@itc-kondo</span></div>
   <div class="article-title"><h1>超大作ゲームの技術と数字 ― サイバーパンク2077・GTA V・GTA VI</h1></div>
   <ul class="tags"><li>ゲーム</li><li>GTA</li><li>サイバーパンク2077</li><li>グラフィックス</li></ul>
+  <p class="article-dates"><span>投稿日 2026年10月26日</span></p>
   <p class="note warn">2026-10-26 時点の公表値・報道にもとづきます。</p>
 
   <p class="note">3本とも「街ひとつを丸ごと作って自由に歩き回れる」オープンワールドの超大作です。<strong>GTA V は約2.3億本</strong>で歴代トップクラスの売上、<strong>サイバーパンク2077 は大失敗の発売から立ち直って4,000万本</strong>、<strong>GTA VI は発売前から史上最大の注目作</strong>（2026年11月19日発売予定）です。</p>
@@ -138,6 +153,7 @@
     <li><a href="https://axis-intelligence.com/?p=32525">Axis Intelligence「Grand Theft Auto Franchise Statistics 2026」</a></li>
   </ul>
 </main>
+<aside class="side"><nav class="toc" data-auto aria-label="目次"></nav></aside>
 </div>
 </body>
 </html>
