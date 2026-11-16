@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>フォームのしくみと、お問い合わせフォームを作ろう</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="site.js" defer></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-top">
+    <a class="site-logo" href="./"><span class="logo-mark">ITC 授業資料</span><span class="logo-sub">Web Extension III・IV</span></a>
+    <form class="header-search" action="./" method="get" role="search"><input type="search" name="q" placeholder="記事を検索" aria-label="記事を検索"></form>
+    <a class="header-btn" href="https://github.com/itc-kondo/class-materials">GitHub</a>
+  </div>
+  <nav class="header-tabs" aria-label="カテゴリ">
+    <a data-tab="all" href="./">すべて</a>
+    <a data-tab="class" href="./?tab=class" class="active">授業の手順書</a>
+    <a data-tab="column" href="./?tab=column">小話・コラム</a>
+  </nav>
+</header>
+<div class="article-layout">
+<aside class="rail" aria-label="共有">
+  <a href="https://x.com/intent/post?url=https%3A%2F%2Fitc-kondo.github.io%2Fclass-materials%2Fform-basics.html&amp;text=%E3%83%95%E3%82%A9%E3%83%BC%E3%83%A0%E3%81%AE%E3%81%97%E3%81%8F%E3%81%BF%E3%81%A8%E3%80%81%E3%81%8A%E5%95%8F%E3%81%84%E5%90%88%E3%82%8F%E3%81%9B%E3%83%95%E3%82%A9%E3%83%BC%E3%83%A0%E3%82%92%E4%BD%9C%E3%82%8D%E3%81%86" target="_blank" rel="noopener" title="X でシェア">𝕏</a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fitc-kondo.github.io%2Fclass-materials%2Fform-basics.html" target="_blank" rel="noopener" title="Facebook でシェア">f</a>
+  <a href="https://b.hatena.ne.jp/entry/s/itc-kondo.github.io/class-materials/form-basics.html" target="_blank" rel="noopener" title="はてなブックマーク">B!</a>
+  <button type="button" data-copy title="URL をコピー">🔗</button>
+  <span class="rail-label">コピー</span>
+</aside>
+<main>
+  <div class="article-meta"><span class="avatar">K</span><span class="author">@itc-kondo</span></div>
+  <div class="article-title"><h1>フォームのしくみと、お問い合わせフォームを作ろう ― 入力したデータはどこへ行く？（課題 03-form）</h1></div>
+  <ul class="tags"><li>HTML</li><li>フォーム</li><li>GitHub</li><li>課題</li><li>初心者</li></ul>
+  <p class="article-dates"><span>投稿日 2026年11月16日</span></p>
+
+  <p class="note">このページでやること<br>
+  ① 入力したデータが<strong>画面からどうやって送られるのか</strong>（しくみ）<br>
+  ② <strong>さまざまなフォーム部品</strong>（入力欄・選択肢・ボタン）<br>
+  ③ <strong>標準的なお問い合わせフォーム</strong>の書き方<br>
+  ④ <strong>GitHub に新しい課題（03-form）を作って提出</strong>する</p>
+
+  <!-- ===================================================== -->
+  <h2 id="what">1. フォームってなに？</h2>
+  <p><strong>フォーム</strong>は、Web ページの中で<strong>利用者に何かを入力してもらい、それを送るためのしくみ</strong>です。毎日のように使っています。</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>身近な例</th><th>入力するもの</th><th>送った後</th></tr></thead>
+    <tbody>
+      <tr><td>検索</td><td>調べたいことば</td><td>検索結果のページが返ってくる</td></tr>
+      <tr><td>ログイン</td><td>メールアドレス・パスワード</td><td>自分のページが開く</td></tr>
+      <tr><td>お問い合わせ</td><td>名前・メール・質問</td><td>「送信しました」のページが出る</td></tr>
+      <tr><td>ネット通販の注文</td><td>住所・支払い方法</td><td>注文完了のページが出る</td></tr>
+    </tbody>
+  </table></div>
+  <figure>
+    <img src="img/form/f1-letter.webp" alt="子どもが画面の用紙を送信すると封筒になって郵便局のようなサーバーに届き、返事のカードが戻ってくるイラスト" width="1280" height="720" loading="lazy">
+    <figcaption>フォームの送信は、手紙を出して返事をもらうのと同じ</figcaption>
+  </figure>
+
+  <!-- ===================================================== -->
+  <h2 id="flow">2. 入力したデータは、どうやって送られる？</h2>
+  <p>送信ボタンを押した瞬間、ブラウザの中ではこんなことが起きています。</p>
+  <figure>
+    <svg viewBox="0 0 760 330" role="img" aria-label="入力、送信ボタン、ブラウザが name=値 にまとめる、action の住所へ送る、サーバーのプログラムが受け取る、返事のページが返る" font-size="13">
+      <defs><marker id="fa1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="dg-head"/></marker></defs>
+      <text x="24" y="28" font-size="15" font-weight="600" class="dg-ink">ブラウザが「name=値」にまとめて、action の住所へ送る</text>
+      <rect x="24" y="52" width="420" height="250" rx="12" class="dg-zone"/>
+      <text x="40" y="76" font-weight="600" class="dg-ink">💻 ブラウザ（利用者のパソコン）</text>
+      <rect x="40" y="92" width="180" height="96" rx="8" class="dg-box"/>
+      <text x="130" y="116" text-anchor="middle" font-weight="600" class="dg-ink">① 入力する</text>
+      <text x="130" y="138" text-anchor="middle" font-size="11.5" class="dg-quiet">お名前：大本真奈美</text>
+      <text x="130" y="156" text-anchor="middle" font-size="11.5" class="dg-quiet">ご質問内容：商品の質問</text>
+      <text x="130" y="174" text-anchor="middle" font-size="11.5" class="dg-quiet">→ 送信ボタンを押す</text>
+      <rect x="248" y="92" width="180" height="96" rx="8" class="dg-main"/>
+      <text x="338" y="116" text-anchor="middle" font-weight="600" class="dg-ink">② まとめる</text>
+      <text x="338" y="138" text-anchor="middle" font-size="11.5" class="dg-ink">部品の name と値を</text>
+      <text x="338" y="156" text-anchor="middle" font-size="11.5" class="dg-ink">「name=値」の形に</text>
+      <text x="338" y="174" text-anchor="middle" font-size="11.5" class="dg-ink">（日本語は %E5… に変換）</text>
+      <rect x="40" y="208" width="388" height="78" rx="8" class="dg-box"/>
+      <text x="234" y="232" text-anchor="middle" font-weight="600" class="dg-ink">⑥ 返事のページを表示する</text>
+      <text x="234" y="254" text-anchor="middle" font-size="11.5" class="dg-quiet">「送信ありがとうございました」など</text>
+      <text x="234" y="272" text-anchor="middle" font-size="11.5" class="dg-quiet">（サーバーが作って送り返してくる）</text>
+      <rect x="532" y="52" width="204" height="250" rx="12" class="dg-zone"/>
+      <text x="548" y="76" font-weight="600" class="dg-ink">🏢 サーバー（送り先）</text>
+      <rect x="548" y="92" width="172" height="96" rx="8" class="dg-box"/>
+      <text x="634" y="116" text-anchor="middle" font-weight="600" class="dg-ink">④ 受け取る</text>
+      <text x="634" y="138" text-anchor="middle" font-size="11.5" class="dg-quiet">PHP などのプログラムが</text>
+      <text x="634" y="156" text-anchor="middle" font-size="11.5" class="dg-quiet">name ごとに値を取り出す</text>
+      <rect x="548" y="208" width="172" height="78" rx="8" class="dg-box"/>
+      <text x="634" y="232" text-anchor="middle" font-weight="600" class="dg-ink">⑤ 仕事をする</text>
+      <text x="634" y="254" text-anchor="middle" font-size="11.5" class="dg-quiet">保存・メール送信</text>
+      <text x="634" y="272" text-anchor="middle" font-size="11.5" class="dg-quiet">返事のページを作る</text>
+      <path d="M220 140H248" class="dg-line" marker-end="url(#fa1)"/>
+      <path d="M428 140H548" class="dg-line" marker-end="url(#fa1)"/>
+      <path d="M634 188V208" class="dg-line" marker-end="url(#fa1)"/>
+      <path d="M548 247H428" class="dg-line" marker-end="url(#fa1)"/>
+      <rect x="444" y="118" width="88" height="22" rx="11" class="dg-chip"/>
+      <text x="488" y="133" text-anchor="middle" font-size="11.5" class="dg-chip-text">③ 送信</text>
+      <text x="488" y="160" text-anchor="middle" font-size="11" class="dg-quiet">action の住所へ</text>
+      <text x="488" y="238" text-anchor="middle" font-size="11" class="dg-quiet">返事</text>
+    </svg>
+    <figcaption>HTML が決めるのは「見た目」と「どこへ・どうやって送るか」まで。受け取るのはサーバー側のプログラム</figcaption>
+  </figure>
+  <h3 id="attrs">送るために必要な3つの指定</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>書く場所</th><th>属性</th><th>意味</th><th>たとえると</th></tr></thead>
+    <tbody>
+      <tr><td><code>&lt;form&gt;</code></td><td><code>action</code></td><td><strong>送り先</strong>（データを受け取るプログラムの URL）</td><td>手紙の宛先</td></tr>
+      <tr><td><code>&lt;form&gt;</code></td><td><code>method</code></td><td><strong>送り方</strong>（<code>get</code> か <code>post</code>）</td><td>はがきで出すか、封筒で出すか</td></tr>
+      <tr><td>各部品</td><td><code>name</code></td><td><strong>データの名前</strong>。受け取る側はこの名前で値を取り出す</td><td>用紙の「項目名」</td></tr>
+    </tbody>
+  </table></div>
+<pre><code>&lt;form action="送り先の URL" method="post"&gt;
+    &lt;input type="text" name="username"&gt;   ← name が無い部品は送られない！
+    &lt;button type="submit"&gt;送信&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+  <p class="note warn"><strong><code>name</code> を書き忘れた部品は、入力しても送られません。</strong>画面ではちゃんと入力できるので気づきにくい、いちばん多いミスです。</p>
+
+  <h3 id="get-post">GET と POST のちがい</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th></th><th>GET（ゲット）</th><th>POST（ポスト）</th></tr></thead>
+    <tbody>
+      <tr><td>データの載せ方</td><td><strong>URL の後ろ</strong>に <code>?name=値&amp;name=値</code> で付ける</td><td>URL には出さず、<strong>送る中身（本文）</strong>に入れる</td></tr>
+      <tr><td>たとえると</td><td>📮 はがき（だれでも読める）</td><td>✉️ 封筒（中身は見えない）</td></tr>
+      <tr><td>アドレスバー</td><td>入力した内容が見える・ブックマークできる</td><td>見えない</td></tr>
+      <tr><td>使う場面</td><td><strong>検索</strong>など、見られても困らないもの</td><td><strong>お問い合わせ・ログイン・注文</strong>など</td></tr>
+    </tbody>
+  </table></div>
+  <p>たとえば Google 検索は GET です。下の欄に入れて「検索」を押すと、新しいタブのアドレスバーに <code>?q=入れたことば</code> が付いているのが分かります。</p>
+  <form class="demo-form" action="https://www.google.com/search" method="get" target="_blank">
+    <label for="demo-q">Google で検索（GET の例）</label>
+    <div class="demo-row"><input id="demo-q" type="text" name="q" value="HTML フォーム"><button type="submit">検索</button></div>
+  </form>
+
+  <h3 id="peek">送られる中身をのぞいてみよう</h3>
+  <p>下のフォームに入力して「中身を見る」を押すと、<strong>本当に送信した時にブラウザが作る中身</strong>を表示します（実際にはどこにも送りません）。<code>name</code> が無い欄が送られないことも確かめてみましょう。</p>
+  <form class="demo-form" id="peek-form">
+    <label for="peek-name">お名前（name="name"）</label>
+    <input id="peek-name" type="text" name="name" value="大本真奈美">
+    <label for="peek-q">ご質問内容（name="question"）</label>
+    <select id="peek-q" name="question"><option value="a">商品の質問</option><option value="b">お店について</option><option value="c">その他</option></select>
+    <label for="peek-memo">メモ（⚠ name なし）</label>
+    <input id="peek-memo" type="text" value="これは送られない">
+    <button type="submit">中身を見る</button>
+  </form>
+  <div class="code-frame"><span class="code-name">GET で送った時の URL</span><pre><code id="peek-get">（「中身を見る」を押すと出ます）</code></pre></div>
+  <div class="code-frame"><span class="code-name">POST で送った時の本文</span><pre><code id="peek-post">（「中身を見る」を押すと出ます）</code></pre></div>
+  <p>日本語が <code>%E5%A4%A7…</code> のような記号に変わるのは、URL や送る中身に使える文字が決まっているので、<strong>ブラウザが自動で安全な形に変換する</strong>からです（受け取る側で元の文字に戻します）。<code>select</code> は画面の文字（商品の質問）ではなく <strong><code>value</code> の値（a）</strong>が送られる点にも注目しましょう。</p>
+
+  <!-- ===================================================== -->
+  <h2 id="parts">3. さまざまなフォーム部品</h2>
+  <figure>
+    <img src="img/form/f2-parts.webp" alt="道具箱に入ったフォームの部品を、子どもが画面の用紙に組み立てているイラスト" width="1280" height="720" loading="lazy">
+    <figcaption>入力欄・選択肢・ボタンを組み合わせてフォームを作る</figcaption>
+  </figure>
+  <p>右の列は本物の部品です。さわって試してみましょう。</p>
+  <div class="table-wrap"><table class="parts">
+    <thead><tr><th>部品</th><th>書き方</th><th>見た目（さわれる）</th></tr></thead>
+    <tbody>
+      <tr><td>1行の文字</td><td><code>&lt;input type="text"&gt;</code></td><td><input type="text" placeholder="例：大本真奈美" aria-label="1行の文字の例"></td></tr>
+      <tr><td>メールアドレス</td><td><code>&lt;input type="email"&gt;</code></td><td><input type="email" placeholder="example@mail.com" aria-label="メールの例"><br><small>スマホでは @ 付きのキーボードが出る</small></td></tr>
+      <tr><td>電話番号</td><td><code>&lt;input type="tel"&gt;</code></td><td><input type="tel" placeholder="090-1234-5678" aria-label="電話番号の例"><br><small>スマホでは数字のキーボードが出る</small></td></tr>
+      <tr><td>パスワード</td><td><code>&lt;input type="password"&gt;</code></td><td><input type="password" value="himitsu" aria-label="パスワードの例"><br><small>入力した文字が●で隠れる</small></td></tr>
+      <tr><td>数</td><td><code>&lt;input type="number"&gt;</code></td><td><input type="number" value="1" min="1" max="10" aria-label="数の例"></td></tr>
+      <tr><td>日付</td><td><code>&lt;input type="date"&gt;</code></td><td><input type="date" aria-label="日付の例"></td></tr>
+      <tr><td>1つだけ選ぶ</td><td><code>&lt;input type="radio"&gt;</code></td><td><label><input type="radio" name="demo-radio" checked> はい</label>　<label><input type="radio" name="demo-radio"> いいえ</label><br><small>同じ name のものから1つだけ選べる</small></td></tr>
+      <tr><td>いくつでも選ぶ</td><td><code>&lt;input type="checkbox"&gt;</code></td><td><label><input type="checkbox" checked> HTML</label>　<label><input type="checkbox"> CSS</label>　<label><input type="checkbox"> JS</label></td></tr>
+      <tr><td>リストから選ぶ</td><td><code>&lt;select&gt;</code> と <code>&lt;option&gt;</code></td><td><select aria-label="リストの例"><option>商品の質問</option><option>お店について</option><option>その他</option></select></td></tr>
+      <tr><td>複数行の文字</td><td><code>&lt;textarea&gt;</code></td><td><textarea rows="3" placeholder="ご意見・ご質問" aria-label="複数行の例"></textarea></td></tr>
+      <tr><td>送信ボタン</td><td><code>&lt;button type="submit"&gt;</code></td><td><button type="button">送信する</button><br><small>form の中で押すと送信される</small></td></tr>
+    </tbody>
+  </table></div>
+  <h3 id="helpers">いっしょに使う大事な属性</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>書き方</th><th>意味</th></tr></thead>
+    <tbody>
+      <tr><td><code>&lt;label for="name"&gt;</code> と <code>id="name"</code></td><td>項目名と入力欄をセットにする。<strong>項目名を押しても入力欄が選ばれる</strong>（チェックボックスは押せる範囲が広がる）。読み上げソフトにも正しく伝わる</td></tr>
+      <tr><td><code>placeholder="例：…"</code></td><td>入力欄に薄く出る見本。⚠ 項目名の代わりにはしない（入力すると消える）</td></tr>
+      <tr><td><code>required</code></td><td>必須。空のまま送信しようとすると、ブラウザが止めて知らせてくれる</td></tr>
+      <tr><td><code>value="…"</code></td><td>送られる値。select の option・radio・checkbox では<strong>画面の文字ではなくこの値</strong>が送られる</td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- ===================================================== -->
+  <h2 id="example">4. 標準的なお問い合わせフォーム</h2>
+  <p>教科書のお問い合わせフォーム（03-18）を、<strong>本当に送れる形</strong>に直したものです。<code>&lt;form&gt;</code> で囲み、<code>label</code>・<code>name</code>・<code>required</code> を付けています。</p>
+  <div class="demo-preview">
+    <form class="demo-contact" action="#" onsubmit="return false">
+      <h3>お問い合わせ</h3>
+      <p>ご質問がありましたらお気軽にご連絡ください。</p>
+      <label for="ex-name">お名前 <span class="req">必須</span></label>
+      <input id="ex-name" type="text" name="name" placeholder="例：大本真奈美" required>
+      <label for="ex-mail">メールアドレス <span class="req">必須</span></label>
+      <input id="ex-mail" type="email" name="email" placeholder="例：example@mail.com" required>
+      <label for="ex-q">ご質問内容</label>
+      <select id="ex-q" name="question"><option value="item">商品の質問</option><option value="shop">お店について</option><option value="other">その他</option></select>
+      <label for="ex-msg">ご意見・ご質問</label>
+      <textarea id="ex-msg" name="message" rows="4"></textarea>
+      <label class="check"><input type="checkbox" name="agree" value="yes" required> 個人情報の取り扱いに同意する</label>
+      <button type="submit">送信する</button>
+    </form>
+  </div>
+  <p class="date">↑ 見た目の見本です（このページでは送信しません）。コードは課題の STEP 2 にあります。</p>
+
+  <!-- ===================================================== -->
+  <h2 id="task">5. 課題：GitHub に新しい課題「03-form」を作って提出しよう</h2>
+  <p class="note">今までの <code>ch03</code> リポジトリの中に、<strong>新しいフォルダ <code>03-form</code></strong> を足して作ります。リポジトリを新しく作る必要はありません。手順の基本は <a href="vscode.html#git">VS Code 手順書の「Git / GitHub と接続して課題を上げる」</a>と同じです。</p>
+<pre><code>ch03/
+├── index.html        ← 課題へのリンク集（1行足す）
+├── 03-18/
+├── 03-19/
+└── 03-form/          ← 今回の課題（新しく作る）
+    ├── index.html    ← お問い合わせフォーム
+    ├── style.css
+    └── thanks.html   ← 送信した後に表示するページ</code></pre>
+
+  <h3 id="task1">STEP 1. 新しいフォルダを作る</h3>
+<pre><code>cd ~/ch03
+mkdir 03-form
+code .</code></pre>
+
+  <h3 id="task2">STEP 2. 3つのファイルを書く</h3>
+  <div class="code-frame"><span class="code-name">03-form/index.html</span><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+    &lt;title&gt;お問い合わせ&lt;/title&gt;
+    &lt;link rel="stylesheet" href="style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;お問い合わせ&lt;/h1&gt;
+    &lt;p&gt;ご質問がありましたらお気軽にご連絡ください。&lt;/p&gt;
+
+    &lt;!-- action＝送り先 / method＝送り方 --&gt;
+    &lt;form action="thanks.html" method="get"&gt;
+        &lt;label for="name"&gt;お名前&lt;/label&gt;
+        &lt;input id="name" type="text" name="name" placeholder="例：大本真奈美" required&gt;
+
+        &lt;label for="email"&gt;メールアドレス&lt;/label&gt;
+        &lt;input id="email" type="email" name="email" placeholder="例：example@mail.com" required&gt;
+
+        &lt;label for="question"&gt;ご質問内容&lt;/label&gt;
+        &lt;select id="question" name="question"&gt;
+            &lt;option value="item"&gt;商品の質問&lt;/option&gt;
+            &lt;option value="shop"&gt;お店について&lt;/option&gt;
+            &lt;option value="other"&gt;その他&lt;/option&gt;
+        &lt;/select&gt;
+
+        &lt;label for="message"&gt;ご意見・ご質問&lt;/label&gt;
+        &lt;textarea id="message" name="message"&gt;&lt;/textarea&gt;
+
+        &lt;label class="check"&gt;
+            &lt;input type="checkbox" name="agree" value="yes" required&gt; 個人情報の取り扱いに同意する
+        &lt;/label&gt;
+
+        &lt;button type="submit"&gt;送信する&lt;/button&gt;
+    &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div>
+  <div class="code-frame"><span class="code-name">03-form/style.css</span><pre><code>body {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 0 16px;
+    font-family: sans-serif;
+    color: #333;
+}
+
+h1 {
+    padding-bottom: 8px;
+    border-bottom: 3px solid #2b7bb9;
+}
+
+/* 項目名は1行ずつ */
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+/* 入力欄共通の装飾 */
+input[type="text"],
+input[type="email"],
+select,
+textarea {
+    width: 100%;
+    box-sizing: border-box;    /* padding を含めて 100% にする */
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 25px;
+    font-size: 16px;
+}
+
+textarea {
+    height: 150px;
+}
+
+/* 同意のチェックは太字にしない */
+label.check {
+    font-weight: normal;
+    margin-bottom: 25px;
+}
+
+button {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 6px;
+    background: #2b7bb9;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.8;
+}</code></pre></div>
+  <div class="code-frame"><span class="code-name">03-form/thanks.html</span><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+    &lt;title&gt;送信ありがとうございました&lt;/title&gt;
+    &lt;link rel="stylesheet" href="style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;送信ありがとうございました&lt;/h1&gt;
+    &lt;p&gt;アドレスバーの「?」より後ろを見てみよう。入力した内容が name=値 の形で届いています。&lt;/p&gt;
+    &lt;p&gt;&lt;a href="index.html"&gt;フォームに戻る&lt;/a&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div>
+  <p class="note"><strong>今回は <code>action="thanks.html" method="get"</code> にしています。</strong>GitHub Pages は「ファイルを配るだけ」のホスティングで、<strong>送られたデータを受け取って保存したりメールしたりするプログラムを動かせません</strong>。そこで、送信先を自分の <code>thanks.html</code> にして、<strong>送られたデータがアドレスバーに付いて届く（GET）様子</strong>を観察します。本物のお問い合わせフォームでは、<code>method="post"</code> にして、受け取るプログラム（PHP など）やフォーム用のサービスに送ります。</p>
+
+  <h3 id="task3">STEP 3. まずはローカルで確認する</h3>
+<pre><code>cd ~/ch03/03-form
+open index.html</code></pre>
+  <ol>
+    <li>何も入力せずに「送信する」を押す → ブラウザが<strong>「入力してください」と止めてくれる</strong>か（<code>required</code> が効いているか）</li>
+    <li>メール欄に <code>abc</code> と入れて送信 → <strong>「@ を含めてください」と止めてくれる</strong>か（<code>type="email"</code> が効いているか）</li>
+    <li>項目名（お名前 など）を押すと、入力欄が選ばれるか（<code>label</code> と <code>id</code> が合っているか）</li>
+    <li>全部入れて送信 → <code>thanks.html</code> が開き、<strong>アドレスバーの後ろに <code>?name=…&amp;email=…&amp;question=item…</code></strong> が付いているか</li>
+  </ol>
+
+  <h3 id="task4">STEP 4. トップのリンク集に1行足す</h3>
+  <p><code>ch03/index.html</code> の <code>&lt;ul&gt;</code> の中に追加します。</p>
+<pre><code>&lt;li&gt;&lt;a href="03-form/"&gt;03-form お問い合わせフォーム&lt;/a&gt;&lt;/li&gt;</code></pre>
+
+  <h3 id="task5">STEP 5. GitHub に上げる</h3>
+<pre><code>cd ~/ch03
+git status                        # 03-form/ と index.html が変わっているか確認
+git add .
+git commit -m "Complete 03-form"
+git push origin main</code></pre>
+  <p>リポジトリの作成・<code>git init</code>・<code>git remote add</code>・Pages の設定は<strong>もうやってあるので不要</strong>です（ch03 を初めて上げる人は <a href="vscode.html#git-steps">VS Code 手順書の STEP 1〜9</a> から）。</p>
+
+  <h3 id="task6">STEP 6. 公開ページで送信してみる</h3>
+  <p>数分待ってから、公開ページを開いて送信してみます（<code>h-kondo</code> は自分のユーザー名に）。</p>
+<pre><code>https://h-kondo.github.io/ch03/03-form/</code></pre>
+  <p class="note warn"><strong>公開ページのフォームに、本当の名前・メールアドレス・電話番号は入れないでください。</strong>GET はアドレスバー（URL）に入力内容がそのまま付くので、ブラウザの履歴などに残ります。練習用の例（「大本真奈美」「example@mail.com」など）で試しましょう。</p>
+
+  <h3 id="task7">STEP 7. 提出する</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>提出するもの</th><th>URL</th></tr></thead>
+    <tbody>
+      <tr><td>GitHub URL（コード）</td><td><code>https://github.com/h-kondo/ch03/tree/main/03-form</code></td></tr>
+      <tr><td>GitHub Pages URL（完成画面）</td><td><code>https://h-kondo.github.io/ch03/03-form/</code></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="check">提出前のチェックリスト</h3>
+  <ul>
+    <li><code>&lt;form action="thanks.html" method="get"&gt;</code> で部品を囲んでいる</li>
+    <li>すべての入力部品に <code>name</code> が付いている（付け忘れた部品は送られない）</li>
+    <li>すべての <code>label</code> の <code>for</code> と、入力部品の <code>id</code> が同じ名前</li>
+    <li>メールは <code>type="email"</code>、必須の欄に <code>required</code></li>
+    <li>送信すると <code>thanks.html</code> が開き、URL の後ろに入力内容が付いている</li>
+    <li>CSS が効いている（<code>&lt;link rel="stylesheet" href="style.css"&gt;</code> がある）</li>
+  </ul>
+
+  <h3 id="extra">できた人は挑戦</h3>
+  <ol>
+    <li>「お問い合わせの種類」を <code>radio</code>（ラジオボタン）で作ってみる（同じ <code>name</code> にすること）</li>
+    <li>「希望の連絡方法」を <code>checkbox</code> で複数選べるようにする</li>
+    <li>電話番号の欄（<code>type="tel"</code>）を足す</li>
+    <li><code>method="get"</code> を <code>method="post"</code> に変えて送信すると、<code>thanks.html</code> の URL はどうなる？（GitHub Pages では POST を受け取れないので、どうなるかも観察してみよう）</li>
+  </ol>
+
+  <!-- ===================================================== -->
+  <h2 id="quiz">6. クイズ</h2>
+  <details class="quiz"><summary>Q1. 入力欄に <code>name</code> を書き忘れると、どうなる？</summary><p>画面では入力できるのに、<strong>送信したデータに入らない</strong>（送られない）。受け取る側は name で値を取り出すので、名前の無いデータは扱えないからです。</p></details>
+  <details class="quiz"><summary>Q2. パスワードのフォームを GET で作ってはいけないのはなぜ？</summary><p>GET は入力内容が <strong>URL（アドレスバー）に付く</strong>ので、履歴や画面に残って見えてしまうから。ログインやお問い合わせは POST を使います。</p></details>
+  <details class="quiz"><summary>Q3. <code>&lt;option value="item"&gt;商品の質問&lt;/option&gt;</code> を選んで送ると、何が送られる？</summary><p><code>question=item</code>。画面の文字ではなく <strong><code>value</code> の値</strong>が送られます。</p></details>
+  <details class="quiz"><summary>Q4. GitHub Pages に置いたフォームで、お問い合わせを本当に受け取れる？</summary><p><strong>受け取れません。</strong>GitHub Pages はファイルを配るだけで、データを受け取って保存・メールするプログラムを動かせないためです。本物にするには、PHP などが動くサーバーや、フォーム用のサービスを使います。</p></details>
+
+  <h2 id="ref">参考</h2>
+  <ul>
+    <li><a href="https://developer.mozilla.org/ja/docs/Learn_web_development/Extensions/Forms/Sending_and_retrieving_form_data">MDN「フォームデータの送信」</a></li>
+    <li><a href="https://developer.mozilla.org/ja/docs/Web/HTML/Reference/Elements/input">MDN「&lt;input&gt;: 入力欄（フォーム入力）要素」</a></li>
+    <li><a href="vscode.html#git">VS Code 手順書「Git / GitHub と接続して課題を上げる」</a></li>
+    <li><a href="git-basics.html">小学生でもわかる Git と GitHub とホスティングのしくみ</a></li>
+  </ul>
+</main>
+<aside class="side"><nav class="toc" data-auto aria-label="目次"></nav></aside>
+</div>
+<style>
+  .demo-form, .demo-contact { display: flex; flex-direction: column; gap: 6px; background: var(--page-bg); border: 1px solid var(--line); border-radius: 8px; padding: 16px 18px; margin: 0 0 1.4em; }
+  .demo-form label, .demo-contact label { font-weight: 700; font-size: 14px; margin-top: 6px; }
+  .demo-form input[type="text"], .demo-form select, .demo-contact input[type="text"], .demo-contact input[type="email"], .demo-contact select, .demo-contact textarea, table.parts input:not([type="radio"]):not([type="checkbox"]), table.parts select, table.parts textarea {
+    width: 100%; box-sizing: border-box; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; font: inherit; font-size: 15px; background: var(--bg); color: var(--text); }
+  .demo-row { display: flex; gap: 8px; }
+  .demo-form button, .demo-contact button, table.parts button { align-self: flex-start; padding: 8px 18px; border: none; border-radius: 6px; background: var(--brand); color: #fff; font: inherit; font-weight: 700; cursor: pointer; margin-top: 6px; }
+  .demo-row button { margin-top: 0; white-space: nowrap; }
+  .demo-preview { background: var(--page-bg); border-radius: 8px; padding: 20px; margin: 0 0 0.4em; }
+  .demo-contact { max-width: 520px; margin: 0 auto; background: var(--bg); }
+  .demo-contact h3 { margin: 0 0 4px; padding-bottom: 6px; border-bottom: 3px solid #2b7bb9; }
+  .demo-contact p { margin: 0 0 6px; font-size: 14px; }
+  .demo-contact label.check { font-weight: 400; display: flex; align-items: center; gap: 6px; }
+  .demo-contact button { align-self: stretch; background: #2b7bb9; }
+  .req { display: inline-block; background: #dc2626; color: #fff; font-size: 11px; padding: 0 6px; border-radius: 4px; margin-left: 4px; vertical-align: 2px; }
+  table.parts td { vertical-align: middle; }
+  table.parts small { color: var(--muted); }
+</style>
+<script>
+  // 「送られる中身をのぞいてみよう」：本物と同じ方法で送信内容を作って表示する（どこにも送らない）
+  (function () {
+    var f = document.getElementById("peek-form");
+    if (!f) return;
+    f.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var body = new URLSearchParams(new FormData(f)).toString();
+      document.getElementById("peek-get").textContent = "https://example.com/contact?" + body;
+      document.getElementById("peek-post").textContent = "POST /contact HTTP/1.1\nContent-Type: application/x-www-form-urlencoded\n\n" + body;
+    });
+  })();
+</script>
+</body>
+</html>
