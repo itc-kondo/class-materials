@@ -1,0 +1,102 @@
+/* ★④ テーマカラー：ここの色を変えると、サイト全体の色が変わる */
+:root {
+  --main-color: #334155;   /* ヘッダー・フッター */
+  --bg-color: #f5f5f5;     /* ページの背景 */
+  --card-color: #ffffff;   /* タイルとサイドバーの箱 */
+  --text-color: #222222;   /* 文字 */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  line-height: 1.7;
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* ===== ヘッダーとフッター ===== */
+.site-header,
+.site-footer {
+  background: var(--main-color);
+  color: #ffffff;
+  text-align: center;
+  padding: 24px 16px;
+}
+.site-header h1 {
+  margin: 0;
+}
+.site-header p {
+  margin: 4px 0 0;
+}
+
+/* ===== 2カラム ===== */
+.container {
+  max-width: 1100px;
+  margin: 32px auto;
+  padding: 0 16px;
+  display: flex;      /* main と aside を横に並べる */
+  gap: 24px;
+}
+main {
+  flex: 7;            /* ★⑤ 比率を変えてみよう（例：8 と 2） */
+}
+.sidebar {
+  flex: 3;
+}
+
+/* ===== タイル ===== */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);   /* ★⑥ 3 を 4 や 2 に変えてみよう */
+  gap: 16px;
+}
+.tile {
+  background: var(--card-color);
+  border-radius: 8px;
+  overflow: hidden;   /* 角丸からはみ出した画像を切る */
+}
+.tile-img,
+.tile img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;   /* 縦横の比率をそろえる */
+  object-fit: cover;     /* 写真をゆがめずに切り取る */
+}
+.tile-body {
+  padding: 8px 12px 12px;
+}
+.tile-body h3 {
+  margin: 0 0 4px;
+  font-size: 1.1em;
+}
+.tile-body p {
+  margin: 0;
+  font-size: 0.9em;
+}
+
+/* ===== サイドバーの箱 ===== */
+.box {
+  background: var(--card-color);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+.box h2 {
+  margin-top: 0;
+  font-size: 1.1em;
+}
+
+/* ===== スマホ（767px 以下） ===== */
+/* ★⑦ 切りかわる幅や、スマホでの列の数を変えてみよう */
+@media (max-width: 767px) {
+  .container {
+    flex-direction: column;
+  }
+  .tiles {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>わたしの好きなもの図鑑</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ★① サイトの名前とひとことを、自分のものに変える -->
+  <header class="site-header">
+    <h1>わたしの好きなもの図鑑</h1>
+    <p>最近ハマってるものを集めました</p>
+  </header>
+
+  <div class="container">
+    <main>
+      <h2>好きなもの</h2>
+      <div class="tiles">
+        <!-- ★② タイル1枚 ＝ article 1つ。中身を自分の好きなものに変える（6枚以上） -->
+        <article class="tile">
+          <!-- ★③ 写真を用意したら、下の div を img に置きかえる
+               例：<img src="images/cake.jpg" alt="いちごのショートケーキ"> -->
+          <div class="tile-img" style="background: #fbcfe8;"></div>
+          <div class="tile-body">
+            <h3>ショートケーキ</h3>
+            <p>いちごが乗っているのが一番好き。</p>
+          </div>
+        </article>
+
+        <article class="tile">
+          <div class="tile-img" style="background: #bfdbfe;"></div>
+          <div class="tile-body">
+            <h3>海</h3>
+            <p>夏の夕方の海をぼーっと見るのが好き。</p>
+          </div>
+        </article>
+
+        <article class="tile">
+          <div class="tile-img" style="background: #bbf7d0;"></div>
+          <div class="tile-body">
+            <h3>山登り</h3>
+            <p>最近ハマり中。朝の森は空気がちがう。</p>
+          </div>
+        </article>
+
+        <article class="tile">
+          <div class="tile-img" style="background: #fde68a;"></div>
+          <div class="tile-body">
+            <h3>ゲーム</h3>
+            <p>アクションゲームを毎晩少しずつ。</p>
+          </div>
+        </article>
+
+        <article class="tile">
+          <div class="tile-img" style="background: #ddd6fe;"></div>
+          <div class="tile-body">
+            <h3>ギター</h3>
+            <p>練習3か月め。コードを4つ覚えた。</p>
+          </div>
+        </article>
+
+        <article class="tile">
+          <div class="tile-img" style="background: #fecaca;"></div>
+          <div class="tile-body">
+            <h3>犬</h3>
+            <p>実家の犬。帰るとしっぽで迎えてくれる。</p>
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <aside class="sidebar">
+      <!-- ★① 自己紹介も、自分のものに変える -->
+      <section class="box">
+        <h2>プロフィール</h2>
+        <p>ITカレッジ沖縄の学生です。休みの日は海か山にいます。</p>
+      </section>
+      <section class="box">
+        <h2>カテゴリ</h2>
+        <ul>
+          <li>食べもの</li>
+          <li>場所</li>
+          <li>趣味</li>
+        </ul>
+      </section>
+    </aside>
+  </div>
+
+  <footer class="site-footer">
+    <small>&copy; 2026 わたしの好きなもの図鑑</small>
+  </footer>
+</body>
+</html>

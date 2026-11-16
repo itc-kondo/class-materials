@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>2カラム × タイル型のサイトを作ろう</title>
+  <title>好きなもの紹介ページを作ろう ― 2カラム × タイル型</title>
   <link rel="stylesheet" href="style.css">
   <script src="site.js" defer></script>
 </head>
@@ -22,7 +22,7 @@
 </header>
 <div class="article-layout">
 <aside class="rail" aria-label="共有">
-  <a href="https://x.com/intent/post?url=https%3A%2F%2Fitc-kondo.github.io%2Fclass-materials%2Ftile-site.html&amp;text=2%E3%82%AB%E3%83%A9%E3%83%A0%20%C3%97%20%E3%82%BF%E3%82%A4%E3%83%AB%E5%9E%8B%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%88%E3%82%92%E4%BD%9C%E3%82%8D%E3%81%86" target="_blank" rel="noopener" title="X でシェア">𝕏</a>
+  <a href="https://x.com/intent/post?url=https%3A%2F%2Fitc-kondo.github.io%2Fclass-materials%2Ftile-site.html&amp;text=%E5%A5%BD%E3%81%8D%E3%81%AA%E3%82%82%E3%81%AE%E7%B4%B9%E4%BB%8B%E3%83%9A%E3%83%BC%E3%82%B8%E3%82%92%E4%BD%9C%E3%82%8D%E3%81%86%20%E2%80%95%202%E3%82%AB%E3%83%A9%E3%83%A0%20%C3%97%20%E3%82%BF%E3%82%A4%E3%83%AB%E5%9E%8B" target="_blank" rel="noopener" title="X でシェア">𝕏</a>
   <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fitc-kondo.github.io%2Fclass-materials%2Ftile-site.html" target="_blank" rel="noopener" title="Facebook でシェア">f</a>
   <a href="https://b.hatena.ne.jp/entry/s/itc-kondo.github.io/class-materials/tile-site.html" target="_blank" rel="noopener" title="はてなブックマーク">B!</a>
   <button type="button" data-copy title="URL をコピー">🔗</button>
@@ -30,7 +30,7 @@
 </aside>
 <main>
   <div class="article-meta"><span class="avatar">K</span><span class="author">@itc-kondo</span></div>
-  <div class="article-title"><h1>2カラム × タイル型のサイトを作ろう ― 設計図だけ渡すので、コードは自分で考える（できた人向け課題 tile-site）</h1></div>
+  <div class="article-title"><h1>好きなもの紹介ページを作ろう ― 2カラム × タイル型のレイアウト（できた人向け課題 tile-site）</h1></div>
   <ul class="tags"><li>HTML</li><li>CSS</li><li>レイアウト</li><li>Flexbox</li><li>Grid</li><li>課題</li></ul>
   <p class="article-dates"><span>投稿日 2026年11月16日</span></p>
 
@@ -38,9 +38,10 @@
   ① <strong>2カラム</strong>と<strong>タイル型</strong>ってどんなレイアウト？<br>
   ② 今回作るサイトの<strong>設計図とルール</strong><br>
   ③ <strong>新しいリポジトリ <code>tile-site</code></strong> を作る<br>
-  ④ 道具とヒントを見ながら、<strong>コードは自分で考えて</strong>作る<br>
+  ④ <strong>参考コードを改造する</strong>か、<strong>ゼロから書く</strong>か、自分で選んで作る<br>
   ⑤ 公開して提出する</p>
-  <p class="note warn">このページには<strong>答えのコードは載せていません</strong>。載っているのは「設計図」「使う道具（CSS のプロパティ）」「考えるためのヒント」だけです。ヒントは<strong>開くたびに少しずつ答えに近づく</strong>ようになっているので、まずは開かずに考えてみましょう。</p>
+  <p class="note">テーマは<strong>「好きなもの紹介ページ」</strong>（最近ハマってるものでもOK）。<br>
+  <strong>参考コード</strong>を用意してあるので、「★ここを変えてみよう」の場所を自分のものに変えていけば完成します。自信がある人は、参考コードを見ずに<strong>ゼロから書いて</strong>もOKです。</p>
 
   <!-- ===================================================== -->
   <h2 id="what">1. 2カラムとタイル型ってなに？</h2>
@@ -62,8 +63,8 @@
 
   <!-- ===================================================== -->
   <h2 id="spec">2. 今回作るもの：設計図とルール</h2>
-  <h3 id="theme">テーマ：「自分の好きなもの」を紹介するサイト</h3>
-  <p>中身は自由です。たとえば「好きなもの図鑑」「おすすめの沖縄スポット」「推しの紹介」「架空のカフェのメニュー」など。<strong>自分が作っていて楽しいもの</strong>を選びましょう。</p>
+  <h3 id="theme">テーマ：好きなもの紹介ページ（最近ハマってるものでもOK）</h3>
+  <p>自分の好きなもの・最近ハマってるものを、タイル1枚に1つずつ紹介するページです。食べもの、場所、ゲーム、音楽、スポーツ、推し、趣味…なんでもOK。<strong>1つのジャンルにしぼって</strong>「最近ハマってるラーメン屋 6選」のようにしても面白いです。<strong>自分が作っていて楽しいもの</strong>を選びましょう。</p>
 
   <h3 id="wireframe">設計図（ワイヤーフレーム）</h3>
   <figure>
@@ -162,18 +163,245 @@ git push -u origin main</code></pre></div>
   <p>今回は <code>index.html</code> がリポジトリの<strong>一番上</strong>にあるので、URL は <code>/tile-site/</code> で終わります（ch03 の時の <code>/ch03/03-form/</code> とのちがいを、3章の「URL の分解」を思い出して考えてみよう）。手順の詳しい説明は <a href="vscode.html#step6">VS Code 手順書の STEP 6〜8</a> と同じです。</p>
 
   <!-- ===================================================== -->
-  <h2 id="step2">4. STEP 2. 自分の設計図を紙に描く</h2>
-  <p>いきなりコードを書かずに、<strong>まずノートに四角を描いて</strong>決めます。プロの現場でも、最初に作るのは「ワイヤーフレーム」です。</p>
+  <h2 id="step2">4. STEP 2. コースを選んで、設計図を描く</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>コース</th><th>やること</th><th>こんな人におすすめ</th></tr></thead>
+    <tbody>
+      <tr><td><strong>A. 改造コース</strong></td><td>下の<strong>参考コード</strong>をコピーして、「★」の場所を自分のものに変えていく。分からない所は 6〜9章の「しくみ」を読む</td><td>まず完成させたい人。レイアウトのコードを初めて見る人</td></tr>
+      <tr><td><strong>B. ゼロからコース</strong></td><td>参考コードを<strong>見ずに</strong>、設計図と 6〜9章の「道具箱」「ヒント」だけで書く。詰まったら参考コードを見てもOK</td><td>力をつけたい人。03-form が早く終わった人</td></tr>
+    </tbody>
+  </table></div>
+  <p>どちらのコースでも、いきなりコードを書かずに<strong>まずノートに四角を描いて</strong>決めます。プロの現場でも、最初に作るのは「ワイヤーフレーム」です。</p>
   <ul>
-    <li>サイトの名前は？</li>
-    <li>タイルに何を並べる？（6つ以上書き出す）</li>
-    <li>サイドバーには何を置く？（プロフィール、カテゴリ、おすすめ、お知らせ…）</li>
+    <li>ページの名前は？（例：「わたしの好きなもの図鑑」「最近ハマってるもの」）</li>
+    <li>タイルに何を並べる？（好きなもの・ハマってるものを<strong>6つ以上</strong>書き出す）</li>
+    <li>サイドバーには何を置く？（プロフィール、カテゴリ、いちばんのおすすめ、ハマったきっかけ…）</li>
     <li>色は何色使う？（<strong>3色まで</strong>にすると、まとまって見える）</li>
   </ul>
 
   <!-- ===================================================== -->
-  <h2 id="step3">5. STEP 3. HTML の骨組みを書く</h2>
-  <p>骨組みの<strong>形だけ</strong>示します。中身（コメントの部分）は自分で書きましょう。</p>
+  <h2 id="sample">5. STEP 3（A. 改造コース）参考コードを改造する</h2>
+  <p>参考コードは、実際に動くページとして置いてあります。<strong>まず開いて、PC の幅とスマホの幅（開発ツールの <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd>）で見てみましょう。</strong></p>
+  <p>▶ <a href="demo/tile-sample/" target="_blank" rel="noopener">参考ページを開く（demo/tile-sample/）</a></p>
+  <p><code>tile-site</code> フォルダに <code>index.html</code> と <code>style.css</code> を作り、下のコードをそれぞれ貼り付けます。</p>
+  <div class="code-frame"><span class="code-name">index.html（参考コード）</span><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;title&gt;わたしの好きなもの図鑑&lt;/title&gt;
+  &lt;link rel="stylesheet" href="style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;!-- ★① サイトの名前とひとことを、自分のものに変える --&gt;
+  &lt;header class="site-header"&gt;
+    &lt;h1&gt;わたしの好きなもの図鑑&lt;/h1&gt;
+    &lt;p&gt;最近ハマってるものを集めました&lt;/p&gt;
+  &lt;/header&gt;
+
+  &lt;div class="container"&gt;
+    &lt;main&gt;
+      &lt;h2&gt;好きなもの&lt;/h2&gt;
+      &lt;div class="tiles"&gt;
+        &lt;!-- ★② タイル1枚 ＝ article 1つ。中身を自分の好きなものに変える（6枚以上） --&gt;
+        &lt;article class="tile"&gt;
+          &lt;!-- ★③ 写真を用意したら、下の div を img に置きかえる
+               例：&lt;img src="images/cake.jpg" alt="いちごのショートケーキ"&gt; --&gt;
+          &lt;div class="tile-img" style="background: #fbcfe8;"&gt;&lt;/div&gt;
+          &lt;div class="tile-body"&gt;
+            &lt;h3&gt;ショートケーキ&lt;/h3&gt;
+            &lt;p&gt;いちごが乗っているのが一番好き。&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/article&gt;
+
+        &lt;article class="tile"&gt;
+          &lt;div class="tile-img" style="background: #bfdbfe;"&gt;&lt;/div&gt;
+          &lt;div class="tile-body"&gt;
+            &lt;h3&gt;海&lt;/h3&gt;
+            &lt;p&gt;夏の夕方の海をぼーっと見るのが好き。&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/article&gt;
+
+        &lt;article class="tile"&gt;
+          &lt;div class="tile-img" style="background: #bbf7d0;"&gt;&lt;/div&gt;
+          &lt;div class="tile-body"&gt;
+            &lt;h3&gt;山登り&lt;/h3&gt;
+            &lt;p&gt;最近ハマり中。朝の森は空気がちがう。&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/article&gt;
+
+        &lt;article class="tile"&gt;
+          &lt;div class="tile-img" style="background: #fde68a;"&gt;&lt;/div&gt;
+          &lt;div class="tile-body"&gt;
+            &lt;h3&gt;ゲーム&lt;/h3&gt;
+            &lt;p&gt;アクションゲームを毎晩少しずつ。&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/article&gt;
+
+        &lt;article class="tile"&gt;
+          &lt;div class="tile-img" style="background: #ddd6fe;"&gt;&lt;/div&gt;
+          &lt;div class="tile-body"&gt;
+            &lt;h3&gt;ギター&lt;/h3&gt;
+            &lt;p&gt;練習3か月め。コードを4つ覚えた。&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/article&gt;
+
+        &lt;article class="tile"&gt;
+          &lt;div class="tile-img" style="background: #fecaca;"&gt;&lt;/div&gt;
+          &lt;div class="tile-body"&gt;
+            &lt;h3&gt;犬&lt;/h3&gt;
+            &lt;p&gt;実家の犬。帰るとしっぽで迎えてくれる。&lt;/p&gt;
+          &lt;/div&gt;
+        &lt;/article&gt;
+      &lt;/div&gt;
+    &lt;/main&gt;
+
+    &lt;aside class="sidebar"&gt;
+      &lt;!-- ★① 自己紹介も、自分のものに変える --&gt;
+      &lt;section class="box"&gt;
+        &lt;h2&gt;プロフィール&lt;/h2&gt;
+        &lt;p&gt;ITカレッジ沖縄の学生です。休みの日は海か山にいます。&lt;/p&gt;
+      &lt;/section&gt;
+      &lt;section class="box"&gt;
+        &lt;h2&gt;カテゴリ&lt;/h2&gt;
+        &lt;ul&gt;
+          &lt;li&gt;食べもの&lt;/li&gt;
+          &lt;li&gt;場所&lt;/li&gt;
+          &lt;li&gt;趣味&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/section&gt;
+    &lt;/aside&gt;
+  &lt;/div&gt;
+
+  &lt;footer class="site-footer"&gt;
+    &lt;small&gt;&amp;copy; 2026 わたしの好きなもの図鑑&lt;/small&gt;
+  &lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div>
+  <div class="code-frame"><span class="code-name">style.css（参考コード）</span><pre><code>/* ★④ テーマカラー：ここの色を変えると、サイト全体の色が変わる */
+:root {
+  --main-color: #334155;   /* ヘッダー・フッター */
+  --bg-color: #f5f5f5;     /* ページの背景 */
+  --card-color: #ffffff;   /* タイルとサイドバーの箱 */
+  --text-color: #222222;   /* 文字 */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  line-height: 1.7;
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* ===== ヘッダーとフッター ===== */
+.site-header,
+.site-footer {
+  background: var(--main-color);
+  color: #ffffff;
+  text-align: center;
+  padding: 24px 16px;
+}
+.site-header h1 {
+  margin: 0;
+}
+.site-header p {
+  margin: 4px 0 0;
+}
+
+/* ===== 2カラム ===== */
+.container {
+  max-width: 1100px;
+  margin: 32px auto;
+  padding: 0 16px;
+  display: flex;      /* main と aside を横に並べる */
+  gap: 24px;
+}
+main {
+  flex: 7;            /* ★⑤ 比率を変えてみよう（例：8 と 2） */
+}
+.sidebar {
+  flex: 3;
+}
+
+/* ===== タイル ===== */
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);   /* ★⑥ 3 を 4 や 2 に変えてみよう */
+  gap: 16px;
+}
+.tile {
+  background: var(--card-color);
+  border-radius: 8px;
+  overflow: hidden;   /* 角丸からはみ出した画像を切る */
+}
+.tile-img,
+.tile img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;   /* 縦横の比率をそろえる */
+  object-fit: cover;     /* 写真をゆがめずに切り取る */
+}
+.tile-body {
+  padding: 8px 12px 12px;
+}
+.tile-body h3 {
+  margin: 0 0 4px;
+  font-size: 1.1em;
+}
+.tile-body p {
+  margin: 0;
+  font-size: 0.9em;
+}
+
+/* ===== サイドバーの箱 ===== */
+.box {
+  background: var(--card-color);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+.box h2 {
+  margin-top: 0;
+  font-size: 1.1em;
+}
+
+/* ===== スマホ（767px 以下） ===== */
+/* ★⑦ 切りかわる幅や、スマホでの列の数を変えてみよう */
+@media (max-width: 767px) {
+  .container {
+    flex-direction: column;
+  }
+  .tiles {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}</code></pre></div>
+
+  <h3 id="change">★ここを変えてみよう</h3>
+  <p>コードの中の <strong>★①〜⑦</strong> のコメントが目印です。<strong>変える前に「どうなるか」を予想してから</strong>変えて、保存してブラウザで確かめましょう。予想が外れた所が、いちばん勉強になる所です。</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>目印</th><th>ファイル</th><th>変えること</th><th></th></tr></thead>
+    <tbody>
+      <tr><td>★①</td><td>index.html</td><td>ページの名前・ひとこと・プロフィールを自分のものに</td><td><strong>必須</strong></td></tr>
+      <tr><td>★②</td><td>index.html</td><td>6枚のタイルの見出しと文を、自分の好きなもの・ハマってるものに。<strong>7枚目を足してみる</strong>（どこをコピーすればいい？）</td><td><strong>必須</strong></td></tr>
+      <tr><td>★③</td><td>index.html</td><td>色の箱（<code>div</code>）を写真（<code>img</code>）に置きかえる。写真は <code>images</code> フォルダに入れる</td><td>できれば</td></tr>
+      <tr><td>★④</td><td>style.css</td><td><code>:root</code> の4色を自分のテーマに合う色に。<strong>1か所変えるだけでなぜ全体が変わる？</strong>（<code>var(--main-color)</code> を探してみよう）</td><td><strong>必須</strong></td></tr>
+      <tr><td>★⑤</td><td>style.css</td><td>2カラムの比率 <code>7</code> と <code>3</code> を変えてみる（<code>1</code> と <code>1</code> にしたら？）</td><td>試す</td></tr>
+      <tr><td>★⑥</td><td>style.css</td><td>タイルの列数を <code>4</code> や <code>2</code> にしてみる。自分のページに一番合うのは何列？</td><td>試す</td></tr>
+      <tr><td>★⑦</td><td>style.css</td><td>スマホに切りかわる幅（<code>767px</code>）や、スマホでの列数を変えてみる</td><td>試す</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">★が無い所も、どんどん変えてOK。フォント、角の丸さ（<code>border-radius</code>）、すき間（<code>gap</code>・<code>padding</code>）、カテゴリの中身…。<strong>最後に「参考コードと見た目がちがう」状態になっていれば合格ラインです。</strong></p>
+  <p class="note warn">写真を入れたら <code>alt</code>（画像の説明）も書きましょう。目の見えない人の読み上げや、画像が表示されなかった時に使われます。</p>
+
+  <!-- ===================================================== -->
+  <h2 id="step3">6. しくみ① HTML の骨組み</h2>
+  <p class="note"><strong>ここから 9章までは「しくみ」の説明です。</strong>B. ゼロからコースの人は、ここを見ながら自分で書きます。A. 改造コースの人は、参考コードの<strong>どこが、なぜそう書いてあるのか</strong>をここで確かめましょう。</p>
+  <p>骨組みの<strong>形だけ</strong>示します（ゼロからコースの人は、中身を自分で書く）。</p>
   <div class="code-frame"><span class="code-name">index.html（形だけ）</span><pre><code>&lt;body&gt;
   &lt;header&gt; サイトの名前 &lt;/header&gt;
 
@@ -199,7 +427,7 @@ git push -u origin main</code></pre></div>
   <details class="quiz"><summary>ヒント：container で包む理由</summary><p>CSS で「横に並べる」指示は、<strong>並べたい要素たちの親</strong>に書きます。横に並べたいのは main と aside の2つだけ。だから、その2つだけを1つの親で包みます。</p></details>
 
   <!-- ===================================================== -->
-  <h2 id="step4">6. STEP 4. 2カラムにする</h2>
+  <h2 id="step4">7. しくみ② 2カラムにする（flex）</h2>
   <h3 id="tools-flex">道具箱</h3>
   <div class="table-wrap"><table>
     <thead><tr><th>プロパティ</th><th>どこに書く</th><th>何をする</th></tr></thead>
@@ -218,7 +446,7 @@ git push -u origin main</code></pre></div>
   <details class="quiz"><summary>ヒント3（うまくいかない時）</summary><p>横に並ばない → <code>display: flex;</code> を<strong>子</strong>に書いていませんか？<br>比率がおかしい → <code>width</code> も一緒に書いていませんか？ まずは <code>flex</code> だけにしてみよう。<br>真ん中に来ない → <code>max-width</code> と <code>margin: 0 auto;</code> を<strong>同じ箱</strong>に書いていますか？</p></details>
 
   <!-- ===================================================== -->
-  <h2 id="step5">7. STEP 5. タイルを並べる</h2>
+  <h2 id="step5">8. しくみ③ タイルを並べる（grid）</h2>
   <h3 id="tools-grid">道具箱</h3>
   <div class="table-wrap"><table>
     <thead><tr><th>プロパティ</th><th>どこに書く</th><th>何をする</th></tr></thead>
@@ -243,7 +471,7 @@ git push -u origin main</code></pre></div>
   <details class="quiz"><summary>ヒント3（画像がそろわない時）</summary><p><code>img</code> に <code>width: 100%;</code> で枠いっぱいにしてから、<code>aspect-ratio</code> で比率を固定し、<code>object-fit: cover;</code> でゆがみを直します。画像がまだ無い人は、<code>div</code> に背景色を付けて「色の箱」にしておいてもOK。</p></details>
 
   <!-- ===================================================== -->
-  <h2 id="step6">8. STEP 6. スマホでも見やすくする</h2>
+  <h2 id="step6">9. しくみ④ スマホでも見やすくする（@media）</h2>
   <h3 id="tools-media">道具箱</h3>
   <div class="table-wrap"><table>
     <thead><tr><th>道具</th><th>何をする</th></tr></thead>
@@ -267,7 +495,7 @@ git push -u origin main</code></pre></div>
   </ul>
 
   <!-- ===================================================== -->
-  <h2 id="submit">9. STEP 7. 公開して提出する</h2>
+  <h2 id="submit">10. STEP 4. 公開して提出する</h2>
   <div class="code-frame"><span class="code-name">ターミナル（2回目からはこれだけ）</span><pre><code>git add .
 git commit -m "Add tiles"
 git push origin main</code></pre></div>
@@ -295,9 +523,9 @@ git push origin main</code></pre></div>
   <div class="table-wrap"><table>
     <thead><tr><th>レベル</th><th>できていること</th></tr></thead>
     <tbody>
-      <tr><td>合格</td><td>「必ず守るルール」とチェックリストを全部満たしている</td></tr>
-      <tr><td>よくできた</td><td>色・余白・文字の大きさがそろっていて読みやすい。タイルの中身が自分のテーマに合っている</td></tr>
-      <tr><td>すごい</td><td>下の「もっと挑戦」を1つ以上やっている。コードを人に説明できる</td></tr>
+      <tr><td>合格</td><td>「必ず守るルール」とチェックリストを全部満たしている。改造コースなら ★①②④ を変えて、参考コードとちがう見た目になっている</td></tr>
+      <tr><td>よくできた</td><td>写真（★③）が入っている。色・余白・文字の大きさがそろっていて読みやすい。タイルの中身が自分のテーマに合っている</td></tr>
+      <tr><td>すごい</td><td>ゼロからコースで作った、または下の「もっと挑戦」を1つ以上やっている。コードを人に説明できる</td></tr>
     </tbody>
   </table></div>
 
@@ -312,9 +540,9 @@ git push origin main</code></pre></div>
 
   <h3 id="promise">この課題の約束</h3>
   <ul>
-    <li>この課題の目的は「<strong>自分で考えてレイアウトを組めるようになる</strong>」こと。生成AIに<strong>コードを丸ごと書かせて貼るのはなし</strong>です</li>
+    <li>この課題の目的は「<strong>自分で考えてレイアウトを組めるようになる</strong>」こと。<strong>参考コードを使うのはOK</strong>。でも生成AIに<strong>コードを丸ごと書かせて貼るのはなし</strong>です</li>
     <li>分からない言葉・エラーの意味・プロパティの使い方を<strong>質問するのはOK</strong>（AI でも、検索でも、友だちでも）</li>
-    <li>人のコードを参考にしたら、<strong>1行ずつ自分の言葉で説明できる</strong>ところまで理解してから使う。先生に「ここはどうして？」と聞かれたら答えられるように</li>
+    <li>参考コードも人のコードも、<strong>1行ずつ自分の言葉で説明できる</strong>ところまで理解してから使う。先生に「ここはどうして？」と聞かれたら答えられるように</li>
   </ul>
 
   <!-- ===================================================== -->
