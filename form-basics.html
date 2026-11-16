@@ -36,9 +36,10 @@
 
   <p class="note">このページでやること<br>
   ① 入力したデータが<strong>画面からどうやって送られるのか</strong>（しくみ）<br>
-  ② <strong>さまざまなフォーム部品</strong>（入力欄・選択肢・ボタン）<br>
-  ③ <strong>標準的なお問い合わせフォーム</strong>の書き方<br>
-  ④ <strong>GitHub に新しい課題（03-form）を作って提出</strong>する</p>
+  ② <strong>URL の分解</strong>と、送るデータを守る <strong>HTTPS</strong> のしくみ<br>
+  ③ <strong>さまざまなフォーム部品</strong>（入力欄・選択肢・ボタン）<br>
+  ④ <strong>標準的なお問い合わせフォーム</strong>の書き方<br>
+  ⑤ <strong>GitHub に新しい課題（03-form）を作って提出</strong>する</p>
 
   <!-- ===================================================== -->
   <h2 id="what">1. フォームってなに？</h2>
@@ -148,7 +149,156 @@
   <p>日本語が <code>%E5%A4%A7…</code> のような記号に変わるのは、URL や送る中身に使える文字が決まっているので、<strong>ブラウザが自動で安全な形に変換する</strong>からです（受け取る側で元の文字に戻します）。<code>select</code> は画面の文字（商品の質問）ではなく <strong><code>value</code> の値（a）</strong>が送られる点にも注目しましょう。</p>
 
   <!-- ===================================================== -->
-  <h2 id="parts">3. さまざまなフォーム部品</h2>
+  <h2 id="url">3. URL を分解してみよう</h2>
+  <p>GET で送ると、データは URL の後ろに付きました。そもそも <strong>URL は、いくつかの部品がつながってできた「住所」</strong>です。課題で作る <code>thanks.html</code> の URL を分解してみます。</p>
+  <figure>
+    <svg viewBox="0 0 760 236" role="img" aria-label="URL はスキーム、ホスト名、パス、クエリ、フラグメントに分けられる" font-size="13">
+      <text x="24" y="28" font-size="15" font-weight="600" class="dg-ink">URL ＝ 通信のルール ＋ サーバー ＋ ファイル ＋ データ ＋ ページ内の場所</text>
+      <g font-family="SFMono-Regular, Menlo, Consolas, monospace" font-size="13">
+        <rect x="24" y="52" width="80" height="36" rx="6" fill="#16a34a" fill-opacity="0.15" stroke="#16a34a"/>
+        <text x="64" y="75" text-anchor="middle" class="dg-ink">https://</text>
+        <rect x="104" y="52" width="150" height="36" rx="6" fill="#0f83fd" fill-opacity="0.15" stroke="#0f83fd"/>
+        <text x="179" y="75" text-anchor="middle" class="dg-ink">h-kondo.github.io</text>
+        <rect x="254" y="52" width="212" height="36" rx="6" fill="#a855f7" fill-opacity="0.15" stroke="#a855f7"/>
+        <text x="360" y="75" text-anchor="middle" class="dg-ink">/ch03/03-form/thanks.html</text>
+        <rect x="466" y="52" width="218" height="36" rx="6" fill="#f59e0b" fill-opacity="0.18" stroke="#f59e0b"/>
+        <text x="575" y="75" text-anchor="middle" class="dg-ink">?name=oomoto&amp;question=shop</text>
+        <rect x="684" y="52" width="52" height="36" rx="6" fill="#9ca3af" fill-opacity="0.2" stroke="#9ca3af"/>
+        <text x="710" y="75" text-anchor="middle" class="dg-ink">#top</text>
+      </g>
+      <g font-size="12">
+        <path d="M64 88V108" class="dg-line"/><path d="M179 88V108" class="dg-line"/><path d="M360 88V108" class="dg-line"/><path d="M575 88V108" class="dg-line"/><path d="M710 88V108" class="dg-line"/>
+        <text x="64" y="126" text-anchor="middle" font-weight="600" class="dg-ink">スキーム</text>
+        <text x="64" y="144" text-anchor="middle" font-size="11" class="dg-quiet">通信の</text>
+        <text x="64" y="160" text-anchor="middle" font-size="11" class="dg-quiet">ルール</text>
+        <text x="179" y="126" text-anchor="middle" font-weight="600" class="dg-ink">ホスト名</text>
+        <text x="179" y="144" text-anchor="middle" font-size="11" class="dg-quiet">どのサーバー？</text>
+        <text x="179" y="160" text-anchor="middle" font-size="11" class="dg-quiet">（DNS で番号に）</text>
+        <text x="360" y="126" text-anchor="middle" font-weight="600" class="dg-ink">パス</text>
+        <text x="360" y="144" text-anchor="middle" font-size="11" class="dg-quiet">サーバーの中の</text>
+        <text x="360" y="160" text-anchor="middle" font-size="11" class="dg-quiet">どのファイル？</text>
+        <text x="575" y="126" text-anchor="middle" font-weight="600" class="dg-ink">クエリ</text>
+        <text x="575" y="144" text-anchor="middle" font-size="11" class="dg-quiet">フォームのデータ</text>
+        <text x="575" y="160" text-anchor="middle" font-size="11" class="dg-quiet">（GET の時）</text>
+        <text x="736" y="126" text-anchor="end" font-weight="600" class="dg-ink">フラグメント</text>
+        <text x="736" y="144" text-anchor="end" font-size="11" class="dg-quiet">ページ内の場所</text>
+        <text x="736" y="160" text-anchor="end" font-size="11" class="dg-quiet">（サーバーには</text>
+        <text x="736" y="176" text-anchor="end" font-size="11" class="dg-quiet">送られない）</text>
+      </g>
+      <text x="24" y="214" font-size="11.5" class="dg-quiet">※ https の時は、ホスト名の後ろの「:443」（ポート番号＝サーバーの中の窓口の番号）が省略されている</text>
+    </svg>
+    <figcaption>URL の5つの部品。課題の thanks.html に GET で送った時の URL</figcaption>
+  </figure>
+  <div class="table-wrap"><table>
+    <thead><tr><th>部品</th><th>例</th><th>意味</th><th>たとえると</th></tr></thead>
+    <tbody>
+      <tr><td>スキーム</td><td><code>https://</code></td><td>どのルールで通信するか</td><td>はがきで送るか、鍵付きの箱で送るか</td></tr>
+      <tr><td>ホスト名</td><td><code>h-kondo.github.io</code></td><td>どのサーバーか。<code>github.io</code> の中の <code>h-kondo</code> さんの場所</td><td>建物の名前</td></tr>
+      <tr><td>ポート番号</td><td><code>:443</code>（ふつうは省略）</td><td>サーバーの中のどの窓口か。https は 443、http は 80</td><td>建物の受付の番号</td></tr>
+      <tr><td>パス</td><td><code>/ch03/03-form/thanks.html</code></td><td>サーバーの中のフォルダとファイル。<strong>自分の PC のフォルダ構成と同じ</strong></td><td>建物の中の部屋</td></tr>
+      <tr><td>クエリ</td><td><code>?name=oomoto&amp;question=shop</code></td><td><code>?</code> から後ろ。<code>name=値</code> を <code>&amp;</code> でつないだもの。GET で送ったフォームのデータ</td><td>部屋に届けるメモ</td></tr>
+      <tr><td>フラグメント</td><td><code>#top</code></td><td>ページの中のどの場所を表示するか。<strong>サーバーには送られない</strong>（ブラウザだけが使う）</td><td>本の何ページ目か</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">パスの <code>/ch03/03-form/thanks.html</code> は、自分の PC の <code>~/ch03/03-form/thanks.html</code> とそっくりです。GitHub Pages は、<strong>リポジトリのフォルダ構成をそのまま URL のパスにして配っている</strong>からです。だから URL の最後が <code>/03-form/</code> で終わる時は、その中の <code>index.html</code> が表示されます。</p>
+
+  <h3 id="url-tool">URL 分解ツール</h3>
+  <p>好きな URL を貼って「分解する」を押すと、部品に分けて表示します。フォームを送った後の <code>thanks.html</code> の URL を貼ると、<strong>%E5… の暗号みたいな文字が元の日本語に戻る</strong>のが分かります。</p>
+  <form class="demo-form" id="url-form">
+    <label for="url-in">URL</label>
+    <div class="demo-row"><input id="url-in" type="text" value="https://h-kondo.github.io/ch03/03-form/thanks.html?name=%E5%A4%A7%E6%9C%AC%E7%9C%9F%E5%A5%88%E7%BE%8E&amp;question=shop&amp;agree=yes#top"><button type="submit">分解する</button></div>
+  </form>
+  <div class="table-wrap"><table id="url-out"><tbody><tr><td>（「分解する」を押すと出ます）</td></tr></tbody></table></div>
+
+  <!-- ===================================================== -->
+  <h2 id="https">4. HTTPS ― 送るデータを守るしくみ</h2>
+  <p>URL の最初の <code>https</code> は、<strong>HyperText Transfer Protocol Secure</strong>（安全な HTTP）の略です。最後の <strong>S（Secure＝安全）</strong>が付いているかどうかで、送るデータが途中で読まれるかどうかが変わります。</p>
+  <figure>
+    <img src="img/form/f3-https.webp" alt="はがきは途中でのぞき見されるが、鍵のかかった箱は開けられず、行き先では職員が身分証明書を見せているイラスト" width="1280" height="720" loading="lazy">
+    <figcaption>HTTP ははがき、HTTPS は鍵のかかった箱。届け先は身分証明書（証明書）で本物だと証明する</figcaption>
+  </figure>
+  <h3 id="http-vs-https">途中の人から、何が見える？</h3>
+  <p>インターネットのデータは、自分のパソコンからサーバーまで、<strong>Wi-Fi のルーター・通信会社・いくつもの中継機</strong>を通って届きます。その途中で中身を見られるかどうかが、HTTP と HTTPS のちがいです。</p>
+  <figure>
+    <svg viewBox="0 0 760 290" role="img" aria-label="HTTP では途中の人に送る中身が読めるが、HTTPS では暗号になって読めない" font-size="13">
+      <defs><marker id="fh1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="dg-head"/></marker></defs>
+      <text x="24" y="28" font-size="15" font-weight="600" class="dg-ink">HTTPS なら、途中の人には暗号しか見えない</text>
+      <text x="24" y="66" font-weight="600" fill="#dc2626">HTTP</text>
+      <rect x="84" y="46" width="120" height="44" rx="8" class="dg-box"/>
+      <text x="144" y="73" text-anchor="middle" class="dg-ink">💻 自分の PC</text>
+      <rect x="300" y="46" width="160" height="44" rx="8" class="dg-box"/>
+      <text x="380" y="73" text-anchor="middle" class="dg-ink">👀 途中（Wi-Fi など）</text>
+      <rect x="556" y="46" width="180" height="44" rx="8" class="dg-box"/>
+      <text x="646" y="73" text-anchor="middle" class="dg-ink">🏢 サーバー</text>
+      <path d="M204 68H300" class="dg-line" marker-end="url(#fh1)"/>
+      <path d="M460 68H556" class="dg-line" marker-end="url(#fh1)"/>
+      <rect x="244" y="100" width="356" height="34" rx="6" fill="#dc2626" fill-opacity="0.1" stroke="#dc2626"/>
+      <text x="422" y="122" text-anchor="middle" font-size="12" font-family="SFMono-Regular, Menlo, monospace" class="dg-ink">name=大本真奈美&amp;email=example@mail.com</text>
+      <text x="422" y="152" text-anchor="middle" font-size="11.5" fill="#dc2626">途中の人がそのまま読める・書きかえられる</text>
+      <text x="24" y="196" font-weight="600" fill="#16a34a">HTTPS</text>
+      <rect x="84" y="176" width="120" height="44" rx="8" class="dg-box"/>
+      <text x="144" y="203" text-anchor="middle" class="dg-ink">💻 自分の PC</text>
+      <rect x="300" y="176" width="160" height="44" rx="8" class="dg-box"/>
+      <text x="380" y="203" text-anchor="middle" class="dg-ink">👀 途中（Wi-Fi など）</text>
+      <rect x="556" y="176" width="180" height="44" rx="8" class="dg-main"/>
+      <text x="646" y="203" text-anchor="middle" class="dg-ink">🏢 サーバー（🔒で開ける）</text>
+      <path d="M204 198H300" class="dg-line" marker-end="url(#fh1)"/>
+      <path d="M460 198H556" class="dg-line" marker-end="url(#fh1)"/>
+      <rect x="244" y="230" width="356" height="34" rx="6" fill="#16a34a" fill-opacity="0.1" stroke="#16a34a"/>
+      <text x="422" y="252" text-anchor="middle" font-size="12" font-family="SFMono-Regular, Menlo, monospace" class="dg-ink">🔒 17 03 03 00 4a 8f c2 e9 1d 7b …（暗号のイメージ）</text>
+      <text x="422" y="282" text-anchor="middle" font-size="11.5" fill="#16a34a">見えるのは「github.io と通信している」ことくらい</text>
+    </svg>
+    <figcaption>HTTPS では、パス・クエリ（GET のデータ）・POST の中身も、すべて暗号にして運ばれる</figcaption>
+  </figure>
+  <div class="table-wrap"><table>
+    <thead><tr><th></th><th>HTTP（<code>http://</code>）</th><th>HTTPS（<code>https://</code>）</th></tr></thead>
+    <tbody>
+      <tr><td>通信の中身</td><td>そのまま（だれでも読める）</td><td><strong>暗号にして送る</strong>（TLS というしくみ）</td></tr>
+      <tr><td>途中で書きかえ</td><td>できてしまう</td><td>できない（書きかえるとバレる）</td></tr>
+      <tr><td>相手が本物か</td><td>確かめられない</td><td><strong>証明書</strong>で確かめる</td></tr>
+      <tr><td>ポート番号</td><td>80</td><td>443</td></tr>
+      <tr><td>ブラウザの表示</td><td>「保護されていない通信」と警告が出る</td><td>警告なし</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="tls">HTTPS がつながるまで（ざっくり）</h3>
+  <p>HTTPS のページを開くと、データを送る前に、ブラウザとサーバーの間でこんなやりとりが一瞬で行われています。</p>
+  <ol>
+    <li><strong>こんにちは</strong>：ブラウザが「<code>itc-kondo.github.io</code> と HTTPS で話したい」と伝える</li>
+    <li><strong>身分証明書を見せる</strong>：サーバーが<strong>証明書</strong>を送る（「私は本物の github.io です」と、信頼できる発行元がハンコを押したもの）</li>
+    <li><strong>本物か確かめる</strong>：ブラウザが、証明書の名前・有効期限・ハンコ（発行元）を確認する。にせものなら「この接続ではプライバシーが保護されません」と止める</li>
+    <li><strong>合言葉を決める</strong>：ブラウザとサーバーだけが知っている暗号の鍵を作る（途中の人には分からない方法で）</li>
+    <li><strong>暗号で会話</strong>：ここから先のデータ（ページ・フォームの中身）は全部この鍵で暗号にして送る</li>
+  </ol>
+  <p>この授業資料のサイトの証明書を、本当に取り出してみました。</p>
+<div class="code-frame"><span class="code-name">ターミナル（本物の出力）</span>
+<pre><code>$ openssl s_client -connect itc-kondo.github.io:443 -servername itc-kondo.github.io \
+    | openssl x509 -noout -subject -issuer -dates
+subject=CN=*.github.io                        ← だれの証明書？（github.io のすべてのサブドメイン）
+issuer=C=US, O=Let's Encrypt, CN=YR1          ← だれがハンコを押した？（発行元）
+notBefore=Sep 30 23:44:46 2026 GMT            ← 有効期間の始まり
+notAfter=Dec 29 23:44:45 2026 GMT             ← 有効期間の終わり（約3か月ごとに自動で更新）
+
+$ openssl s_client -connect itc-kondo.github.io:443 -servername itc-kondo.github.io \
+    | grep Protocol
+Protocol  : TLSv1.3                            ← 暗号のしくみ（いちばん新しい版）</code></pre></div>
+  <p><code>*.github.io</code> の <code>*</code> は「なんでも」という意味です。<code>h-kondo.github.io</code> も <code>itc-kondo.github.io</code> も、<strong>この1枚の証明書で守られています</strong>。GitHub Pages は、皆さんのサイトも<strong>何もしなくても HTTPS にしてくれます</strong>。</p>
+  <p>試しに <code>http://</code>（S なし）で開くと、GitHub が <code>https://</code> に転送してくれます。</p>
+<div class="code-frame"><span class="code-name">ターミナル（本物の出力）</span>
+<pre><code>$ curl -sI http://itc-kondo.github.io/class-materials/
+HTTP/1.1 301 Moved Permanently                       ← 「引っ越しました」
+Location: https://itc-kondo.github.io/class-materials/   ← 「こっち（https）へどうぞ」</code></pre></div>
+
+  <h3 id="https-form">フォームと HTTPS の大事な話</h3>
+  <ul>
+    <li><strong>フォームは必ず HTTPS のページに置く</strong>。HTTP のページで名前やパスワードを送ると、途中で丸見えになる（Chrome も警告を出す）</li>
+    <li><strong>HTTPS でも、GET のクエリは「通信の途中」では守られるが、ブラウザの履歴・サーバーの記録・URL を貼ったチャットには残る</strong>。だからパスワードやお問い合わせは POST にする</li>
+    <li><strong>鍵マーク（HTTPS）は「通信が暗号になっている」という意味で、「安全なサイト」という意味ではない</strong>。にせサイト（フィッシング）も HTTPS で作れるので、URL のホスト名が本物かどうかを必ず見る</li>
+  </ul>
+  <p class="note warn">ホスト名のチェックは、URL を分解できると簡単です。たとえば <code>https://github.io.example.com/login</code> のホスト名は <code>github.io.example.com</code> で、<strong>本当は example.com の持ち物</strong>です。ホスト名は「<code>://</code> の後ろから、次の <code>/</code> まで」を、<strong>右から</strong>読みましょう。</p>
+
+  <!-- ===================================================== -->
+  <h2 id="parts">5. さまざまなフォーム部品</h2>
   <figure>
     <img src="img/form/f2-parts.webp" alt="道具箱に入ったフォームの部品を、子どもが画面の用紙に組み立てているイラスト" width="1280" height="720" loading="lazy">
     <figcaption>入力欄・選択肢・ボタンを組み合わせてフォームを作る</figcaption>
@@ -182,7 +332,7 @@
   </table></div>
 
   <!-- ===================================================== -->
-  <h2 id="example">4. 標準的なお問い合わせフォーム</h2>
+  <h2 id="example">6. 標準的なお問い合わせフォーム</h2>
   <p>教科書のお問い合わせフォーム（03-18）を、<strong>本当に送れる形</strong>に直したものです。<code>&lt;form&gt;</code> で囲み、<code>label</code>・<code>name</code>・<code>required</code> を付けています。</p>
   <div class="demo-preview">
     <form class="demo-contact" action="#" onsubmit="return false">
@@ -203,7 +353,7 @@
   <p class="date">↑ 見た目の見本です（このページでは送信しません）。コードは課題の STEP 2 にあります。</p>
 
   <!-- ===================================================== -->
-  <h2 id="task">5. 課題：GitHub に新しい課題「03-form」を作って提出しよう</h2>
+  <h2 id="task">7. 課題：GitHub に新しい課題「03-form」を作って提出しよう</h2>
   <p class="note">今までの <code>ch03</code> リポジトリの中に、<strong>新しいフォルダ <code>03-form</code></strong> を足して作ります。リポジトリを新しく作る必要はありません。手順の基本は <a href="vscode.html#git">VS Code 手順書の「Git / GitHub と接続して課題を上げる」</a>と同じです。</p>
 <pre><code>ch03/
 ├── index.html        ← 課題へのリンク集（1行足す）
@@ -389,15 +539,20 @@ git push origin main</code></pre>
   </ol>
 
   <!-- ===================================================== -->
-  <h2 id="quiz">6. クイズ</h2>
+  <h2 id="quiz">8. クイズ</h2>
   <details class="quiz"><summary>Q1. 入力欄に <code>name</code> を書き忘れると、どうなる？</summary><p>画面では入力できるのに、<strong>送信したデータに入らない</strong>（送られない）。受け取る側は name で値を取り出すので、名前の無いデータは扱えないからです。</p></details>
   <details class="quiz"><summary>Q2. パスワードのフォームを GET で作ってはいけないのはなぜ？</summary><p>GET は入力内容が <strong>URL（アドレスバー）に付く</strong>ので、履歴や画面に残って見えてしまうから。ログインやお問い合わせは POST を使います。</p></details>
   <details class="quiz"><summary>Q3. <code>&lt;option value="item"&gt;商品の質問&lt;/option&gt;</code> を選んで送ると、何が送られる？</summary><p><code>question=item</code>。画面の文字ではなく <strong><code>value</code> の値</strong>が送られます。</p></details>
   <details class="quiz"><summary>Q4. GitHub Pages に置いたフォームで、お問い合わせを本当に受け取れる？</summary><p><strong>受け取れません。</strong>GitHub Pages はファイルを配るだけで、データを受け取って保存・メールするプログラムを動かせないためです。本物にするには、PHP などが動くサーバーや、フォーム用のサービスを使います。</p></details>
 
+  <details class="quiz"><summary>Q5. <code>https://h-kondo.github.io/ch03/03-form/thanks.html?name=oomoto#top</code> のうち、サーバーに送られないのはどこ？</summary><p><code>#top</code>（フラグメント）。ページの中のどこを表示するかを、ブラウザだけが使います。</p></details>
+  <details class="quiz"><summary>Q6. 鍵マーク（HTTPS）が付いているサイトなら、パスワードを入れても安全？</summary><p><strong>そうとは限らない。</strong>HTTPS は「通信が暗号になっている」だけで、にせサイトも HTTPS で作れます。URL のホスト名が本物かを必ず確かめましょう。</p></details>
+
   <h2 id="ref">参考</h2>
   <ul>
     <li><a href="https://developer.mozilla.org/ja/docs/Learn_web_development/Extensions/Forms/Sending_and_retrieving_form_data">MDN「フォームデータの送信」</a></li>
+    <li><a href="https://developer.mozilla.org/ja/docs/Web/URI">MDN「URI（URL の書き方）」</a></li>
+    <li><a href="https://developer.mozilla.org/ja/docs/Glossary/HTTPS">MDN 用語集「HTTPS」</a></li>
     <li><a href="https://developer.mozilla.org/ja/docs/Web/HTML/Reference/Elements/input">MDN「&lt;input&gt;: 入力欄（フォーム入力）要素」</a></li>
     <li><a href="vscode.html#git">VS Code 手順書「Git / GitHub と接続して課題を上げる」</a></li>
     <li><a href="git-basics.html">小学生でもわかる Git と GitHub とホスティングのしくみ</a></li>
@@ -434,6 +589,36 @@ git push origin main</code></pre>
       document.getElementById("peek-get").textContent = "https://example.com/contact?" + body;
       document.getElementById("peek-post").textContent = "POST /contact HTTP/1.1\nContent-Type: application/x-www-form-urlencoded\n\n" + body;
     });
+  })();
+  // 「URL 分解ツール」：ブラウザの URL 解析（new URL）で部品に分け、クエリは元の文字に戻して表示する
+  (function () {
+    var f = document.getElementById("url-form");
+    if (!f) return;
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var run = function () {
+      var out = document.getElementById("url-out");
+      var u;
+      try { u = new URL(document.getElementById("url-in").value.trim()); }
+      catch (e) { out.innerHTML = "<tbody><tr><td>URL として読めませんでした（https:// から始まっているか確認してください）</td></tr></tbody>"; return; }
+      var rows = [
+        ["スキーム", u.protocol + "//"],
+        ["ホスト名", u.hostname],
+        ["ポート番号", u.port || (u.protocol === "https:" ? "443（省略）" : u.protocol === "http:" ? "80（省略）" : "（なし）")],
+        ["パス", decodeURIComponent(u.pathname)],
+        ["クエリ", u.search || "（なし）"],
+        ["フラグメント", u.hash || "（なし）"]
+      ];
+      var html = "<thead><tr><th>部品</th><th>中身</th></tr></thead><tbody>";
+      rows.forEach(function (r) { html += "<tr><td>" + r[0] + "</td><td><code>" + esc(r[1]) + "</code></td></tr>"; });
+      var n = 0;
+      u.searchParams.forEach(function (v, k) {
+        n++;
+        html += "<tr><td>　└ データ " + n + "</td><td><code>" + esc(k) + "</code> ＝ <strong>" + esc(v) + "</strong></td></tr>";
+      });
+      out.innerHTML = html + "</tbody>";
+    };
+    f.addEventListener("submit", function (e) { e.preventDefault(); run(); });
+    run();
   })();
 </script>
 </body>
