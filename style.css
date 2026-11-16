@@ -332,6 +332,16 @@ main h2 {
 main h3 { font-size: 1.3em; line-height: 1.4; margin: 2em 0 0.6em; color: var(--text-strong); }
 main h4 { font-size: 1.1em; margin: 1.6em 0 0.4em; }
 h2, h3, h4 { scroll-margin-top: 16px; }
+kbd {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85em;
+  padding: 0.1em 0.45em;
+  border: 1px solid var(--line);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  background: var(--bg, #fff);
+  white-space: nowrap;
+}
 p { margin: 0 0 1.2em; }
 ul, ol { padding-left: 1.6em; margin: 0 0 1.2em; }
 li { margin: 0.25em 0; }

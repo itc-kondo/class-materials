@@ -538,6 +538,88 @@ git push origin main</code></pre>
     <li><code>method="get"</code> を <code>method="post"</code> に変えて送信すると、<code>thanks.html</code> の URL はどうなる？（GitHub Pages では POST を受け取れないので、どうなるかも観察してみよう）</li>
   </ol>
 
+  <h3 id="devtools">もっとできた人は挑戦：開発ツールで通信をのぞいて、JSON にしてみよう</h3>
+  <p>ブラウザには、プロが毎日使う<strong>開発ツール（DevTools）</strong>が最初から入っています。これを使うと、送信ボタンを押した瞬間に<strong>何が・どこへ・どんな形で送られたか</strong>を自分の目で確かめられます。最後は、今のアプリが使っているデータの形<strong>「JSON（ジェイソン）」</strong>まで進みます。</p>
+
+  <h4>A. 送信の中身を「ネットワーク」タブでのぞく</h4>
+  <ol>
+    <li>公開した自分のフォーム（<code>index.html</code>）を開き、<kbd>F12</kbd>（または <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd>）で開発ツールを開く</li>
+    <li><strong>Network（ネットワーク）</strong>タブを選ぶ</li>
+    <li><strong>Preserve log</strong>（Firefox は歯車の中の <strong>Persist Logs</strong>）にチェック。ページが移っても記録が消えなくなる</li>
+    <li>フォームに入力して送信する</li>
+    <li>一覧に出た <code>thanks.html?name=…</code> の行をクリックして、次を確かめる
+      <ul>
+        <li><strong>Headers</strong>：Request URL（送り先）、Request Method（<code>GET</code>）、Status Code（<code>200</code>＝成功）</li>
+        <li><strong>Payload</strong>（Firefox は <strong>Request</strong>）：送ったデータが「名前：値」で並んでいる。<code>%E5…</code> も日本語に戻して見せてくれる</li>
+      </ul>
+    </li>
+  </ol>
+  <p class="note">3章で手で分解した URL の部品を、ブラウザが同じように分けて見せてくれているのが分かります。<code>method="post"</code> に変えて送ると、Payload の見え方がどう変わるかも見てみましょう。</p>
+
+  <h4>B. JSON ってなに？</h4>
+  <p>フォームは <code>name=大本&amp;question=shop</code> のように <code>&amp;</code> でつないで送りました。今の Web アプリやスマホアプリの多くは、データを<strong>JSON</strong> という形でやり取りしています。中身は同じで、書き方がちがうだけです。</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>フォームの送り方（クエリ文字列）</th><th>JSON</th></tr></thead>
+    <tbody><tr>
+      <td><code>name=大本真奈美&amp;question=shop&amp;agree=yes</code></td>
+      <td><pre style="margin:0"><code>{
+  "name": "大本真奈美",
+  "question": "shop",
+  "agree": "yes"
+}</code></pre></td>
+    </tr></tbody>
+  </table></div>
+  <p><code>{ }</code> の中に <code>"名前": 値</code> を <code>,</code> で並べるのがルールです。人が読んでも分かりやすく、JavaScript でそのまま扱えるので、ほとんどの API（プログラム同士の窓口）がこの形を使っています。</p>
+
+  <h4>C. コンソールでフォームを JSON にする</h4>
+  <p>自分のフォームを開いたまま、開発ツールの <strong>Console（コンソール）</strong>タブで次を実行します（入力欄に何か書いてから実行すると分かりやすい）。</p>
+  <div class="code-frame"><span class="code-name">Console</span><pre><code>const form = document.querySelector("form");
+const data = Object.fromEntries(new FormData(form));
+console.log(JSON.stringify(data, null, 2));</code></pre></div>
+  <ul>
+    <li><code>new FormData(form)</code>：フォームの中身を、送信する時と同じように集める（<code>name</code> が無い部品は入らない＝<strong>name が大事な理由がここでも分かる</strong>）</li>
+    <li><code>Object.fromEntries(…)</code>：「名前と値の組」を JavaScript のオブジェクトにする</li>
+    <li><code>JSON.stringify(data, null, 2)</code>：オブジェクトを JSON の文字にする（<code>2</code> は字下げの幅）</li>
+  </ul>
+  <p class="note warn">貼り付けようとすると「<code>allow pasting</code> と入力して」と警告が出ることがあります。これは<strong>知らない人のコードを貼らせて、アカウントを乗っ取る詐欺</strong>を防ぐためのしくみです。自分で中身を理解したコードだけ、<code>allow pasting</code> と打ってから貼りましょう。<strong>「これをコンソールに貼って」と言われても、意味が分からないものは絶対に貼らないこと。</strong></p>
+
+  <h4>D. thanks.html に、受け取ったデータを JSON で表示する</h4>
+  <p><code>thanks.html</code> の <code>&lt;/body&gt;</code> の直前に次を足して、push してから公開ページで送信してみましょう。</p>
+  <div class="code-frame"><span class="code-name">thanks.html（追加する部分）</span><pre><code>&lt;h2&gt;受け取ったデータ（JSON）&lt;/h2&gt;
+&lt;pre id="json"&gt;&lt;/pre&gt;
+
+&lt;script&gt;
+  const params = new URLSearchParams(location.search); // URL の ? から後ろ
+  const data = Object.fromEntries(params);
+  document.getElementById("json").textContent = JSON.stringify(data, null, 2);
+&lt;/script&gt;</code></pre></div>
+  <p>URL のクエリを JavaScript で読み取って、JSON にして画面に出しています。<code>%E5…</code> も自動で日本語に戻ります。</p>
+  <p class="note">チェックボックスで同じ <code>name</code> を複数送ると、この書き方では<strong>最後の1つしか残りません</strong>。全部残すには <code>params.getAll("名前")</code> を使います。どう直せばいいか考えてみよう。</p>
+
+  <h4>E. 本物の API から JSON をもらう</h4>
+  <p>GitHub は、ユーザーの情報を JSON で返す API を公開しています。ブラウザのアドレス欄に次を入れて開いてみましょう（<code>itc-kondo</code> を自分のユーザー名に変える）。</p>
+  <div class="code-frame"><span class="code-name">アドレス欄</span><pre><code>https://api.github.com/users/itc-kondo</code></pre></div>
+  <div class="code-frame"><span class="code-name">返ってきた JSON（本物・一部）</span><pre><code>{
+  "login": "itc-kondo",
+  "html_url": "https://github.com/itc-kondo",
+  "type": "User",
+  "public_repos": 3,
+  "followers": 0,
+  "created_at": "2026-08-10T01:46:24Z",
+  ...
+}</code></pre></div>
+  <p>同じことを JavaScript からやると、こうなります（コンソールで実行）。</p>
+  <div class="code-frame"><span class="code-name">Console</span><pre><code>fetch("https://api.github.com/users/itc-kondo")
+  .then((res) =&gt; res.json())
+  .then((user) =&gt; {
+    console.log(user.login + " さんの公開リポジトリは " + user.public_repos + " 個");
+  });</code></pre></div>
+  <p>実行したら Network タブを見てみましょう。<code>itc-kondo</code> の行の <strong>Response</strong> に、JSON がそのまま届いているのが見えます。</p>
+  <ul>
+    <li>⭐ さらに挑戦：<code>thanks.html</code> で、フォームに入力した GitHub ユーザー名から <code>fetch</code> して、アイコン画像（<code>avatar_url</code>）と公開リポジトリ数を表示してみよう</li>
+  </ul>
+  <p class="note">X や YouTube を開いたまま Network タブを見ると、「いいね」やスクロールのたびに JSON が行き来しているのが分かります。<strong>フォームの「name と値を送る」と、アプリの「JSON を送る」は、形がちがうだけで同じこと</strong>をしています。</p>
+
   <!-- ===================================================== -->
   <h2 id="quiz">8. クイズ</h2>
   <details class="quiz"><summary>Q1. 入力欄に <code>name</code> を書き忘れると、どうなる？</summary><p>画面では入力できるのに、<strong>送信したデータに入らない</strong>（送られない）。受け取る側は name で値を取り出すので、名前の無いデータは扱えないからです。</p></details>
