@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>2カラム × タイル型のサイトを作ろう</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="site.js" defer></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-top">
+    <a class="site-logo" href="./"><span class="logo-mark">ITC 授業資料</span><span class="logo-sub">Web Extension III・IV</span></a>
+    <form class="header-search" action="./" method="get" role="search"><input type="search" name="q" placeholder="記事を検索" aria-label="記事を検索"></form>
+    <a class="header-btn" href="https://github.com/itc-kondo/class-materials">GitHub</a>
+  </div>
+  <nav class="header-tabs" aria-label="カテゴリ">
+    <a data-tab="all" href="./">すべて</a>
+    <a data-tab="class" href="./?tab=class" class="active">授業の手順書</a>
+    <a data-tab="column" href="./?tab=column">小話・コラム</a>
+  </nav>
+</header>
+<div class="article-layout">
+<aside class="rail" aria-label="共有">
+  <a href="https://x.com/intent/post?url=https%3A%2F%2Fitc-kondo.github.io%2Fclass-materials%2Ftile-site.html&amp;text=2%E3%82%AB%E3%83%A9%E3%83%A0%20%C3%97%20%E3%82%BF%E3%82%A4%E3%83%AB%E5%9E%8B%E3%81%AE%E3%82%B5%E3%82%A4%E3%83%88%E3%82%92%E4%BD%9C%E3%82%8D%E3%81%86" target="_blank" rel="noopener" title="X でシェア">𝕏</a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fitc-kondo.github.io%2Fclass-materials%2Ftile-site.html" target="_blank" rel="noopener" title="Facebook でシェア">f</a>
+  <a href="https://b.hatena.ne.jp/entry/s/itc-kondo.github.io/class-materials/tile-site.html" target="_blank" rel="noopener" title="はてなブックマーク">B!</a>
+  <button type="button" data-copy title="URL をコピー">🔗</button>
+  <span class="rail-label">コピー</span>
+</aside>
+<main>
+  <div class="article-meta"><span class="avatar">K</span><span class="author">@itc-kondo</span></div>
+  <div class="article-title"><h1>2カラム × タイル型のサイトを作ろう ― 設計図だけ渡すので、コードは自分で考える（できた人向け課題 tile-site）</h1></div>
+  <ul class="tags"><li>HTML</li><li>CSS</li><li>レイアウト</li><li>Flexbox</li><li>Grid</li><li>課題</li></ul>
+  <p class="article-dates"><span>投稿日 2026年11月16日</span></p>
+
+  <p class="note"><strong>03-form が終わった人向けの課題です。</strong><br>
+  ① <strong>2カラム</strong>と<strong>タイル型</strong>ってどんなレイアウト？<br>
+  ② 今回作るサイトの<strong>設計図とルール</strong><br>
+  ③ <strong>新しいリポジトリ <code>tile-site</code></strong> を作る<br>
+  ④ 道具とヒントを見ながら、<strong>コードは自分で考えて</strong>作る<br>
+  ⑤ 公開して提出する</p>
+  <p class="note warn">このページには<strong>答えのコードは載せていません</strong>。載っているのは「設計図」「使う道具（CSS のプロパティ）」「考えるためのヒント」だけです。ヒントは<strong>開くたびに少しずつ答えに近づく</strong>ようになっているので、まずは開かずに考えてみましょう。</p>
+
+  <!-- ===================================================== -->
+  <h2 id="what">1. 2カラムとタイル型ってなに？</h2>
+  <figure>
+    <img src="img/tile/t1-board.webp" alt="壁の掲示板の左の広い区画に同じ大きさのカードが3列×2段に並び、右の細い区画にプロフィールの紙が縦に並んでいて、2人の子どもがカードを貼る場所を相談しているイラスト" width="1280" height="721" loading="lazy">
+    <figcaption>ページは掲示板と同じ。左の広い場所に同じ大きさのカード（タイル）を並べ、右の細い場所に案内を貼る</figcaption>
+  </figure>
+  <p>Web ページの「並べ方」には名前が付いています。</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>名前</th><th>どんな並べ方？</th><th>よく見る場所</th></tr></thead>
+    <tbody>
+      <tr><td><strong>1カラム</strong></td><td>中身が縦に1列だけ</td><td>スマホのページ、LP（宣伝ページ）</td></tr>
+      <tr><td><strong>2カラム</strong></td><td>広い<strong>メイン</strong>と、細い<strong>サイドバー</strong>が横に並ぶ</td><td>ブログ、ニュースサイト</td></tr>
+      <tr><td><strong>タイル型</strong></td><td>同じ大きさのカードを、床のタイルのように縦横に敷きつめる</td><td>YouTube のホーム、ネットショップの商品一覧</td></tr>
+    </tbody>
+  </table></div>
+  <p>今回はこの2つを<strong>組み合わせます</strong>。「ページ全体は2カラム」で、「メインの中身はタイル型」です。ちなみにこの授業資料のトップページも、左（タグ）・中央（記事一覧）・右（お知らせ）の<strong>3カラム</strong>になっています。開発ツールで中をのぞくと、どう作っているか分かります。</p>
+  <p class="note">教科書の <strong>CHAPTER05（2カラム）</strong>と <strong>CHAPTER06（タイル型）</strong>の先取りです。先にやっておくと、本番の授業がぐっと楽になります。</p>
+
+  <!-- ===================================================== -->
+  <h2 id="spec">2. 今回作るもの：設計図とルール</h2>
+  <h3 id="theme">テーマ：「自分の好きなもの」を紹介するサイト</h3>
+  <p>中身は自由です。たとえば「好きなもの図鑑」「おすすめの沖縄スポット」「推しの紹介」「架空のカフェのメニュー」など。<strong>自分が作っていて楽しいもの</strong>を選びましょう。</p>
+
+  <h3 id="wireframe">設計図（ワイヤーフレーム）</h3>
+  <figure>
+    <svg viewBox="0 0 760 330" role="img" aria-label="PC では header の下に、左に 3列のタイルが並ぶ main、右に aside の2カラム、一番下に footer。スマホでは main のタイルが2列になり、aside は main の下に来る" font-size="12">
+      <defs><marker id="tw1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="dg-head"/></marker></defs>
+      <text x="20" y="26" font-size="14" font-weight="600" class="dg-ink">PC（画面の幅 768px 以上）</text>
+      <rect x="20" y="38" width="460" height="276" rx="10" class="dg-box"/>
+      <rect x="32" y="50" width="436" height="30" rx="5" class="dg-zone"/>
+      <text x="250" y="70" text-anchor="middle" class="dg-ink">header（サイトの名前）</text>
+      <rect x="32" y="90" width="300" height="182" rx="6" class="dg-main"/>
+      <text x="42" y="108" font-weight="600" class="dg-ink">main（タイル 6枚以上・3列）</text>
+      <g class="dg-box">
+        <rect x="42" y="118" width="88" height="70" rx="4"/><rect x="138" y="118" width="88" height="70" rx="4"/><rect x="234" y="118" width="88" height="70" rx="4"/>
+        <rect x="42" y="194" width="88" height="70" rx="4"/><rect x="138" y="194" width="88" height="70" rx="4"/><rect x="234" y="194" width="88" height="70" rx="4"/>
+      </g>
+      <g font-size="10.5" class="dg-quiet" text-anchor="middle">
+        <text x="86" y="150">画像</text><text x="86" y="176">見出し＋文</text>
+        <text x="182" y="150">画像</text><text x="182" y="176">見出し＋文</text>
+        <text x="278" y="150">画像</text><text x="278" y="176">見出し＋文</text>
+        <text x="86" y="226">画像</text><text x="86" y="252">見出し＋文</text>
+        <text x="182" y="226">画像</text><text x="182" y="252">見出し＋文</text>
+        <text x="278" y="226">画像</text><text x="278" y="252">見出し＋文</text>
+      </g>
+      <line x1="42" y1="160" x2="130" y2="160" class="dg-line" stroke-dasharray="3 3"/><line x1="138" y1="160" x2="226" y2="160" class="dg-line" stroke-dasharray="3 3"/><line x1="234" y1="160" x2="322" y2="160" class="dg-line" stroke-dasharray="3 3"/>
+      <line x1="42" y1="236" x2="130" y2="236" class="dg-line" stroke-dasharray="3 3"/><line x1="138" y1="236" x2="226" y2="236" class="dg-line" stroke-dasharray="3 3"/><line x1="234" y1="236" x2="322" y2="236" class="dg-line" stroke-dasharray="3 3"/>
+      <rect x="344" y="90" width="124" height="182" rx="6" class="dg-zone"/>
+      <text x="406" y="108" text-anchor="middle" font-weight="600" class="dg-ink">aside</text>
+      <rect x="354" y="118" width="104" height="60" rx="4" class="dg-box"/><text x="406" y="152" text-anchor="middle" font-size="10.5" class="dg-quiet">プロフィール</text>
+      <rect x="354" y="186" width="104" height="60" rx="4" class="dg-box"/><text x="406" y="220" text-anchor="middle" font-size="10.5" class="dg-quiet">カテゴリなど</text>
+      <text x="182" y="290" text-anchor="middle" font-size="11" class="dg-quiet">← 約 7 →</text>
+      <text x="406" y="290" text-anchor="middle" font-size="11" class="dg-quiet">← 約 3 →</text>
+      <rect x="32" y="296" width="436" height="12" rx="3" class="dg-zone"/>
+      <text x="250" y="306" text-anchor="middle" font-size="9.5" class="dg-ink">footer</text>
+
+      <path d="M488 176H548" class="dg-line" marker-end="url(#tw1)"/>
+      <text x="518" y="166" text-anchor="middle" font-size="10.5" class="dg-quiet">せまくなると</text>
+
+      <text x="560" y="26" font-size="14" font-weight="600" class="dg-ink">スマホ（767px 以下）</text>
+      <rect x="560" y="38" width="170" height="276" rx="14" class="dg-box"/>
+      <rect x="570" y="50" width="150" height="24" rx="4" class="dg-zone"/>
+      <text x="645" y="66" text-anchor="middle" font-size="10.5" class="dg-ink">header</text>
+      <rect x="570" y="80" width="150" height="166" rx="5" class="dg-main"/>
+      <text x="645" y="95" text-anchor="middle" font-size="10.5" font-weight="600" class="dg-ink">main（タイル 2列）</text>
+      <g class="dg-box">
+        <rect x="578" y="102" width="64" height="42" rx="3"/><rect x="648" y="102" width="64" height="42" rx="3"/>
+        <rect x="578" y="150" width="64" height="42" rx="3"/><rect x="648" y="150" width="64" height="42" rx="3"/>
+        <rect x="578" y="198" width="64" height="42" rx="3"/><rect x="648" y="198" width="64" height="42" rx="3"/>
+      </g>
+      <rect x="570" y="252" width="150" height="34" rx="5" class="dg-zone"/>
+      <text x="645" y="273" text-anchor="middle" font-size="10.5" class="dg-ink">aside（main の下へ）</text>
+      <rect x="570" y="292" width="150" height="14" rx="3" class="dg-zone"/>
+      <text x="645" y="303" text-anchor="middle" font-size="9.5" class="dg-ink">footer</text>
+    </svg>
+    <figcaption>これが「設計図」。この形になれば、色・フォント・中身は自由</figcaption>
+  </figure>
+
+  <h3 id="rules">必ず守るルール（必須）</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th></th><th>ルール</th></tr></thead>
+    <tbody>
+      <tr><td>リポジトリ</td><td>新しく <strong><code>tile-site</code></strong>（Public）を作り、GitHub Pages で公開する</td></tr>
+      <tr><td>ファイル</td><td><code>index.html</code> と <code>style.css</code>（画像を使うなら <code>images/</code> フォルダ）</td></tr>
+      <tr><td>HTML のタグ</td><td><code>header</code>・<code>main</code>・<code>aside</code>・<code>footer</code> を使う（全部 <code>div</code> にしない）</td></tr>
+      <tr><td>2カラム</td><td>PC の幅では <strong>main が左（広い）、aside が右（細い）</strong>で横に並ぶ</td></tr>
+      <tr><td>タイル</td><td>main の中に<strong>6枚以上</strong>。PC では<strong>3列</strong>。1枚に「画像（または色の箱）＋見出し＋短い文」</td></tr>
+      <tr><td>スマホ</td><td>幅が <strong>767px 以下</strong>になったら、aside が main の<strong>下</strong>に回り、タイルは<strong>2列か1列</strong>になる</td></tr>
+      <tr><td>画像</td><td>自分で撮ったもの・自分で描いたもの・フリー素材だけ。フリー素材は<strong>footer に出典</strong>を書く</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note warn">公開ページは<strong>世界中のだれでも見られます</strong>。本名・顔写真・住所・学校名が分かる写真は載せないこと。Google の画像検索で見つけた画像を勝手に使うのもダメです（著作権）。</p>
+
+  <!-- ===================================================== -->
+  <h2 id="step1">3. STEP 1. 新しいリポジトリ「tile-site」を作る</h2>
+  <p class="note warn"><strong>フォルダは <code>ch03</code> の外に作ります。</strong>ch03 の中に作ると「Git の中に Git」になって、うまく push できなくなります（理由は <a href="vscode.html#nested-git">VS Code 手順書「親のフォルダがすでに Git につながっていると失敗する」</a>）。</p>
+  <div class="code-frame"><span class="code-name">ターミナル</span><pre><code>cd ~               # ホームに戻る（ch03 の中にいないこと！）
+mkdir tile-site
+cd tile-site
+code .</code></pre></div>
+  <ol>
+    <li>GitHub 右上の <strong>＋</strong> → <strong>New repository</strong></li>
+    <li>Repository name：<strong><code>tile-site</code></strong> ／ <strong>Public</strong> ／ 「Add a README file」は<strong>チェックしない</strong> → <strong>Create repository</strong></li>
+    <li><code>index.html</code> を1行でも書いたら、初回のアップロード（<code>h-kondo</code> は自分のユーザー名に）</li>
+  </ol>
+  <div class="code-frame"><span class="code-name">ターミナル（tile-site フォルダで）</span><pre><code>pwd                         # 最後が /tile-site ならOK
+git init
+git add .
+git commit -m "First commit"
+git branch -M main
+git remote add origin https://github.com/h-kondo/tile-site.git
+git remote -v               # tile-site になっているか確認
+git push -u origin main</code></pre></div>
+  <ol start="4">
+    <li><strong>Settings</strong> → <strong>Pages</strong> → Branch：<strong>main</strong> ／ <strong>/(root)</strong> → <strong>Save</strong></li>
+    <li>数分後、<code>https://h-kondo.github.io/tile-site/</code> で見られるようになる</li>
+  </ol>
+  <p>今回は <code>index.html</code> がリポジトリの<strong>一番上</strong>にあるので、URL は <code>/tile-site/</code> で終わります（ch03 の時の <code>/ch03/03-form/</code> とのちがいを、3章の「URL の分解」を思い出して考えてみよう）。手順の詳しい説明は <a href="vscode.html#step6">VS Code 手順書の STEP 6〜8</a> と同じです。</p>
+
+  <!-- ===================================================== -->
+  <h2 id="step2">4. STEP 2. 自分の設計図を紙に描く</h2>
+  <p>いきなりコードを書かずに、<strong>まずノートに四角を描いて</strong>決めます。プロの現場でも、最初に作るのは「ワイヤーフレーム」です。</p>
+  <ul>
+    <li>サイトの名前は？</li>
+    <li>タイルに何を並べる？（6つ以上書き出す）</li>
+    <li>サイドバーには何を置く？（プロフィール、カテゴリ、おすすめ、お知らせ…）</li>
+    <li>色は何色使う？（<strong>3色まで</strong>にすると、まとまって見える）</li>
+  </ul>
+
+  <!-- ===================================================== -->
+  <h2 id="step3">5. STEP 3. HTML の骨組みを書く</h2>
+  <p>骨組みの<strong>形だけ</strong>示します。中身（コメントの部分）は自分で書きましょう。</p>
+  <div class="code-frame"><span class="code-name">index.html（形だけ）</span><pre><code>&lt;body&gt;
+  &lt;header&gt; サイトの名前 &lt;/header&gt;
+
+  &lt;div class="container"&gt;
+    &lt;main&gt;
+      &lt;!-- タイルを並べる「箱」を1つ作り、その中にタイルを6枚以上 --&gt;
+      &lt;!-- タイル1枚 ＝ 画像 ＋ 見出し ＋ 短い文 --&gt;
+    &lt;/main&gt;
+
+    &lt;aside&gt;
+      &lt;!-- プロフィール・カテゴリなど --&gt;
+    &lt;/aside&gt;
+  &lt;/div&gt;
+
+  &lt;footer&gt; コピーライト・画像の出典 &lt;/footer&gt;
+&lt;/body&gt;</code></pre></div>
+  <h3 id="think-html">考えよう</h3>
+  <ul>
+    <li>なぜ <code>main</code> と <code>aside</code> だけを <code>div class="container"</code> で包むのか？（<code>header</code> と <code>footer</code> は包まないのはなぜ？）</li>
+    <li>タイル1枚には、どのタグを使う？（<code>div</code>？ <code>article</code>？ <code>li</code>？ それぞれのちがいを調べてみよう）</li>
+    <li>スマホで正しく表示するために、<code>&lt;head&gt;</code> に必ず入れる1行はなに？（03-form の <code>index.html</code> を見返そう）</li>
+  </ul>
+  <details class="quiz"><summary>ヒント：container で包む理由</summary><p>CSS で「横に並べる」指示は、<strong>並べたい要素たちの親</strong>に書きます。横に並べたいのは main と aside の2つだけ。だから、その2つだけを1つの親で包みます。</p></details>
+
+  <!-- ===================================================== -->
+  <h2 id="step4">6. STEP 4. 2カラムにする</h2>
+  <h3 id="tools-flex">道具箱</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>プロパティ</th><th>どこに書く</th><th>何をする</th></tr></thead>
+    <tbody>
+      <tr><td><code>display: flex;</code></td><td>親</td><td>子どもたちを<strong>横一列に並べる</strong></td></tr>
+      <tr><td><code>gap: 24px;</code></td><td>親</td><td>子どもと子どもの間に<strong>すき間</strong>をあける</td></tr>
+      <tr><td><code>flex: 数字;</code></td><td>子</td><td>残りの幅を<strong>数字の比率で分け合う</strong>（例：<code>2</code> と <code>1</code> なら 2:1）</td></tr>
+      <tr><td><code>max-width: 1100px;</code></td><td>どこでも</td><td>これより<strong>広がらない</strong>ようにする</td></tr>
+      <tr><td><code>margin: 0 auto;</code></td><td>幅が決まった箱</td><td>左右の余白を自動にして<strong>真ん中に寄せる</strong></td></tr>
+    </tbody>
+  </table></div>
+  <h3 id="think-flex">考えよう</h3>
+  <p><strong>main と aside を「7：3」で横に並べ、間を 24px あけ、ページ全体は 1100px より広がらずに真ん中に置く。</strong>どのセレクタに、どのプロパティを書けばいいでしょう？</p>
+  <details class="quiz"><summary>ヒント1</summary><p>上の表の「どこに書く」を見よう。<code>display: flex;</code> と <code>gap</code> は<strong>親</strong>、<code>flex: 数字;</code> は<strong>子</strong>。この HTML で main と aside の親はどれ？</p></details>
+  <details class="quiz"><summary>ヒント2</summary><p>親は <code>.container</code>。子は <code>main</code> と <code>aside</code>。比率の数字は「7：3」をそのまま使えます。</p></details>
+  <details class="quiz"><summary>ヒント3（うまくいかない時）</summary><p>横に並ばない → <code>display: flex;</code> を<strong>子</strong>に書いていませんか？<br>比率がおかしい → <code>width</code> も一緒に書いていませんか？ まずは <code>flex</code> だけにしてみよう。<br>真ん中に来ない → <code>max-width</code> と <code>margin: 0 auto;</code> を<strong>同じ箱</strong>に書いていますか？</p></details>
+
+  <!-- ===================================================== -->
+  <h2 id="step5">7. STEP 5. タイルを並べる</h2>
+  <h3 id="tools-grid">道具箱</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>プロパティ</th><th>どこに書く</th><th>何をする</th></tr></thead>
+    <tbody>
+      <tr><td><code>display: grid;</code></td><td>親（タイルの箱）</td><td>子どもたちを<strong>マス目に並べる</strong>準備をする</td></tr>
+      <tr><td><code>grid-template-columns:</code></td><td>親</td><td><strong>何列にするか</strong>と、それぞれの列の幅を決める</td></tr>
+      <tr><td><code>fr</code>（単位）</td><td>上の値の中</td><td>「残りの幅を等分した1つ分」。<code>1fr 1fr</code> なら2列で半分ずつ</td></tr>
+      <tr><td><code>repeat(回数, 幅)</code></td><td>上の値の中</td><td>同じ幅を何回もくり返す書き方。<code>repeat(2, 1fr)</code> ＝ <code>1fr 1fr</code></td></tr>
+      <tr><td><code>gap</code></td><td>親</td><td>マス目の間のすき間（flex と同じ）</td></tr>
+      <tr><td><code>aspect-ratio: 4 / 3;</code></td><td>画像</td><td>縦横の<strong>比率</strong>をそろえる</td></tr>
+      <tr><td><code>object-fit: cover;</code></td><td>画像</td><td>比率がちがう写真を、<strong>ゆがめずに切り取って</strong>枠に収める</td></tr>
+    </tbody>
+  </table></div>
+  <h3 id="think-grid">考えよう</h3>
+  <ul>
+    <li><strong>タイルを同じ幅で3列</strong>に並べるには、どこに何を書く？（<code>1fr</code> を3回書く方法と、<code>repeat</code> を使う方法の2通りある）</li>
+    <li>写真の大きさがバラバラで、タイルの高さがそろわない。どうする？</li>
+    <li>flex と grid、どちらも「並べる」道具。<strong>2カラムには flex、タイルには grid</strong> を使うのはなぜだと思う？（逆でも作れる。やってみて、どっちが楽か比べてみよう）</li>
+  </ul>
+  <details class="quiz"><summary>ヒント1</summary><p>タイルの「箱」（main の中でタイルを包んでいる要素）が親です。そこに <code>display: grid;</code> と <code>grid-template-columns</code>。</p></details>
+  <details class="quiz"><summary>ヒント2</summary><p>「同じ幅」は <code>1fr</code>。それを「3回くり返す」なら、上の表の <code>repeat</code> の例の数字を変えるだけ。</p></details>
+  <details class="quiz"><summary>ヒント3（画像がそろわない時）</summary><p><code>img</code> に <code>width: 100%;</code> で枠いっぱいにしてから、<code>aspect-ratio</code> で比率を固定し、<code>object-fit: cover;</code> でゆがみを直します。画像がまだ無い人は、<code>div</code> に背景色を付けて「色の箱」にしておいてもOK。</p></details>
+
+  <!-- ===================================================== -->
+  <h2 id="step6">8. STEP 6. スマホでも見やすくする</h2>
+  <h3 id="tools-media">道具箱</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>道具</th><th>何をする</th></tr></thead>
+    <tbody>
+      <tr><td><code>&lt;meta name="viewport" …&gt;</code></td><td>これが無いと、スマホは PC の画面を縮小して見せる（<strong>@media が効かない</strong>）</td></tr>
+      <tr><td><code>@media (max-width: 767px) { … }</code></td><td>画面の幅が <strong>767px 以下の時だけ</strong>、<code>{ }</code> の中の CSS を使う</td></tr>
+      <tr><td><code>flex-direction: column;</code></td><td>flex の並びを<strong>横から縦</strong>に変える</td></tr>
+    </tbody>
+  </table></div>
+  <h3 id="think-media">考えよう</h3>
+  <p>スマホの幅では、①aside を main の<strong>下</strong>に回し、②タイルを<strong>2列</strong>にしたい。<code>@media</code> の中で、<strong>どのセレクタの、どのプロパティを上書き</strong>すればいい？</p>
+  <details class="quiz"><summary>ヒント1</summary><p>@media の中には、<strong>変えたいところだけ</strong>を書きます（全部書き直さなくていい）。変えたいのは「2カラムの並ぶ向き」と「タイルの列の数」の2か所。</p></details>
+  <details class="quiz"><summary>ヒント2</summary><p>並ぶ向きは STEP 4 で <code>display: flex;</code> を書いた<strong>同じセレクタ</strong>に <code>flex-direction</code>。列の数は STEP 5 の <code>grid-template-columns</code> を、<code>repeat</code> の数字を変えて上書き。</p></details>
+  <details class="quiz"><summary>ヒント3（効かない時）</summary><p>@media を CSS ファイルの<strong>一番下</strong>に書いていますか？ CSS は後に書いたものが勝つので、上に書くと元の指定に負けます。それでも効かなければ viewport の1行を確認。</p></details>
+
+  <h3 id="devtools">開発ツールで確かめる</h3>
+  <ul>
+    <li><kbd>F12</kbd> で開発ツール → <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd> で<strong>スマホ表示</strong>に切りかえ（Chrome は「デバイスツールバー」、Firefox は「レスポンシブデザインモード」）。上の幅の数字を 767 と 768 で行き来すると、レイアウトが切りかわる瞬間が見える</li>
+    <li>Elements（インスペクター）で grid を書いた要素の横に出る <strong><code>grid</code></strong> のバッジを押すと、マス目の線が表示される</li>
+    <li>うまくいかない時は、要素をクリックして右の <strong>Styles</strong> を見る。<strong>線で消されている</strong>指定は、別の指定に負けている</li>
+  </ul>
+
+  <!-- ===================================================== -->
+  <h2 id="submit">9. STEP 7. 公開して提出する</h2>
+  <div class="code-frame"><span class="code-name">ターミナル（2回目からはこれだけ）</span><pre><code>git add .
+git commit -m "Add tiles"
+git push origin main</code></pre></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>提出するもの</th><th>URL</th></tr></thead>
+    <tbody>
+      <tr><td>GitHub URL（コード）</td><td><code>https://github.com/h-kondo/tile-site</code></td></tr>
+      <tr><td>GitHub Pages URL（完成画面）</td><td><code>https://h-kondo.github.io/tile-site/</code></td></tr>
+    </tbody>
+  </table></div>
+  <p>Classroom の課題に添付されている<strong>提出フォーム</strong>から出してください。</p>
+
+  <h3 id="check">提出前のチェックリスト</h3>
+  <ul>
+    <li><code>tile-site</code> が <code>ch03</code> の<strong>外</strong>にあり、Public のリポジトリになっている</li>
+    <li><code>header</code>・<code>main</code>・<code>aside</code>・<code>footer</code> を使っている</li>
+    <li>PC の幅で、main（左・広い）と aside（右・細い）が横に並んでいる</li>
+    <li>タイルが6枚以上、PC で3列に並び、大きさがそろっている</li>
+    <li>開発ツールのスマホ表示（767px 以下）で、aside が下に回り、タイルが2列か1列になる</li>
+    <li>フリー素材を使ったら footer に出典がある。個人情報が写っていない</li>
+    <li>公開ページ（<code>…/tile-site/</code>）で CSS も画像もちゃんと表示される</li>
+  </ul>
+
+  <h3 id="grade">評価のめやす</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>レベル</th><th>できていること</th></tr></thead>
+    <tbody>
+      <tr><td>合格</td><td>「必ず守るルール」とチェックリストを全部満たしている</td></tr>
+      <tr><td>よくできた</td><td>色・余白・文字の大きさがそろっていて読みやすい。タイルの中身が自分のテーマに合っている</td></tr>
+      <tr><td>すごい</td><td>下の「もっと挑戦」を1つ以上やっている。コードを人に説明できる</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="extra">もっと挑戦</h3>
+  <ol>
+    <li><strong>タイルにマウスを乗せると少し浮く</strong>：<code>:hover</code>・<code>transform</code>・<code>box-shadow</code>・<code>transition</code> を組み合わせる</li>
+    <li><strong>ヘッダーをスクロールしても上に残す</strong>：<code>position: sticky;</code> と <code>top</code> を調べてみよう</li>
+    <li><strong>@media を使わずに列の数を自動で変える</strong>：<code>repeat(auto-fill, minmax(220px, 1fr))</code> は何をしている？ 数字を変えて動きを観察し、自分の言葉で説明しよう</li>
+    <li><strong>タイルの中身を JSON から作る</strong>：<code>data.json</code> にタイルの情報を書き、<code>fetch</code> で読み込んで JavaScript でタイルを並べる（<a href="form-basics.html#devtools">フォームの資料の「JSON」</a>の続き。<code>data.json</code> は GitHub Pages にファイルとして置けるので、公開ページでも動く）</li>
+    <li><strong>ダークモード</strong>：<code>@media (prefers-color-scheme: dark)</code> で、OS がダークの時だけ色を変える</li>
+  </ol>
+
+  <h3 id="promise">この課題の約束</h3>
+  <ul>
+    <li>この課題の目的は「<strong>自分で考えてレイアウトを組めるようになる</strong>」こと。生成AIに<strong>コードを丸ごと書かせて貼るのはなし</strong>です</li>
+    <li>分からない言葉・エラーの意味・プロパティの使い方を<strong>質問するのはOK</strong>（AI でも、検索でも、友だちでも）</li>
+    <li>人のコードを参考にしたら、<strong>1行ずつ自分の言葉で説明できる</strong>ところまで理解してから使う。先生に「ここはどうして？」と聞かれたら答えられるように</li>
+  </ul>
+
+  <!-- ===================================================== -->
+  <h2 id="ref">参考</h2>
+  <ul>
+    <li><a href="https://developer.mozilla.org/ja/docs/Web/CSS/Guides/Flexible_box_layout">MDN：フレックスボックスレイアウト</a></li>
+    <li><a href="https://developer.mozilla.org/ja/docs/Web/CSS/Guides/Grid_layout">MDN：グリッドレイアウト</a></li>
+    <li><a href="https://developer.mozilla.org/ja/docs/Web/CSS/Guides/Media_queries/Using">MDN：メディアクエリーの使用</a></li>
+    <li><a href="https://developer.mozilla.org/ja/docs/Web/CSS/Reference/Properties/aspect-ratio">MDN：aspect-ratio</a> ／ <a href="https://developer.mozilla.org/ja/docs/Web/CSS/Reference/Properties/object-fit">MDN：object-fit</a> ／ <a href="https://developer.mozilla.org/ja/docs/Web/CSS/Reference/Properties/position">MDN：position</a></li>
+    <li><a href="vscode.html#git">VS Code 手順書：Git / GitHub と接続して課題を上げる</a></li>
+  </ul>
+</main>
+<aside class="side"><nav class="toc" data-auto aria-label="目次"></nav></aside>
+</div>
+</body>
+</html>
