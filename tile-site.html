@@ -138,10 +138,13 @@
   <!-- ===================================================== -->
   <h2 id="step1">3. STEP 1. 新しいリポジトリ「tile-site」を作る</h2>
   <p class="note warn"><strong>フォルダは <code>ch03</code> の外に作ります。</strong>ch03 の中に作ると「Git の中に Git」になって、うまく push できなくなります（理由は <a href="vscode.html#nested-git">VS Code 手順書「親のフォルダがすでに Git につながっていると失敗する」</a>）。</p>
-  <div class="code-frame"><span class="code-name">ターミナル</span><pre><code>cd ~               # ホームに戻る（ch03 の中にいないこと！）
+  <p>作る場所は<strong>自分の好きな場所でOK</strong>です（ホーム、<code>Documents</code>、授業用にまとめているフォルダなど）。ただし <code>ch03</code> のように、<strong>すでに Git につながっているフォルダの中はダメ</strong>。作る前に、その場所で <code>git status</code> を打って確かめましょう。</p>
+  <div class="code-frame"><span class="code-name">ターミナル</span><pre><code>cd 作りたい場所       # 例：cd ~/Documents
+git status           # 「fatal: not a git repository」と出ればOK（Git の外にいる）
 mkdir tile-site
 cd tile-site
 code .</code></pre></div>
+  <p class="note"><code>git status</code> で <code>On branch main</code> などと出たら、そこは<strong>すでに Git の中</strong>です。別の場所に移動してから作りましょう。</p>
   <ol>
     <li>GitHub 右上の <strong>＋</strong> → <strong>New repository</strong></li>
     <li>Repository name：<strong><code>tile-site</code></strong> ／ <strong>Public</strong> ／ 「Add a README file」は<strong>チェックしない</strong> → <strong>Create repository</strong></li>
