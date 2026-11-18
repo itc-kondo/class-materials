@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>好きなもの紹介ページを作ろう ― 2カラム × タイル型</title>
+  <title>「こんなゲームあったらいいな」サイトを作ろう ― 2カラム × タイル型</title>
   <link rel="stylesheet" href="style.css">
   <script src="site.js" defer></script>
 </head>
@@ -22,7 +22,7 @@
 </header>
 <div class="article-layout">
 <aside class="rail" aria-label="共有">
-  <a href="https://x.com/intent/post?url=https%3A%2F%2Fitc-kondo.github.io%2Fclass-materials%2Ftile-site.html&amp;text=%E5%A5%BD%E3%81%8D%E3%81%AA%E3%82%82%E3%81%AE%E7%B4%B9%E4%BB%8B%E3%83%9A%E3%83%BC%E3%82%B8%E3%82%92%E4%BD%9C%E3%82%8D%E3%81%86%20%E2%80%95%202%E3%82%AB%E3%83%A9%E3%83%A0%20%C3%97%20%E3%82%BF%E3%82%A4%E3%83%AB%E5%9E%8B" target="_blank" rel="noopener" title="X でシェア">𝕏</a>
+  <a href="https://x.com/intent/post?url=https%3A%2F%2Fitc-kondo.github.io%2Fclass-materials%2Ftile-site.html&amp;text=%E3%80%8C%E3%81%93%E3%82%93%E3%81%AA%E3%82%B2%E3%83%BC%E3%83%A0%E3%81%82%E3%81%A3%E3%81%9F%E3%82%89%E3%81%84%E3%81%84%E3%81%AA%E3%80%8D%E3%82%B5%E3%82%A4%E3%83%88%E3%82%92%E4%BD%9C%E3%82%8D%E3%81%86%20%E2%80%95%202%E3%82%AB%E3%83%A9%E3%83%A0%20%C3%97%20%E3%82%BF%E3%82%A4%E3%83%AB%E5%9E%8B" target="_blank" rel="noopener" title="X でシェア">𝕏</a>
   <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fitc-kondo.github.io%2Fclass-materials%2Ftile-site.html" target="_blank" rel="noopener" title="Facebook でシェア">f</a>
   <a href="https://b.hatena.ne.jp/entry/s/itc-kondo.github.io/class-materials/tile-site.html" target="_blank" rel="noopener" title="はてなブックマーク">B!</a>
   <button type="button" data-copy title="URL をコピー">🔗</button>
@@ -30,7 +30,7 @@
 </aside>
 <main>
   <div class="article-meta"><span class="avatar">K</span><span class="author">@itc-kondo</span></div>
-  <div class="article-title"><h1>好きなもの紹介ページを作ろう ― 2カラム × タイル型のレイアウト（できた人向け課題 tile-site）</h1></div>
+  <div class="article-title"><h1>「こんなゲームあったらいいな」サイトを作ろう ― 2カラム × タイル型のレイアウト（できた人向け課題 tile-site）</h1></div>
   <ul class="tags"><li>HTML</li><li>CSS</li><li>レイアウト</li><li>Flexbox</li><li>Grid</li><li>課題</li></ul>
   <p class="article-dates"><span>投稿日 2026年11月16日</span></p>
 
@@ -40,7 +40,7 @@
   ③ <strong>新しいリポジトリ <code>tile-site</code></strong> を作る<br>
   ④ <strong>参考コードを改造する</strong>か、<strong>ゼロから書く</strong>か、自分で選んで作る<br>
   ⑤ 公開して提出する</p>
-  <p class="note">テーマは<strong>「好きなもの紹介ページ」</strong>（最近ハマってるものでもOK）。<br>
+  <p class="note">テーマは<strong>「こんなゲームあったらいいな」サイト</strong>。普段遊んでいるゲームから気づいたことをヒントに、<strong>自分が遊びたい架空のゲーム</strong>を考えて紹介します。画像は <strong>ChatGPT で作ってOK</strong>。<br>
   <strong>参考コード</strong>を用意してあるので、「★ここを変えてみよう」の場所を自分のものに変えていけば完成します。自信がある人は、参考コードを見ずに<strong>ゼロから書いて</strong>もOKです。</p>
 
   <!-- ===================================================== -->
@@ -63,8 +63,14 @@
 
   <!-- ===================================================== -->
   <h2 id="spec">2. 今回作るもの：設計図とルール</h2>
-  <h3 id="theme">テーマ：好きなもの紹介ページ（最近ハマってるものでもOK）</h3>
-  <p>自分の好きなもの・最近ハマってるものを、タイル1枚に1つずつ紹介するページです。食べもの、場所、ゲーム、音楽、スポーツ、推し、趣味…なんでもOK。<strong>1つのジャンルにしぼって</strong>「最近ハマってるラーメン屋 6選」のようにしても面白いです。<strong>自分が作っていて楽しいもの</strong>を選びましょう。</p>
+  <h3 id="theme">テーマ：「こんなゲームあったらいいな」サイト</h3>
+  <p>まだこの世に無い、<strong>自分が遊びたいゲーム</strong>を考えて、その紹介サイトを作ります。ゲーム会社が新作を発表する時の「公式サイト」のつもりで作りましょう。</p>
+  <ul>
+    <li><strong>タイル</strong>：ゲームの見どころを1枚に1つ（どんなゲーム？・主人公・遊び方・ステージ・ここが新しい…）</li>
+    <li><strong>サイドバー</strong>：ゲームの基本情報（ジャンル・機種・人数）と、<strong>思いついたきっかけ</strong></li>
+    <li><strong>画像</strong>：ChatGPT で作ってOK（作り方は <a href="#chatgpt">5章の「ChatGPT で画像を作る」</a>）</li>
+  </ul>
+  <p>大事なのは<strong>「普段遊んでいるゲームから気づいたこと」から考える</strong>ことです。「ここが楽しい」「ここがモヤっとする」「こうだったらいいのに」。その気づきが、新しいゲームのタネになります。プロのゲームクリエイターも、いつもそうやって考えています。</p>
 
   <h3 id="wireframe">設計図（ワイヤーフレーム）</h3>
   <figure>
@@ -92,8 +98,8 @@
       <line x1="42" y1="236" x2="130" y2="236" class="dg-line" stroke-dasharray="3 3"/><line x1="138" y1="236" x2="226" y2="236" class="dg-line" stroke-dasharray="3 3"/><line x1="234" y1="236" x2="322" y2="236" class="dg-line" stroke-dasharray="3 3"/>
       <rect x="344" y="90" width="124" height="182" rx="6" class="dg-zone"/>
       <text x="406" y="108" text-anchor="middle" font-weight="600" class="dg-ink">aside</text>
-      <rect x="354" y="118" width="104" height="60" rx="4" class="dg-box"/><text x="406" y="152" text-anchor="middle" font-size="10.5" class="dg-quiet">プロフィール</text>
-      <rect x="354" y="186" width="104" height="60" rx="4" class="dg-box"/><text x="406" y="220" text-anchor="middle" font-size="10.5" class="dg-quiet">カテゴリなど</text>
+      <rect x="354" y="118" width="104" height="60" rx="4" class="dg-box"/><text x="406" y="152" text-anchor="middle" font-size="10.5" class="dg-quiet">基本情報</text>
+      <rect x="354" y="186" width="104" height="60" rx="4" class="dg-box"/><text x="406" y="220" text-anchor="middle" font-size="10.5" class="dg-quiet">きっかけ</text>
       <text x="182" y="290" text-anchor="middle" font-size="11" class="dg-quiet">← 約 7 →</text>
       <text x="406" y="290" text-anchor="middle" font-size="11" class="dg-quiet">← 約 3 →</text>
       <rect x="32" y="296" width="436" height="12" rx="3" class="dg-zone"/>
@@ -131,7 +137,8 @@
       <tr><td>2カラム</td><td>PC の幅では <strong>main が左（広い）、aside が右（細い）</strong>で横に並ぶ</td></tr>
       <tr><td>タイル</td><td>main の中に<strong>6枚以上</strong>。PC では<strong>3列</strong>。1枚に「画像（または色の箱）＋見出し＋短い文」</td></tr>
       <tr><td>スマホ</td><td>幅が <strong>767px 以下</strong>になったら、aside が main の<strong>下</strong>に回り、タイルは<strong>2列か1列</strong>になる</td></tr>
-      <tr><td>画像</td><td>自分で撮ったもの・自分で描いたもの・フリー素材だけ。フリー素材は<strong>footer に出典</strong>を書く</td></tr>
+      <tr><td>中身</td><td>実在しない、<strong>自分が考えたゲーム</strong>。サイドバーに<strong>「思いついたきっかけ」</strong>（普段遊ぶゲームで気づいたこと）を書く</td></tr>
+      <tr><td>画像</td><td>ChatGPT などで作ったもの・自分で描いたものOK。footer に<strong>どうやって用意したか</strong>を書く（例：「画像：ChatGPT で生成」）</td></tr>
     </tbody>
   </table></div>
 
@@ -173,117 +180,138 @@ git push -u origin main</code></pre></div>
       <tr><td><strong>B. ゼロからコース</strong></td><td>参考コードを<strong>見ずに</strong>、設計図と 6〜9章の「道具箱」「ヒント」だけで書く。詰まったら参考コードを見てもOK</td><td>力をつけたい人。03-form が早く終わった人</td></tr>
     </tbody>
   </table></div>
+  <h3 id="idea">まずはゲームを考える（着想メモ）</h3>
+  <p>コードを書く前に、ノートかメモアプリで次の順に書き出してみましょう。</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>順番</th><th>書くこと</th><th>例（見本の「そらとぶ配達便」）</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>普段よく遊ぶゲームを1つ選ぶ</td><td>オープンワールドのゲーム</td></tr>
+      <tr><td>2</td><td>そのゲームの<strong>好きなところ</strong></td><td>景色がきれい。どこへでも行ける</td></tr>
+      <tr><td>3</td><td>そのゲームで<strong>モヤっとするところ</strong></td><td>目的地までの移動が長くて退屈</td></tr>
+      <tr><td>4</td><td>「<strong>もし〜だったら？</strong>」</td><td>もし、移動そのものが一番楽しかったら？</td></tr>
+      <tr><td>5</td><td>自分のゲームを一言で</td><td>空に浮かぶ島へ、自転車で荷物を届けるゲーム</td></tr>
+    </tbody>
+  </table></div>
+  <p>思いつかない時は、こんな考え方も使えます。</p>
+  <ul>
+    <li><strong>組み合わせる</strong>：好きなジャンル2つをかけ算（例：料理 × 格闘、パズル × ホラー）</li>
+    <li><strong>逆にする</strong>：いつもと反対の立場で遊ぶ（例：勇者ではなく、ダンジョンを作る側）</li>
+    <li><strong>モヤっとを遊びに変える</strong>：面倒なところを、いちばん楽しいところにする（見本はこれ）</li>
+    <li><strong>身近なものから</strong>：沖縄、学校、バイト、部活…自分にしか分からない体験</li>
+  </ul>
+
+  <h3 id="wire">設計図を描く</h3>
   <p>どちらのコースでも、いきなりコードを書かずに<strong>まずノートに四角を描いて</strong>決めます。プロの現場でも、最初に作るのは「ワイヤーフレーム」です。</p>
   <ul>
-    <li>ページの名前は？（例：「わたしの好きなもの図鑑」「最近ハマってるもの」）</li>
-    <li>タイルに何を並べる？（好きなもの・ハマってるものを<strong>6つ以上</strong>書き出す）</li>
-    <li>サイドバーには何を置く？（プロフィール、カテゴリ、いちばんのおすすめ、ハマったきっかけ…）</li>
-    <li>色は何色使う？（<strong>3色まで</strong>にすると、まとまって見える）</li>
+    <li>ゲームの名前とキャッチコピーは？</li>
+    <li>タイルに何を並べる？（ゲームの見どころを<strong>6つ以上</strong>）</li>
+    <li>サイドバーには何を置く？（基本情報、思いついたきっかけ、こんな人に遊んでほしい…）</li>
+    <li>色は何色使う？（ゲームの雰囲気に合わせて、<strong>3色まで</strong>にするとまとまって見える）</li>
   </ul>
 
   <!-- ===================================================== -->
   <h2 id="sample">5. STEP 3（A. 改造コース）参考コードを改造する</h2>
   <p>参考コードは、実際に動くページとして置いてあります。<strong>まず開いて、PC の幅とスマホの幅（開発ツールの <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd>）で見てみましょう。</strong></p>
   <p>▶ <a href="demo/tile-sample/" target="_blank" rel="noopener">参考ページを開く（demo/tile-sample/）</a></p>
-  <p><code>tile-site</code> フォルダに <code>index.html</code> と <code>style.css</code> を作り、下のコードをそれぞれ貼り付けます。</p>
+  <p><code>tile-site</code> フォルダに <code>index.html</code> と <code>style.css</code> と <code>images</code> フォルダを作り、下のコードをそれぞれ貼り付けます。画像は自分のゲームのものを作って <code>images</code> に入れるまで表示されません（代わりに <code>alt</code> の文字が出ます）。</p>
   <div class="code-frame"><span class="code-name">index.html（参考コード）</span><pre><code>&lt;!DOCTYPE html&gt;
 &lt;html lang="ja"&gt;
 &lt;head&gt;
   &lt;meta charset="UTF-8"&gt;
   &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
-  &lt;title&gt;わたしの好きなもの図鑑&lt;/title&gt;
+  &lt;title&gt;そらとぶ配達便 ― こんなゲームあったらいいな&lt;/title&gt;
   &lt;link rel="stylesheet" href="style.css"&gt;
 &lt;/head&gt;
 &lt;body&gt;
-  &lt;!-- ★① サイトの名前とひとことを、自分のものに変える --&gt;
+  &lt;!-- ★① ゲームの名前とキャッチコピーを、自分のものに変える --&gt;
   &lt;header class="site-header"&gt;
-    &lt;h1&gt;わたしの好きなもの図鑑&lt;/h1&gt;
-    &lt;p&gt;最近ハマってるものを集めました&lt;/p&gt;
+    &lt;h1&gt;そらとぶ配達便&lt;/h1&gt;
+    &lt;p&gt;空に浮かぶ島から島へ。自転車で荷物を届けるゲーム、あったらいいな&lt;/p&gt;
   &lt;/header&gt;
 
   &lt;div class="container"&gt;
     &lt;main&gt;
-      &lt;h2&gt;好きなもの&lt;/h2&gt;
+      &lt;h2&gt;こんなゲームです&lt;/h2&gt;
       &lt;div class="tiles"&gt;
-        &lt;!-- ★② タイル1枚 ＝ article 1つ。中身を自分の好きなものに変える（6枚以上） --&gt;
+        &lt;!-- ★② タイル1枚 ＝ article 1つ。自分のゲームの「見どころ」を6つ以上 --&gt;
         &lt;article class="tile"&gt;
-          &lt;!-- ★③ 写真を用意したら、下の div を img に置きかえる
-               例：&lt;img src="images/cake.jpg" alt="いちごのショートケーキ"&gt; --&gt;
-          &lt;div class="tile-img" style="background: #fbcfe8;"&gt;&lt;/div&gt;
+          &lt;!-- ★③ 画像を自分のゲームのものに（ChatGPT で作ってOK）。images フォルダに入れる --&gt;
+          &lt;img src="images/g1-world.webp" alt="浮かぶ島々のあいだを、羽のついた自転車で配達員が飛んでいる"&gt;
           &lt;div class="tile-body"&gt;
-            &lt;h3&gt;ショートケーキ&lt;/h3&gt;
-            &lt;p&gt;いちごが乗っているのが一番好き。&lt;/p&gt;
+            &lt;h3&gt;どんなゲーム？&lt;/h3&gt;
+            &lt;p&gt;空に浮かぶ島々に、空飛ぶ自転車で荷物を届けるオープンワールド。&lt;/p&gt;
           &lt;/div&gt;
         &lt;/article&gt;
 
         &lt;article class="tile"&gt;
-          &lt;div class="tile-img" style="background: #bfdbfe;"&gt;&lt;/div&gt;
+          &lt;img src="images/g2-hero.webp" alt="帽子とカバンの見習い配達員と、羽のついた自転車"&gt;
           &lt;div class="tile-body"&gt;
-            &lt;h3&gt;海&lt;/h3&gt;
-            &lt;p&gt;夏の夕方の海をぼーっと見るのが好き。&lt;/p&gt;
+            &lt;h3&gt;主人公&lt;/h3&gt;
+            &lt;p&gt;見習い配達員。ペダルを速くこぐほど、高く飛べる。&lt;/p&gt;
           &lt;/div&gt;
         &lt;/article&gt;
 
         &lt;article class="tile"&gt;
-          &lt;div class="tile-img" style="background: #bbf7d0;"&gt;&lt;/div&gt;
+          &lt;img src="images/g3-wind.webp" alt="配達員が白い風の流れに乗って進んでいる"&gt;
           &lt;div class="tile-body"&gt;
-            &lt;h3&gt;山登り&lt;/h3&gt;
-            &lt;p&gt;最近ハマり中。朝の森は空気がちがう。&lt;/p&gt;
+            &lt;h3&gt;遊び方&lt;/h3&gt;
+            &lt;p&gt;風を読んで最短ルートを探す。荷物をゆらさず運べたらボーナス。&lt;/p&gt;
           &lt;/div&gt;
         &lt;/article&gt;
 
         &lt;article class="tile"&gt;
-          &lt;div class="tile-img" style="background: #fde68a;"&gt;&lt;/div&gt;
+          &lt;img src="images/g4-stage.webp" alt="雲の町・森・雷の塔・雪の島が並んでいる"&gt;
           &lt;div class="tile-body"&gt;
-            &lt;h3&gt;ゲーム&lt;/h3&gt;
-            &lt;p&gt;アクションゲームを毎晩少しずつ。&lt;/p&gt;
+            &lt;h3&gt;ステージ&lt;/h3&gt;
+            &lt;p&gt;雲の町、浮かぶ森、雷の塔…。島ごとに天気がちがう。&lt;/p&gt;
           &lt;/div&gt;
         &lt;/article&gt;
 
         &lt;article class="tile"&gt;
-          &lt;div class="tile-img" style="background: #ddd6fe;"&gt;&lt;/div&gt;
+          &lt;img src="images/g5-coop.webp" alt="2人の配達員が大きな木箱をロープでつるして一緒に運んでいる"&gt;
           &lt;div class="tile-body"&gt;
-            &lt;h3&gt;ギター&lt;/h3&gt;
-            &lt;p&gt;練習3か月め。コードを4つ覚えた。&lt;/p&gt;
+            &lt;h3&gt;協力プレイ&lt;/h3&gt;
+            &lt;p&gt;大きな荷物は友だちと2人で。息が合わないと落としてしまう。&lt;/p&gt;
           &lt;/div&gt;
         &lt;/article&gt;
 
         &lt;article class="tile"&gt;
-          &lt;div class="tile-img" style="background: #fecaca;"&gt;&lt;/div&gt;
+          &lt;img src="images/g6-new.webp" alt="夕焼けの雲の上を配達員がのんびり進んでいる"&gt;
           &lt;div class="tile-body"&gt;
-            &lt;h3&gt;犬&lt;/h3&gt;
-            &lt;p&gt;実家の犬。帰るとしっぽで迎えてくれる。&lt;/p&gt;
+            &lt;h3&gt;ここが新しい&lt;/h3&gt;
+            &lt;p&gt;ワープは無し。移動そのものが一番楽しいゲーム。&lt;/p&gt;
           &lt;/div&gt;
         &lt;/article&gt;
       &lt;/div&gt;
     &lt;/main&gt;
 
     &lt;aside class="sidebar"&gt;
-      &lt;!-- ★① 自己紹介も、自分のものに変える --&gt;
+      &lt;!-- ★④ ゲームの基本情報を、自分のゲームに合わせて --&gt;
       &lt;section class="box"&gt;
-        &lt;h2&gt;プロフィール&lt;/h2&gt;
-        &lt;p&gt;ITカレッジ沖縄の学生です。休みの日は海か山にいます。&lt;/p&gt;
+        &lt;h2&gt;ゲームの基本情報&lt;/h2&gt;
+        &lt;dl&gt;
+          &lt;dt&gt;ジャンル&lt;/dt&gt;&lt;dd&gt;オープンワールド × 配達&lt;/dd&gt;
+          &lt;dt&gt;遊べる機種&lt;/dt&gt;&lt;dd&gt;スマホ・PC&lt;/dd&gt;
+          &lt;dt&gt;人数&lt;/dt&gt;&lt;dd&gt;1〜2人&lt;/dd&gt;
+        &lt;/dl&gt;
       &lt;/section&gt;
+      &lt;!-- ★⑤ いちばん大事。普段遊んでいるゲームで気づいたことを書く --&gt;
       &lt;section class="box"&gt;
-        &lt;h2&gt;カテゴリ&lt;/h2&gt;
-        &lt;ul&gt;
-          &lt;li&gt;食べもの&lt;/li&gt;
-          &lt;li&gt;場所&lt;/li&gt;
-          &lt;li&gt;趣味&lt;/li&gt;
-        &lt;/ul&gt;
+        &lt;h2&gt;思いついたきっかけ&lt;/h2&gt;
+        &lt;p&gt;いつも遊ぶオープンワールドのゲームで、目的地までの移動が長くて「早く着かないかな」と思っていた。それなら、移動そのものが一番楽しいゲームがあったらいいのに、と思った。&lt;/p&gt;
       &lt;/section&gt;
     &lt;/aside&gt;
   &lt;/div&gt;
 
   &lt;footer class="site-footer"&gt;
-    &lt;small&gt;&amp;copy; 2026 わたしの好きなもの図鑑&lt;/small&gt;
+    &lt;small&gt;&amp;copy; 2026 そらとぶ配達便（架空のゲームです）／ 画像：ChatGPT で生成&lt;/small&gt;
   &lt;/footer&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code></pre></div>
-  <div class="code-frame"><span class="code-name">style.css（参考コード）</span><pre><code>/* ★④ テーマカラー：ここの色を変えると、サイト全体の色が変わる */
+  <div class="code-frame"><span class="code-name">style.css（参考コード）</span><pre><code>/* ★⑥ テーマカラー：ここの色を変えると、サイト全体の色が変わる */
 :root {
-  --main-color: #334155;   /* ヘッダー・フッター */
-  --bg-color: #f5f5f5;     /* ページの背景 */
+  --main-color: #1e3a8a;   /* ヘッダー・フッター */
+  --bg-color: #eef4ff;     /* ページの背景 */
   --card-color: #ffffff;   /* タイルとサイドバーの箱 */
   --text-color: #222222;   /* 文字 */
 }
@@ -324,7 +352,7 @@ body {
   gap: 24px;
 }
 main {
-  flex: 7;            /* ★⑤ 比率を変えてみよう（例：8 と 2） */
+  flex: 7;            /* ★⑦ 比率を変えてみよう（例：8 と 2） */
 }
 .sidebar {
   flex: 3;
@@ -333,7 +361,7 @@ main {
 /* ===== タイル ===== */
 .tiles {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);   /* ★⑥ 3 を 4 や 2 に変えてみよう */
+  grid-template-columns: repeat(3, 1fr);   /* ★⑧ 3 を 4 や 2 に変えてみよう */
   gap: 16px;
 }
 .tile {
@@ -371,9 +399,15 @@ main {
   margin-top: 0;
   font-size: 1.1em;
 }
+.box dt {
+  font-weight: bold;
+}
+.box dd {
+  margin: 0 0 8px;
+}
 
 /* ===== スマホ（767px 以下） ===== */
-/* ★⑦ 切りかわる幅や、スマホでの列の数を変えてみよう */
+/* ★⑨ 切りかわる幅や、スマホでの列の数を変えてみよう */
 @media (max-width: 767px) {
   .container {
     flex-direction: column;
@@ -384,21 +418,41 @@ main {
 }</code></pre></div>
 
   <h3 id="change">★ここを変えてみよう</h3>
-  <p>コードの中の <strong>★①〜⑦</strong> のコメントが目印です。<strong>変える前に「どうなるか」を予想してから</strong>変えて、保存してブラウザで確かめましょう。予想が外れた所が、いちばん勉強になる所です。</p>
+  <p>コードの中の <strong>★①〜⑨</strong> のコメントが目印です。<strong>変える前に「どうなるか」を予想してから</strong>変えて、保存してブラウザで確かめましょう。予想が外れた所が、いちばん勉強になる所です。</p>
   <div class="table-wrap"><table>
     <thead><tr><th>目印</th><th>ファイル</th><th>変えること</th><th></th></tr></thead>
     <tbody>
-      <tr><td>★①</td><td>index.html</td><td>ページの名前・ひとこと・プロフィールを自分のものに</td><td><strong>必須</strong></td></tr>
-      <tr><td>★②</td><td>index.html</td><td>6枚のタイルの見出しと文を、自分の好きなもの・ハマってるものに。<strong>7枚目を足してみる</strong>（どこをコピーすればいい？）</td><td><strong>必須</strong></td></tr>
-      <tr><td>★③</td><td>index.html</td><td>色の箱（<code>div</code>）を写真（<code>img</code>）に置きかえる。写真は <code>images</code> フォルダに入れる</td><td>できれば</td></tr>
-      <tr><td>★④</td><td>style.css</td><td><code>:root</code> の4色を自分のテーマに合う色に。<strong>1か所変えるだけでなぜ全体が変わる？</strong>（<code>var(--main-color)</code> を探してみよう）</td><td><strong>必須</strong></td></tr>
-      <tr><td>★⑤</td><td>style.css</td><td>2カラムの比率 <code>7</code> と <code>3</code> を変えてみる（<code>1</code> と <code>1</code> にしたら？）</td><td>試す</td></tr>
-      <tr><td>★⑥</td><td>style.css</td><td>タイルの列数を <code>4</code> や <code>2</code> にしてみる。自分のページに一番合うのは何列？</td><td>試す</td></tr>
-      <tr><td>★⑦</td><td>style.css</td><td>スマホに切りかわる幅（<code>767px</code>）や、スマホでの列数を変えてみる</td><td>試す</td></tr>
+      <tr><td>★①</td><td>index.html</td><td>ゲームの名前とキャッチコピー（<code>title</code> も忘れずに）</td><td><strong>必須</strong></td></tr>
+      <tr><td>★②</td><td>index.html</td><td>タイルの見出しと文を、自分のゲームの見どころに。<strong>7枚目を足してみる</strong>（どこをコピーすればいい？）</td><td><strong>必須</strong></td></tr>
+      <tr><td>★③</td><td>index.html</td><td>画像を自分のゲームのものに（ChatGPT で作ってOK）。<code>alt</code> も書きかえる</td><td><strong>必須</strong></td></tr>
+      <tr><td>★④</td><td>index.html</td><td>ゲームの基本情報（ジャンル・機種・人数。項目を足してもOK）</td><td><strong>必須</strong></td></tr>
+      <tr><td>★⑤</td><td>index.html</td><td><strong>思いついたきっかけ</strong>。普段遊ぶゲームで気づいたことを、自分の言葉で</td><td><strong>必須</strong></td></tr>
+      <tr><td>★⑥</td><td>style.css</td><td><code>:root</code> の4色を、ゲームの雰囲気に合う色に。<strong>1か所変えるだけでなぜ全体が変わる？</strong>（<code>var(--main-color)</code> を探してみよう）</td><td><strong>必須</strong></td></tr>
+      <tr><td>★⑦</td><td>style.css</td><td>2カラムの比率 <code>7</code> と <code>3</code> を変えてみる（<code>1</code> と <code>1</code> にしたら？）</td><td>試す</td></tr>
+      <tr><td>★⑧</td><td>style.css</td><td>タイルの列数を <code>4</code> や <code>2</code> にしてみる。自分のページに一番合うのは何列？</td><td>試す</td></tr>
+      <tr><td>★⑨</td><td>style.css</td><td>スマホに切りかわる幅（<code>767px</code>）や、スマホでの列数を変えてみる</td><td>試す</td></tr>
     </tbody>
   </table></div>
-  <p class="note">★が無い所も、どんどん変えてOK。フォント、角の丸さ（<code>border-radius</code>）、すき間（<code>gap</code>・<code>padding</code>）、カテゴリの中身…。<strong>最後に「参考コードと見た目がちがう」状態になっていれば合格ラインです。</strong></p>
-  <p class="note warn">写真を入れたら <code>alt</code>（画像の説明）も書きましょう。目の見えない人の読み上げや、画像が表示されなかった時に使われます。</p>
+  <p class="note">★が無い所も、どんどん変えてOK。フォント、角の丸さ（<code>border-radius</code>）、すき間（<code>gap</code>・<code>padding</code>）、サイドバーの項目…。<strong>最後に「参考コードと見た目がちがう」状態になっていれば合格ラインです。</strong></p>
+  <p class="note warn">画像には必ず <code>alt</code>（画像の説明）も書きましょう。目の見えない人の読み上げや、画像が表示されなかった時に使われます。</p>
+
+  <h3 id="chatgpt">ChatGPT で画像を作る（どちらのコースも）</h3>
+  <p>ゲームの画像（クリエイティブ）は ChatGPT に作ってもらってOKです。<strong>コードは自分で、絵は ChatGPT と一緒に</strong>、という分担です。見本の6枚も ChatGPT で作りました。</p>
+  <div class="code-frame"><span class="code-name">ChatGPT に送る文の例（見本の1枚目）</span><pre><code>【架空のゲーム「そらとぶ配達便」のキービジュアル】
+青空の中に、大小いくつもの浮かぶ島が散らばっていて、
+その間を、羽のついた自転車に乗った子どもの配達員が、
+荷台に小包を積んで楽しそうに飛んでいる。
+
+スタイル：明るくやさしいフラットなイラスト、パステル寄りの鮮やかな色。横長4:3。
+画像の中に文字は入れないこと。</code></pre></div>
+  <ul>
+    <li><strong>何が・どこで・何をしているか</strong>を具体的に書くほど、思った絵に近づく</li>
+    <li>最後の<strong>「スタイル：…」を全部の画像で同じにする</strong>と、6枚の絵のテイストがそろう（タイルが並んだ時にきれい）</li>
+    <li><strong>「横長4:3」</strong>と書くと、タイルの枠にちょうど収まる</li>
+    <li>「文字は入れない」と書いておく（AI は文字を書くのが苦手で、変な文字が入りやすい）</li>
+    <li>キャラクターは、今あるゲームのキャラではなく、<strong>自分のゲームのオリジナル</strong>にしよう</li>
+    <li>保存したら、ファイル名を<strong>英小文字・数字・ハイフンだけ</strong>に変えて（例：<code>hero.png</code>）、<code>images</code> フォルダへ。日本語やスペースが入った名前は、公開した時に表示されないことがある</li>
+  </ul>
 
   <!-- ===================================================== -->
   <h2 id="step3">6. しくみ① HTML の骨組み</h2>
@@ -414,7 +468,7 @@ main {
     &lt;/main&gt;
 
     &lt;aside&gt;
-      &lt;!-- プロフィール・カテゴリなど --&gt;
+      &lt;!-- ゲームの基本情報・思いついたきっかけ --&gt;
     &lt;/aside&gt;
   &lt;/div&gt;
 
@@ -517,7 +571,8 @@ git push origin main</code></pre></div>
     <li>PC の幅で、main（左・広い）と aside（右・細い）が横に並んでいる</li>
     <li>タイルが6枚以上、PC で3列に並び、大きさがそろっている</li>
     <li>開発ツールのスマホ表示（767px 以下）で、aside が下に回り、タイルが2列か1列になる</li>
-    <li>フリー素材を使ったら footer に出典がある</li>
+    <li>サイドバーに「思いついたきっかけ」がある</li>
+    <li>footer に画像をどうやって用意したかが書いてある（例：画像：ChatGPT で生成）</li>
     <li>公開ページ（<code>…/tile-site/</code>）で CSS も画像もちゃんと表示される</li>
   </ul>
 
@@ -525,8 +580,8 @@ git push origin main</code></pre></div>
   <div class="table-wrap"><table>
     <thead><tr><th>レベル</th><th>できていること</th></tr></thead>
     <tbody>
-      <tr><td>合格</td><td>「必ず守るルール」とチェックリストを全部満たしている。改造コースなら ★①②④ を変えて、参考コードとちがう見た目になっている</td></tr>
-      <tr><td>よくできた</td><td>写真（★③）が入っている。色・余白・文字の大きさがそろっていて読みやすい。タイルの中身が自分のテーマに合っている</td></tr>
+      <tr><td>合格</td><td>「必ず守るルール」とチェックリストを全部満たしている。改造コースなら ★①〜⑥ を変えて、参考コードとちがう見た目になっている</td></tr>
+      <tr><td>よくできた</td><td>「思いついたきっかけ」が具体的で、ゲームの中身とつながっている。画像のテイストがそろっていて、色・余白・文字の大きさも読みやすい</td></tr>
       <tr><td>すごい</td><td>ゼロからコースで作った、または下の「もっと挑戦」を1つ以上やっている。コードを人に説明できる</td></tr>
     </tbody>
   </table></div>

@@ -3,92 +3,92 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>わたしの好きなもの図鑑</title>
+  <title>そらとぶ配達便 ― こんなゲームあったらいいな</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- ★① サイトの名前とひとことを、自分のものに変える -->
+  <!-- ★① ゲームの名前とキャッチコピーを、自分のものに変える -->
   <header class="site-header">
-    <h1>わたしの好きなもの図鑑</h1>
-    <p>最近ハマってるものを集めました</p>
+    <h1>そらとぶ配達便</h1>
+    <p>空に浮かぶ島から島へ。自転車で荷物を届けるゲーム、あったらいいな</p>
   </header>
 
   <div class="container">
     <main>
-      <h2>好きなもの</h2>
+      <h2>こんなゲームです</h2>
       <div class="tiles">
-        <!-- ★② タイル1枚 ＝ article 1つ。中身を自分の好きなものに変える（6枚以上） -->
+        <!-- ★② タイル1枚 ＝ article 1つ。自分のゲームの「見どころ」を6つ以上 -->
         <article class="tile">
-          <!-- ★③ 写真を用意したら、下の div を img に置きかえる
-               例：<img src="images/cake.jpg" alt="いちごのショートケーキ"> -->
-          <div class="tile-img" style="background: #fbcfe8;"></div>
+          <!-- ★③ 画像を自分のゲームのものに（ChatGPT で作ってOK）。images フォルダに入れる -->
+          <img src="images/g1-world.webp" alt="浮かぶ島々のあいだを、羽のついた自転車で配達員が飛んでいる">
           <div class="tile-body">
-            <h3>ショートケーキ</h3>
-            <p>いちごが乗っているのが一番好き。</p>
+            <h3>どんなゲーム？</h3>
+            <p>空に浮かぶ島々に、空飛ぶ自転車で荷物を届けるオープンワールド。</p>
           </div>
         </article>
 
         <article class="tile">
-          <div class="tile-img" style="background: #bfdbfe;"></div>
+          <img src="images/g2-hero.webp" alt="帽子とカバンの見習い配達員と、羽のついた自転車">
           <div class="tile-body">
-            <h3>海</h3>
-            <p>夏の夕方の海をぼーっと見るのが好き。</p>
+            <h3>主人公</h3>
+            <p>見習い配達員。ペダルを速くこぐほど、高く飛べる。</p>
           </div>
         </article>
 
         <article class="tile">
-          <div class="tile-img" style="background: #bbf7d0;"></div>
+          <img src="images/g3-wind.webp" alt="配達員が白い風の流れに乗って進んでいる">
           <div class="tile-body">
-            <h3>山登り</h3>
-            <p>最近ハマり中。朝の森は空気がちがう。</p>
+            <h3>遊び方</h3>
+            <p>風を読んで最短ルートを探す。荷物をゆらさず運べたらボーナス。</p>
           </div>
         </article>
 
         <article class="tile">
-          <div class="tile-img" style="background: #fde68a;"></div>
+          <img src="images/g4-stage.webp" alt="雲の町・森・雷の塔・雪の島が並んでいる">
           <div class="tile-body">
-            <h3>ゲーム</h3>
-            <p>アクションゲームを毎晩少しずつ。</p>
+            <h3>ステージ</h3>
+            <p>雲の町、浮かぶ森、雷の塔…。島ごとに天気がちがう。</p>
           </div>
         </article>
 
         <article class="tile">
-          <div class="tile-img" style="background: #ddd6fe;"></div>
+          <img src="images/g5-coop.webp" alt="2人の配達員が大きな木箱をロープでつるして一緒に運んでいる">
           <div class="tile-body">
-            <h3>ギター</h3>
-            <p>練習3か月め。コードを4つ覚えた。</p>
+            <h3>協力プレイ</h3>
+            <p>大きな荷物は友だちと2人で。息が合わないと落としてしまう。</p>
           </div>
         </article>
 
         <article class="tile">
-          <div class="tile-img" style="background: #fecaca;"></div>
+          <img src="images/g6-new.webp" alt="夕焼けの雲の上を配達員がのんびり進んでいる">
           <div class="tile-body">
-            <h3>犬</h3>
-            <p>実家の犬。帰るとしっぽで迎えてくれる。</p>
+            <h3>ここが新しい</h3>
+            <p>ワープは無し。移動そのものが一番楽しいゲーム。</p>
           </div>
         </article>
       </div>
     </main>
 
     <aside class="sidebar">
-      <!-- ★① 自己紹介も、自分のものに変える -->
+      <!-- ★④ ゲームの基本情報を、自分のゲームに合わせて -->
       <section class="box">
-        <h2>プロフィール</h2>
-        <p>ITカレッジ沖縄の学生です。休みの日は海か山にいます。</p>
+        <h2>ゲームの基本情報</h2>
+        <dl>
+          <dt>ジャンル</dt><dd>オープンワールド × 配達</dd>
+          <dt>遊べる機種</dt><dd>スマホ・PC</dd>
+          <dt>人数</dt><dd>1〜2人</dd>
+        </dl>
       </section>
+      <!-- ★⑤ いちばん大事。普段遊んでいるゲームで気づいたことを書く -->
       <section class="box">
-        <h2>カテゴリ</h2>
-        <ul>
-          <li>食べもの</li>
-          <li>場所</li>
-          <li>趣味</li>
-        </ul>
+        <h2>思いついたきっかけ</h2>
+        <p>いつも遊ぶオープンワールドのゲームで、目的地までの移動が長くて「早く着かないかな」と思っていた。それなら、移動そのものが一番楽しいゲームがあったらいいのに、と思った。</p>
       </section>
     </aside>
   </div>
 
   <footer class="site-footer">
-    <small>&copy; 2026 わたしの好きなもの図鑑</small>
+    <small>&copy; 2026 そらとぶ配達便（架空のゲームです）／ 画像：ChatGPT で生成</small>
   </footer>
 </body>
 </html>

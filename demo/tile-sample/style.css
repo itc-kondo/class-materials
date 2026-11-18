@@ -1,7 +1,7 @@
-/* ★④ テーマカラー：ここの色を変えると、サイト全体の色が変わる */
+/* ★⑥ テーマカラー：ここの色を変えると、サイト全体の色が変わる */
 :root {
-  --main-color: #334155;   /* ヘッダー・フッター */
-  --bg-color: #f5f5f5;     /* ページの背景 */
+  --main-color: #1e3a8a;   /* ヘッダー・フッター */
+  --bg-color: #eef4ff;     /* ページの背景 */
   --card-color: #ffffff;   /* タイルとサイドバーの箱 */
   --text-color: #222222;   /* 文字 */
 }
@@ -42,7 +42,7 @@ body {
   gap: 24px;
 }
 main {
-  flex: 7;            /* ★⑤ 比率を変えてみよう（例：8 と 2） */
+  flex: 7;            /* ★⑦ 比率を変えてみよう（例：8 と 2） */
 }
 .sidebar {
   flex: 3;
@@ -51,7 +51,7 @@ main {
 /* ===== タイル ===== */
 .tiles {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);   /* ★⑥ 3 を 4 や 2 に変えてみよう */
+  grid-template-columns: repeat(3, 1fr);   /* ★⑧ 3 を 4 や 2 に変えてみよう */
   gap: 16px;
 }
 .tile {
@@ -89,9 +89,15 @@ main {
   margin-top: 0;
   font-size: 1.1em;
 }
+.box dt {
+  font-weight: bold;
+}
+.box dd {
+  margin: 0 0 8px;
+}
 
 /* ===== スマホ（767px 以下） ===== */
-/* ★⑦ 切りかわる幅や、スマホでの列の数を変えてみよう */
+/* ★⑨ 切りかわる幅や、スマホでの列の数を変えてみよう */
 @media (max-width: 767px) {
   .container {
     flex-direction: column;
